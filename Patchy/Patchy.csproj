@@ -78,6 +78,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClientManager.cs" />
+    <Compile Include="Converters\TorrentETAConverter.cs" />
+    <Compile Include="Converters\TorrentSizeConverter.cs" />
+    <Compile Include="Converters\TorrentSpeedConverter.cs" />
     <Compile Include="Converters\TorrentStatusToStringConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -85,6 +88,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PeriodicTorrent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

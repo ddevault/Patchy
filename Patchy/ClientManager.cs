@@ -19,7 +19,7 @@ namespace Patchy
     {
         public void Initialize()
         {
-            Torrents = new List<TorrentWrapper>();
+            Torrents = new List<PeriodicTorrent>();
 
             // TODO: Customize most of these settings
             var settings = new EngineSettings(Path.Combine(
@@ -37,13 +37,13 @@ namespace Patchy
 
         public void AddTorrent(TorrentWrapper torrent)
         {
-            Torrents.Add(torrent);
+            Torrents.Add(new PeriodicTorrent(torrent));
             torrent.Index = Torrents.Count;
             Client.Register(torrent);
             torrent.Start();
         }
 
-        public List<TorrentWrapper> Torrents { get; set; }
+        public List<PeriodicTorrent> Torrents { get; set; }
 
         private static ClientEngine Client { get; set; }
     }
@@ -53,12 +53,14 @@ namespace Patchy
         public string Name { get; private set; }
         public long Size { get; private set; }
         public int Index { get; set; }
+        public bool IsMagnet { get; set; }
 
         public TorrentWrapper(Torrent torrent, string savePath, TorrentSettings settings)
             : base(torrent, savePath, settings)
         {
             Name = torrent.Name;
             Size = torrent.Size;
+            IsMagnet = false;
         }
 
         public TorrentWrapper(MagnetLink magnetLink, string savePath, TorrentSettings settings, string torrentSave)
@@ -67,6 +69,7 @@ namespace Patchy
             Name = magnetLink.Name;
             Name = HttpUtility.UrlDecode(Name);
             Size = -1;
+            IsMagnet = true;
         }
     }
 }

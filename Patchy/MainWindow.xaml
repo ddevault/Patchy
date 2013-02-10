@@ -2,10 +2,13 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:c="clr-namespace:Patchy.Converters"
-        Title="Patchy" Height="600" Width="1000" Icon="Images/patchy.ico">
+        Title="Patchy" Height="600" Width="1200" Icon="Images/patchy.ico">
     <Window.Resources>
         <ResourceDictionary>
             <c:TorrentStatusToStringConverter x:Key="torrentStatusConverter"></c:TorrentStatusToStringConverter>
+            <c:TorrentSizeConverter x:Key="torrentSizeConverter"></c:TorrentSizeConverter>
+            <c:TorrentSpeedConverter x:Key="torrentSpeedConverter"></c:TorrentSpeedConverter>
+            <c:TorrentETAConverter x:Key="torrentEtaConverter"></c:TorrentETAConverter>
         </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
@@ -64,15 +67,15 @@
                             <Binding Path="Name"></Binding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Size">
+                    <DataGridTextColumn Header="Size" Width="80">
                         <DataGridTextColumn.Binding>
-                            <Binding Path="Size"></Binding>
+                            <Binding Path="Size" Converter="{StaticResource ResourceKey=torrentSizeConverter}"></Binding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
                     <DataGridTemplateColumn Header="Progress" Width="150">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress, Mode=OneWay}"></ProgressBar>
+                                <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}"></ProgressBar>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -81,12 +84,36 @@
                             <Binding Path="State" Converter="{StaticResource ResourceKey=torrentStatusConverter}"></Binding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Down" Width="40"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Up" Width="40"></DataGridTextColumn>
-                    <DataGridTextColumn Header="ETA"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Downloaded" Width="80"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Uploaded" Width="80"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Ratio"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Down" Width="80">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="DownloadSpeed" Converter="{StaticResource ResourceKey=torrentSpeedConverter}"></Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Up" Width="80">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="UploadSpeed" Converter="{StaticResource ResourceKey=torrentSpeedConverter}"></Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="ETA" Width="80">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="EstimatedTime" Converter="{StaticResource ResourceKey=torrentEtaConverter}"></Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Downloaded" Width="80">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="TotalDownloaded" Converter="{StaticResource ResourceKey=torrentSizeConverter}"></Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Uploaded" Width="80">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="TotalUploaded" Converter="{StaticResource ResourceKey=torrentSizeConverter}"></Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Ratio" Width="80">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="DownloadToUploadRatio" StringFormat="0.00 d/u"></Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

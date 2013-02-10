@@ -54,7 +54,8 @@ namespace Patchy
                     // Torrents don't implement INotifyPropertyChanged
                     Dispatcher.Invoke(() =>
                         {
-                            UpdateTorrentGrid(false);
+                            foreach (var torrent in Client.Torrents)
+                                torrent.Update();
                             if (Client.Torrents.Count == 0)
                                 NotifyIcon.Text = "Patchy";
                             else if (Client.Torrents.Any(t => !t.Complete))
@@ -63,8 +64,8 @@ namespace Patchy
                                     "Patchy - {0} torrent{3}, {1} downloading at {2}%",
                                     Client.Torrents.Count,
                                     Client.Torrents.Count(t => !t.Complete),
-                                    Client.Torrents.Where(t => !t.Complete).Select(t => t.Progress)
-                                        .Aggregate((t, n) => t + n) / Client.Torrents.Count(t => !t.Complete),
+                                    (int)(Client.Torrents.Where(t => !t.Complete).Select(t => t.Progress)
+                                        .Aggregate((t, n) => t + n) / Client.Torrents.Count(t => !t.Complete)),
                                     Client.Torrents.Count == 1 ? "" : "s");
                             }
                             else
