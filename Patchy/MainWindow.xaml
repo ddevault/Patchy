@@ -1,7 +1,13 @@
 ﻿<Window x:Class="Patchy.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="clr-namespace:Patchy.Converters"
         Title="Patchy" Height="600" Width="1000" Icon="Images/patchy.ico">
+    <Window.Resources>
+        <ResourceDictionary>
+            <c:TorrentStatusToStringConverter x:Key="torrentStatusConverter"></c:TorrentStatusToStringConverter>
+        </ResourceDictionary>
+    </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="Open" Executed="ExecuteNew"></CommandBinding>
         <CommandBinding Command="Close" Executed="ExecuteExit"></CommandBinding>
@@ -36,7 +42,12 @@
         </Menu>
         <Grid Grid.Row="1" x:Name="upperGrid">
             <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
-                      GridLinesVisibility="None">
+                      GridLinesVisibility="None" SelectionUnit="FullRow">
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </DataGrid.CellStyle>
                 <DataGrid.Background>
                     <ImageBrush ImageSource="Images/patchy.png" AlignmentX="Left" AlignmentY="Top"
                                 Viewport="0,20,70,70" ViewportUnits="Absolute" Opacity="0.5"></ImageBrush>
@@ -67,7 +78,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Status" Width="80">
                         <DataGridTextColumn.Binding>
-                            <Binding Path="State"></Binding>
+                            <Binding Path="State" Converter="{StaticResource ResourceKey=torrentStatusConverter}"></Binding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Down" Width="40"></DataGridTextColumn>

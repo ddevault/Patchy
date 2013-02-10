@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using MonoTorrent;
 using MonoTorrent.Client;
 using MonoTorrent.Client.Encryption;
@@ -64,6 +65,7 @@ namespace Patchy
             : base(magnetLink, savePath, settings, torrentSave)
         {
             Name = magnetLink.Name;
+            Name = HttpUtility.UrlDecode(Name);
             Size = -1;
         }
     }

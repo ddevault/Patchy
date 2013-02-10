@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using MonoTorrent.Common;
 using MonoTorrent;
+using System.Web;
 
 namespace Patchy
 {
@@ -117,7 +118,7 @@ namespace Patchy
                 {
                     MagnetLink = new MagnetLink(magnetLinkTextBox.Text);
                     name = MagnetLink.Name;
-                    name = Uri.UnescapeDataString(MagnetLink.Name);
+                    name = HttpUtility.UrlDecode(MagnetLink.Name);
                 }
                 else
                 {
