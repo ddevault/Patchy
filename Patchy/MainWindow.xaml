@@ -1,0 +1,104 @@
+﻿<Window x:Class="Patchy.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Patchy" Height="600" Width="1000" Icon="Images/patchy.ico">
+    <Window.CommandBindings>
+        <CommandBinding Command="Open" Executed="ExecuteNew"></CommandBinding>
+        <CommandBinding Command="Close" Executed="ExecuteExit"></CommandBinding>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="Open" Key="O" Modifiers="Control"></KeyBinding>
+    </Window.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="6*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="File">
+                <MenuItem Header="Add Torrent..." Command="Open"></MenuItem>
+                <MenuItem Header="Create Torrent"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="Exit" Command="Close"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Torrent">
+                <MenuItem Header="Pause"></MenuItem>
+                <MenuItem Header="Remove...">
+                    <MenuItem Header="Torrent"></MenuItem>
+                    <MenuItem Header="Torrent+files"></MenuItem>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Options">
+                <MenuItem Header="Preferences"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <Grid Grid.Row="1" x:Name="upperGrid">
+            <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
+                      GridLinesVisibility="None">
+                <DataGrid.Background>
+                    <ImageBrush ImageSource="Images/patchy.png" AlignmentX="Left" AlignmentY="Top"
+                                Viewport="0,20,70,70" ViewportUnits="Absolute" Opacity="0.5"></ImageBrush>
+                </DataGrid.Background>
+                <DataGrid.Columns>
+                    <!--It would be nice if we could assign these elsewhere-->
+                    <DataGridTextColumn Header="#">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="Index"></Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Name" Width="300">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="Name"></Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Size">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="Size"></Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Progress" Width="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress, Mode=OneWay}"></ProgressBar>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Status" Width="80">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="State"></Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Down" Width="40"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Up" Width="40"></DataGridTextColumn>
+                    <DataGridTextColumn Header="ETA"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Downloaded" Width="80"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Uploaded" Width="80"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Ratio"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <GridSplitter Grid.Row="2" ResizeDirection="Rows" Width="Auto"
+                      Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      Background="LightGray"></GridSplitter>
+        <Grid Grid.Row="3" x:Name="lowerGrid">
+            <TabControl>
+                <TabItem Header="Information">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock>Progress</TextBlock>
+                        <ProgressBar Height="25" Grid.Row="1"></ProgressBar>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Files"></TabItem>
+                <TabItem Header="Peers"></TabItem>
+                <TabItem Header="Trackers"></TabItem>
+                <TabItem Header="Statistics"></TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+</Window>

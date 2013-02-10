@@ -1,0 +1,83 @@
+﻿<Window x:Class="Patchy.AddTorrentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add Torrent" Height="500" Width="600"
+        ResizeMode="CanMinimize" Icon="Images/patchy.ico">
+    <Grid Margin="3">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="18">Add Torrent</TextBlock>
+        <GroupBox Header="Source" Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <RadioButton x:Name="torrentFileRadioButton" IsChecked="True" VerticalAlignment="Center" 
+                             Checked="torrentFileRadioButton_Checked">Torrent File</RadioButton>
+                <RadioButton x:Name="magnetLinkRadioButton" Grid.Row="1" VerticalAlignment="Center"
+                             Checked="magnetLinkRadioButton_Checked">Magnet Link</RadioButton>
+                <TextBox x:Name="torrentFileTextBox" Grid.Column="1" Margin="3"></TextBox>
+                <Button Grid.Column="2" x:Name="browseTorrentTextBox" Height="23" Width="20">...</Button>
+                <TextBox x:Name="magnetLinkTextBox" IsEnabled="false" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Margin="3"></TextBox>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Destination" Grid.Row="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <RadioButton x:Name="defaultDestinationRadioButton" IsChecked="True">Downloads (default)</RadioButton><!--TODO: Populate this dynamically-->
+                <RadioButton VerticalAlignment="Center" x:Name="recentRadioButton" Grid.Row="1"
+                             Checked="recentRadioButton_Checked">Recent</RadioButton>
+                <ComboBox x:Name="recentItemsComboBox" Grid.Row="1" Grid.Column="1" SelectedIndex="1" IsEnabled="False">
+                    <ComboBoxItem>Videos</ComboBoxItem>
+                </ComboBox>
+                <RadioButton x:Name="otherRadioButton" Checked="otherRadioButton_Checked" Grid.Row="2">Other:</RadioButton>
+                <TextBox IsEnabled="False" Grid.ColumnSpan="2" x:Name="customDestinationTextBox" Grid.Row="3" Text="C:\"></TextBox>
+                <ListView IsEnabled="False" Grid.ColumnSpan="2" Grid.Row="4" x:Name="folderBrowser">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="16"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="Images/folder.png"></Image>
+                                <TextBlock Grid.Column="1" Text="{Binding Name}"></TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </GroupBox>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="8*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <CheckBox x:Name="editSettingsCheckBox">Edit additional settings</CheckBox>
+            <Button Grid.Column="2" Margin="3" IsCancel="True" Click="CloseClicked">Cancel</Button>
+            <Button Grid.Column="3" Margin="3" IsDefault="True" Click="AddClicked">Add</Button>
+        </Grid>
+    </Grid>
+</Window>
