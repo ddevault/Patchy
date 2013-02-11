@@ -213,9 +213,16 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridComboBoxColumn Header="Priority" Width="100" SortMemberPath="Priority"
-                                                    SelectedItemBinding="{Binding Priority, Mode=OneWay}"
-                                                    ItemsSource="{Binding Source={StaticResource ResourceKey=priorityDataProvider}}"></DataGridComboBoxColumn>
+                            <DataGridTemplateColumn Header="Priority" Width="100" SortMemberPath="Priority">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox Tag="{Binding}" SelectionChanged="filePriorityBoxChanged"
+                                            ItemsSource="{Binding Source={StaticResource ResourceKey=priorityDataProvider}}"
+                                            SelectedItem="{Binding Priority, Mode=TwoWay}">
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>

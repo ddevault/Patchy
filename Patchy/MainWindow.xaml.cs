@@ -302,7 +302,7 @@ namespace Patchy
         {
             var source = sender as ComboBox;
             var file = source.Tag as PeriodicFile;
-            file.File.Priority = (Priority)source.SelectedIndex;
+            file.Priority = (Priority)source.SelectedIndex;
         }
 
         private void fileListGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
