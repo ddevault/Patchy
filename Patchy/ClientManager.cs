@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Threading;
 using MonoTorrent;
 using MonoTorrent.Client;
 using MonoTorrent.Client.Encryption;
@@ -51,6 +52,11 @@ namespace Patchy
         public void Shutdown()
         {
             Client.Dispose();
+        }
+
+        public PeriodicTorrent GetTorrent(Torrent torrent)
+        {
+            return Torrents.FirstOrDefault(t => t.Torrent.Torrent == torrent);
         }
 
         public List<PeriodicTorrent> Torrents { get; set; }

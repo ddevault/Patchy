@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
+using MonoTorrent.Client;
 using MonoTorrent.Common;
 
 namespace Patchy
@@ -25,7 +28,8 @@ namespace Patchy
             Name = Torrent.Name;
             Size = Torrent.Size;
             CompletedOnAdd = Torrent.Complete;
-            NotifiedComplete = false; 
+            NotifiedComplete = false;
+            PeerList = new ObservableCollection<PeerId>();
         }
 
         internal void Update()
@@ -55,6 +59,9 @@ namespace Patchy
                 foreach (var file in files)
                     file.Update();
             }
+            Peers = Torrent.Peers.Available;
+            Seeders = Torrent.Peers.Seeds;
+            Leechers = Torrent.Peers.Leechs;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -67,6 +74,8 @@ namespace Patchy
                 return files;
             }
         }
+
+        public ObservableCollection<PeerId> PeerList { get; set; }
 
         private TorrentState state;
         public TorrentState State 
@@ -241,6 +250,54 @@ namespace Patchy
                 name = value;
                 if (fire && PropertyChanged != null)
                     PropertyChanged(this, new PropertyChangedEventArgs("Name"));
+            }
+        }
+
+        public int peers;
+        public int Peers
+        {
+            get
+            {
+                return peers;
+            }
+            private set
+            {
+                var fire = peers != value;
+                peers = value;
+                if (fire && PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("Peers"));
+            }
+        }
+
+        public int seeders;
+        public int Seeders
+        {
+            get
+            {
+                return seeders;
+            }
+            private set
+            {
+                var fire = seeders != value;
+                seeders = value;
+                if (fire && PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("Seeders"));
+            }
+        }
+
+        public int leechers;
+        public int Leechers
+        {
+            get
+            {
+                return leechers;
+            }
+            private set
+            {
+                var fire = leechers != value;
+                leechers = value;
+                if (fire && PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("Leechers"));
             }
         }
     }

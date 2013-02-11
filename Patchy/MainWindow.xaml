@@ -213,20 +213,30 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Priority" Width="100" SortMemberPath="Priority">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ComboBox Tag="{Binding}" SelectionChanged="filePriorityBoxChanged"
-                                            ItemsSource="{Binding Source={StaticResource ResourceKey=priorityDataProvider}}"
-                                            SelectedItem="{Binding Priority, Mode=OneWay}">
-                                        </ComboBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                            <DataGridComboBoxColumn Header="Priority" Width="100" SortMemberPath="Priority"
+                                                    SelectedItemBinding="{Binding Priority, Mode=OneWay}"
+                                                    ItemsSource="{Binding Source={StaticResource ResourceKey=priorityDataProvider}}"></DataGridComboBoxColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
-                <TabItem Header="Peers"></TabItem>
+                <TabItem Header="Peers">
+                    <DataGrid ItemsSource="{Binding PeerList}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False"
+                        GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="peerListGrid" IsReadOnly="True"
+                        MouseDoubleClick="fileListGrid_MouseDoubleClick">
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Address" Width="100">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="Uri"></Binding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
                 <TabItem Header="Trackers"></TabItem>
             </TabControl>
             <Rectangle Fill="LightGray" Opacity="0.5" x:Name="lowerFill"></Rectangle>

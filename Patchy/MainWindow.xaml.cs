@@ -174,6 +174,8 @@ namespace Patchy
                         new TorrentSettings());
                 }
                 Client.AddTorrent(torrent);
+                torrent.PeerConnected += torrent_PeerConnected;
+                torrent.PeerDisconnected += torrent_PeerDisconnected;
                 UpdateTorrentGrid();
                 torrentGrid.SelectedItem = torrent;
                 
@@ -183,6 +185,34 @@ namespace Patchy
                     Focus();
                 }
             }
+        }
+
+        void torrent_PeerDisconnected(object sender, PeerConnectionEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var torrent = sender as Torrent;
+                if (torrent == null)
+                    return;
+                var periodicTorrent = Client.GetTorrent(torrent);
+                if (periodicTorrent == null)
+                    return;
+                periodicTorrent.PeerList.Remove(e.PeerID);
+            });
+        }
+
+        void torrent_PeerConnected(object sender, PeerConnectionEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+                {
+                    var torrent = sender as Torrent;
+                    if (torrent == null)
+                        return;
+                    var periodicTorrent = Client.GetTorrent(torrent);
+                    if (periodicTorrent == null)
+                        return;
+                    periodicTorrent.PeerList.Add(e.PeerID);
+                });
         }
 
         private void ExecuteExit(object sender, ExecutedRoutedEventArgs e)
@@ -249,6 +279,8 @@ namespace Patchy
             torrent = new TorrentWrapper(magnetLink, directory,
                 new TorrentSettings(), Path.GetTempFileName());
             Client.AddTorrent(torrent);
+            torrent.PeerConnected += torrent_PeerConnected;
+            torrent.PeerDisconnected += torrent_PeerDisconnected;
             UpdateTorrentGrid(); // TODO: Centralize torrent creation
             torrentGrid.SelectedItem = torrent;
         }
