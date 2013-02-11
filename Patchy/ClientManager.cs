@@ -43,6 +43,16 @@ namespace Patchy
             torrent.Start();
         }
 
+        public void LoadFastResume(FastResume resume)
+        {
+            
+        }
+
+        public void Shutdown()
+        {
+            Client.Dispose();
+        }
+
         public List<PeriodicTorrent> Torrents { get; set; }
 
         private static ClientEngine Client { get; set; }

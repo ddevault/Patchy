@@ -14,7 +14,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using MonoTorrent.BEncoding;
 using MonoTorrent.Client;
+using MonoTorrent.Common;
 
 namespace Patchy
 {
@@ -27,6 +29,7 @@ namespace Patchy
         private bool AllowClose = false;
         private ClientManager Client { get; set; }
         private Timer Timer { get; set; }
+        private SettingsManager SettingsManager { get; set; }
 
         public MainWindow()
         {
@@ -49,6 +52,7 @@ namespace Patchy
             NotifyIcon.ContextMenu = menu;
             Client = new ClientManager();
             Client.Initialize();
+            Initialize();
             Timer = new Timer(o =>
                 {
                     // Torrents don't implement INotifyPropertyChanged
@@ -71,8 +75,9 @@ namespace Patchy
                             else
                             {
                                 NotifyIcon.Text = string.Format(
-                                    "Patchy - Seeding {0} torrents",
-                                    Client.Torrents.Count);
+                                    "Patchy - Seeding {0} torrent{1}",
+                                    Client.Torrents.Count,
+                                    Client.Torrents.Count == 1 ? "" : "s");
                             }
                         });
                 }, null, 1000, 1000);
@@ -150,6 +155,36 @@ namespace Patchy
             AllowClose = true;
             NotifyIcon.Dispose();
             Close();
+        }
+
+        private void Initialize()
+        {
+            SettingsManager = new SettingsManager();
+            SettingsManager.Initialize();
+            // Load prior session
+            if (File.Exists(SettingsManager.FastResumePath))
+            {
+                var resume = BEncodedDictionary.Decode<BEncodedDictionary>(
+                    File.ReadAllBytes(SettingsManager.FastResumePath));
+                foreach (var torrent in resume)
+                {
+                    // TODO
+                }
+            }
+        }
+
+        private void WindowClosed(object sender, EventArgs e)
+        {
+            var resume = new BEncodedDictionary();
+            foreach (var torrent in Client.Torrents)
+            {
+                torrent.Torrent.Stop();
+                while (torrent.Torrent.State != TorrentState.Stopped)
+                    Thread.Sleep(100);
+                resume.Add(torrent.Torrent.InfoHash.ToHex(), torrent.Torrent.SaveFastResume().Encode());
+            }
+            File.WriteAllBytes(SettingsManager.FastResumePath, resume.Encode());
+            Client.Shutdown();
         }
     }
 }
