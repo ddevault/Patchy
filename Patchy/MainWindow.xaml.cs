@@ -108,8 +108,10 @@ namespace Patchy
             foreach (var torrent in Client.Torrents)
             {
                 torrent.Torrent.Stop();
-                while (torrent.Torrent.State != TorrentState.Stopped)
+                while (torrent.Torrent.State != TorrentState.Stopped && torrent.Torrent.State != TorrentState.Error)
                     Thread.Sleep(100);
+                // TODO: Notify users on error? The application is shutting down here, it wouldn't be particualry
+                // easy to get information to the user
                 resume.Add(torrent.Torrent.InfoHash.ToHex(), torrent.Torrent.SaveFastResume().Encode());
             }
             File.WriteAllBytes(SettingsManager.FastResumePath, resume.Encode());
