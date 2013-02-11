@@ -36,7 +36,7 @@ namespace Patchy
                 EstimatedTime = new TimeSpan((long)((DateTime.Now - Torrent.StartTime).Ticks / (Torrent.Progress / 100)));
             TotalDownloaded = Torrent.Monitor.DataBytesDownloaded;
             TotalUploaded = Torrent.Monitor.DataBytesUploaded;
-            DownloadToUploadRatio = (double)Torrent.Monitor.DataBytesDownloaded / (double)Torrent.Monitor.DataBytesUploaded;
+            DownloadToUploadRatio = (double)Torrent.Monitor.DataBytesUploaded / (double)Torrent.Monitor.DataBytesDownloaded;
             if (Torrent.State == TorrentState.Downloading && files == null)
             {
                 files = new PeriodicFile[Torrent.Torrent.Files.Length];

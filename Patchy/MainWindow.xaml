@@ -112,7 +112,11 @@
                     <DataGridTemplateColumn Header="Progress" Width="150">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}"></ProgressBar>
+                                <Grid>
+                                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}"></ProgressBar>
+                                    <TextBlock Text="{Binding Path=Progress, StringFormat='0%'}" Foreground="Black"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                                </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -191,7 +195,11 @@
                             <DataGridTemplateColumn Header="Progress" Width="150">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}"></ProgressBar>
+                                        <Grid>
+                                            <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}"></ProgressBar>
+                                            <TextBlock Text="{Binding Path=Progress, StringFormat='0\%'}" Foreground="Black"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                                        </Grid>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
