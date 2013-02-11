@@ -74,7 +74,7 @@
                         VerticalAlignment="Center" Margin="3">
                     <Button.Template>
                         <ControlTemplate>
-                            <Image Source="Images/close.png" Cursor="Hand"></Image>
+                            <Image Source="Images/close.png" Cursor="Hand" Width="16" Height="16"></Image>
                         </ControlTemplate>
                     </Button.Template>
                 </Button>

@@ -26,6 +26,10 @@ Make sure you come back to get updates until auto-updating is added.
 Feel free to file bug reports as [GitHub Issues](https://github.com/SirCmpwn/Patchy/issues/new). Please be
 as descriptive as possible. You may also submit feature requests and ask questions through the same mechanism.
 
+You can also join
+[#patchy](http://webchat.freenode.net/?channels=reddit-ks) ([irc://](irc://irc.freenode.net/#patchy))
+on irc.freenode.net for assistance and Patchy-related discussion.
+
 ## Compiling
 
 To compile Patchy, add `C:\Windows\Microsoft.NET\Framework\v4.0.30319` to your PATH. Run `msbuild` from the
@@ -33,4 +37,13 @@ root of the repository to build.
 
 ## Contributing
 
-Pull requests are welcome. 
+Pull requests are welcome. Adhere to code standards already in use. Smaller, focused pull requests are more
+likely to be accepted than broad, sweeping ones.
+
+## License
+
+Patchy uses the permissive [MIT license](http://www.opensource.org/licenses/mit-license.php/). In a nutshell:
+
+* You are not restricted on usage of Patchy; commercial, private, etc, all fine.
+* The developers are not liable for what you do with it.
+* Patchy is provided "as is" with no warranty.
