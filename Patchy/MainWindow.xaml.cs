@@ -61,7 +61,7 @@ namespace Patchy
             Initialize();
             Timer = new Timer(o => // Used for updating periodic objects and the notify icon
                 {
-                    Dispatcher.Invoke(() =>
+                    Dispatcher.Invoke(new Action(() =>
                         {
                             CheckMagnetLinks();
                             foreach (var torrent in Client.Torrents)
@@ -94,7 +94,7 @@ namespace Patchy
                                     Client.Torrents.Count,
                                     Client.Torrents.Count == 1 ? "" : "s");
                             }
-                        });
+                        }));
                 }, null, 1000, 1000);
         }
 
@@ -189,7 +189,7 @@ namespace Patchy
 
         void torrent_PeerDisconnected(object sender, PeerConnectionEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Action(() =>
             {
                 var torrent = sender as Torrent;
                 if (torrent == null)
@@ -198,12 +198,12 @@ namespace Patchy
                 if (periodicTorrent == null)
                     return;
                 periodicTorrent.PeerList.Remove(e.PeerID);
-            });
+            }));
         }
 
         void torrent_PeerConnected(object sender, PeerConnectionEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Action(() =>
                 {
                     var torrent = sender as Torrent;
                     if (torrent == null)
@@ -212,7 +212,7 @@ namespace Patchy
                     if (periodicTorrent == null)
                         return;
                     periodicTorrent.PeerList.Add(e.PeerID);
-                });
+                }));
         }
 
         private void ExecuteExit(object sender, ExecutedRoutedEventArgs e)
