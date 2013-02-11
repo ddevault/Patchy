@@ -62,7 +62,15 @@ namespace Patchy
                         {
                             CheckMagnetLinks();
                             foreach (var torrent in Client.Torrents)
+                            {
                                 torrent.Update();
+                                if (torrent.Torrent.Complete && !torrent.CompletedOnAdd && !torrent.NotifiedComplete)
+                                {
+                                    NotifyIcon.ShowBalloonTip(5000, "Download Complete",
+                                        torrent.Name, System.Windows.Forms.ToolTipIcon.Info);
+                                    torrent.NotifiedComplete = true;
+                                }
+                            }
                             if (Client.Torrents.Count == 0)
                                 NotifyIcon.Text = "Patchy";
                             else if (Client.Torrents.Any(t => !t.Complete))
@@ -113,24 +121,11 @@ namespace Patchy
             quickAddGrid.Visibility = visibility;
         }
 
-        private void UpdateTorrentGrid(bool recreate)
+        private void UpdateTorrentGrid()
         {
-            if (recreate)
-            {
-                torrentGrid.Items.Clear();
-                foreach (var torrent in Client.Torrents)
-                    torrentGrid.Items.Add(torrent);
-            }
-            else
-            {
-                if (torrentGrid.Items.Count != Client.Torrents.Count)
-                {
-                    UpdateTorrentGrid(true);
-                    return;
-                }
-                for (int i = 0; i < Client.Torrents.Count; i++)
-                    torrentGrid.Items[i] = Client.Torrents[i];
-            }
+            torrentGrid.Items.Clear();
+            foreach (var torrent in Client.Torrents)
+                torrentGrid.Items.Add(torrent);
         }
 
         void NotifyIcon_Click(object sender, EventArgs e)
@@ -170,7 +165,7 @@ namespace Patchy
                         new TorrentSettings());
                 }
                 Client.AddTorrent(torrent);
-                UpdateTorrentGrid(true);
+                UpdateTorrentGrid();
                 torrentGrid.SelectedItem = torrent;
                 
                 if (Visibility == Visibility.Hidden)
@@ -245,7 +240,7 @@ namespace Patchy
             torrent = new TorrentWrapper(magnetLink, directory,
                 new TorrentSettings(), Path.GetTempFileName());
             Client.AddTorrent(torrent);
-            UpdateTorrentGrid(true);
+            UpdateTorrentGrid(); // TODO: Centralize torrent creation
             torrentGrid.SelectedItem = torrent;
         }
 
@@ -260,6 +255,13 @@ namespace Patchy
             IgnoredClipboardValue = Clipboard.GetText();
             CheckMagnetLinks();
             ExecuteNew(sender, null);
+        }
+
+        private void filePriorityBoxChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var source = sender as ComboBox;
+            var file = source.Tag as PeriodicFile;
+            file.File.Priority = (Priority)source.SelectedIndex;
         }
     }
 }

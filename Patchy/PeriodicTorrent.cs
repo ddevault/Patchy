@@ -15,6 +15,8 @@ namespace Patchy
     public class PeriodicTorrent : INotifyPropertyChanged // TODO: Consider replacing TorrentWrapper entirely with this
     {
         public TorrentWrapper Torrent { get; set; }
+        public bool CompletedOnAdd { get; set; }
+        public bool NotifiedComplete { get; set; }
 
         public PeriodicTorrent(TorrentWrapper wrapper)
         {
@@ -22,6 +24,8 @@ namespace Patchy
             Update();
             Name = Torrent.Name;
             Size = Torrent.Size;
+            CompletedOnAdd = Torrent.Complete;
+            NotifiedComplete = false; 
         }
 
         internal void Update()
