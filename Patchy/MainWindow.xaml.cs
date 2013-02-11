@@ -53,9 +53,8 @@ namespace Patchy
             Client = new ClientManager();
             Client.Initialize();
             Initialize();
-            Timer = new Timer(o =>
+            Timer = new Timer(o => // Used for updating periodic objects and the notify icon
                 {
-                    // Torrents don't implement INotifyPropertyChanged
                     Dispatcher.Invoke(() =>
                         {
                             foreach (var torrent in Client.Torrents)
@@ -136,11 +135,12 @@ namespace Patchy
                 }
                 else
                 {
-                    torrent = new TorrentWrapper(window.Torrent, window.DestinationPath, 
+                    torrent = new TorrentWrapper(window.Torrent, window.DestinationPath,
                         new TorrentSettings());
                 }
                 Client.AddTorrent(torrent);
                 UpdateTorrentGrid(true);
+                torrentGrid.SelectedItem = torrent;
                 
                 if (Visibility == Visibility.Hidden)
                 {
@@ -185,6 +185,20 @@ namespace Patchy
             }
             File.WriteAllBytes(SettingsManager.FastResumePath, resume.Encode());
             Client.Shutdown();
+        }
+
+        private void torrentGridSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (torrentGrid.SelectedItems.Count != 1)
+            {
+                lowerFill.Visibility = Visibility.Visible;
+                lowerGrid.DataContext = null;
+            }
+            else
+            {
+                lowerFill.Visibility = Visibility.Collapsed;
+                lowerGrid.DataContext = torrentGrid.SelectedItem;
+            }
         }
     }
 }

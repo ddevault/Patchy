@@ -37,13 +37,32 @@ namespace Patchy
             TotalDownloaded = Torrent.Monitor.DataBytesDownloaded;
             TotalUploaded = Torrent.Monitor.DataBytesUploaded;
             DownloadToUploadRatio = (double)Torrent.Monitor.DataBytesDownloaded / (double)Torrent.Monitor.DataBytesUploaded;
-            if (Torrent.IsMagnet && Torrent.State == TorrentState.Downloading && Torrent.Size == -1)
+            if (Torrent.State == TorrentState.Downloading && files == null)
             {
+                files = new PeriodicFile[Torrent.Torrent.Files.Length];
+                for (int i = 0; i < files.Length; i++)
+                    files[i] = new PeriodicFile(Torrent.Torrent.Files[i]);
+                PropertyChanged(this, new PropertyChangedEventArgs("Files"));
+            }
+            if (Torrent.IsMagnet && Torrent.State == TorrentState.Downloading && Torrent.Size == -1)
                 Size = Torrent.Torrent.Files.Select(f => f.Length).Aggregate((a, b) => a + b);
+            if (files != null)
+            {
+                foreach (var file in files)
+                    file.Update();
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private PeriodicFile[] files;
+        public PeriodicFile[] Files
+        {
+            get
+            {
+                return files;
+            }
+        }
 
         private TorrentState state;
         public TorrentState State 
@@ -52,7 +71,7 @@ namespace Patchy
             {
                 return state;
             }
-            set
+            private set
             {
                 var fire = state != value;
                 state = value;
@@ -68,7 +87,7 @@ namespace Patchy
             {
                 return progress;
             }
-            set
+            private set
             {
                 var fire = progress != value;
                 progress = value;
@@ -84,7 +103,7 @@ namespace Patchy
             {
                 return downloadSpeed;
             }
-            set
+            private set
             {
                 var fire = downloadSpeed != value;
                 downloadSpeed = value;
@@ -100,7 +119,7 @@ namespace Patchy
             {
                 return uploadSpeed;
             }
-            set
+            private set
             {
                 var fire = uploadSpeed != value;
                 uploadSpeed = value;
@@ -116,7 +135,7 @@ namespace Patchy
             {
                 return estimatedTime;
             }
-            set
+            private set
             {
                 var fire = estimatedTime != value;
                 estimatedTime = value;
@@ -132,7 +151,7 @@ namespace Patchy
             {
                 return totalDownloaded;
             }
-            set
+            private set
             {
                 var fire = totalDownloaded != value;
                 totalDownloaded = value;
@@ -148,7 +167,7 @@ namespace Patchy
             {
                 return totalUploaded;
             }
-            set
+            private set
             {
                 var fire = totalUploaded != value;
                 totalUploaded = value;
@@ -164,7 +183,7 @@ namespace Patchy
             {
                 return downloadToUploadRatio;
             }
-            set
+            private set
             {
                 var fire = downloadToUploadRatio != value;
                 downloadToUploadRatio = value;
@@ -180,7 +199,7 @@ namespace Patchy
             {
                 return complete;
             }
-            set
+            private set
             {
                 var fire = complete != value;
                 complete = value;
@@ -196,7 +215,7 @@ namespace Patchy
             {
                 return size;
             }
-            set
+            private set
             {
                 var fire = size != value;
                 size = value;
@@ -212,7 +231,7 @@ namespace Patchy
             {
                 return name;
             }
-            set
+            private set
             {
                 var fire = name != value;
                 name = value;

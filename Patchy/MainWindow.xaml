@@ -51,7 +51,7 @@
         </ComboBox>
         <Grid Grid.Row="1" x:Name="upperGrid">
             <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
-                      GridLinesVisibility="None" SelectionUnit="FullRow">
+                      GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="torrentGridSelectionChanged">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="BorderThickness" Value="0"/>
@@ -126,7 +126,7 @@
         <GridSplitter Grid.Row="2" ResizeDirection="Rows" Width="Auto"
                       Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       Background="LightGray"></GridSplitter>
-        <Grid Grid.Row="3" x:Name="lowerGrid" DataContext="{Binding ElementName=torrentGrid, Path=SelectedItem}">
+        <Grid Grid.Row="3" x:Name="lowerGrid">
             <TabControl>
                 <TabItem Header="Information">
                     <Grid>
@@ -138,11 +138,40 @@
                         <ProgressBar Height="25" Grid.Row="1" Minimum="0" Maximum="100" Value="{Binding Progress}"></ProgressBar>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Files"></TabItem>
+                <TabItem Header="Files">
+                    <DataGrid ItemsSource="{Binding Files}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False"
+                        GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="fileListGrid">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Width="300">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="Name"></Binding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Size" Width="80">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="Length" Converter="{StaticResource ResourceKey=torrentSizeConverter}"></Binding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                            <DataGridTemplateColumn Header="Progress" Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}"></ProgressBar>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Priority">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="Priority"></Binding> <!--TODO: Combo box drop down-->
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
                 <TabItem Header="Peers"></TabItem>
                 <TabItem Header="Trackers"></TabItem>
                 <TabItem Header="Statistics"></TabItem>
             </TabControl>
+            <Rectangle Fill="LightGray" Opacity="0.5" x:Name="lowerFill"></Rectangle>
         </Grid>
     </Grid>
 </Window>

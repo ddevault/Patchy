@@ -11,12 +11,10 @@ namespace Patchy.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            int speed = (int)value; // In bits per second, I think
-            if (speed < 8388608)
-                return (speed / 8192.0).ToString("0.00") + " kb/s";
-            if (speed < 8589934592)
-                return (speed / 8388608.0).ToString("0.00") + " mb/s";
-            return (speed / 8589934592.0).ToString("0.00") + " gb/s";
+            int speed = (int)value;
+            if (speed < 1048576)
+                return (speed / 1024.0).ToString("0.00") + " kb/s";
+            return (speed / 1048576.0).ToString("0.00") + " mb/s";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
