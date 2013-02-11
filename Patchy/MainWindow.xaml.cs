@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using MonoTorrent;
 using MonoTorrent.BEncoding;
 using MonoTorrent.Client;
 using MonoTorrent.Common;
@@ -30,6 +32,7 @@ namespace Patchy
         private ClientManager Client { get; set; }
         private Timer Timer { get; set; }
         private SettingsManager SettingsManager { get; set; }
+        private string IgnoredClipboardValue { get; set; }
 
         public MainWindow()
         {
@@ -57,6 +60,7 @@ namespace Patchy
                 {
                     Dispatcher.Invoke(() =>
                         {
+                            CheckMagnetLinks();
                             foreach (var torrent in Client.Torrents)
                                 torrent.Update();
                             if (Client.Torrents.Count == 0)
@@ -80,6 +84,33 @@ namespace Patchy
                             }
                         });
                 }, null, 1000, 1000);
+        }
+
+        private void CheckMagnetLinks()
+        {
+            var visibility = Visibility.Collapsed;
+            if (Clipboard.ContainsText())
+            {
+                var text = Clipboard.GetText();
+                if (IgnoredClipboardValue != text)
+                {
+                    if (Uri.IsWellFormedUriString(text, UriKind.Absolute))
+                    {
+                        var uri = new Uri(text);
+                        if (uri.Scheme == "magnet")
+                        {
+                            try
+                            {
+                                var link = new MagnetLink(text);
+                                quickAddName.Text = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(link.Name));
+                                visibility = Visibility.Visible;
+                            }
+                            catch { }
+                        }
+                    }
+                }
+            }
+            quickAddGrid.Visibility = visibility;
         }
 
         private void UpdateTorrentGrid(bool recreate)
@@ -123,7 +154,7 @@ namespace Patchy
 
         private void ExecuteNew(object sender, ExecutedRoutedEventArgs e)
         {
-            var window = new AddTorrentWindow();
+            var window = new AddTorrentWindow(SettingsManager.DefaultDownloadLocation);
             if (window.ShowDialog().GetValueOrDefault(false))
             {
                 TorrentWrapper torrent;
@@ -199,6 +230,36 @@ namespace Patchy
                 lowerFill.Visibility = Visibility.Collapsed;
                 lowerGrid.DataContext = torrentGrid.SelectedItem;
             }
+        }
+
+        private void quickAddClicked(object sender, RoutedEventArgs e)
+        {
+            TorrentWrapper torrent;
+            IgnoredClipboardValue = Clipboard.GetText();
+            CheckMagnetLinks();
+            var magnetLink = new MagnetLink(IgnoredClipboardValue);
+            var name = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(magnetLink.Name));
+            var directory = Path.Combine(SettingsManager.DefaultDownloadLocation, AddTorrentWindow.CleanFileName(name));
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+            torrent = new TorrentWrapper(magnetLink, directory,
+                new TorrentSettings(), Path.GetTempFileName());
+            Client.AddTorrent(torrent);
+            UpdateTorrentGrid(true);
+            torrentGrid.SelectedItem = torrent;
+        }
+
+        private void quickAddDismissClicked(object sender, RoutedEventArgs e)
+        {
+            IgnoredClipboardValue = Clipboard.GetText();
+            CheckMagnetLinks();
+        }
+
+        private void quickAddAdvancedClciked(object sender, RoutedEventArgs e)
+        {
+            IgnoredClipboardValue = Clipboard.GetText();
+            CheckMagnetLinks();
+            ExecuteNew(sender, null);
         }
     }
 }

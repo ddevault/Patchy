@@ -41,14 +41,12 @@ namespace Patchy
             public string Name { get { return Path.GetFileName(FullPath); } }
         }
 
-        public AddTorrentWindow()
+        public AddTorrentWindow(string defaultLocation)
         {
-            // TODO: Allow for customization
-            DefaultLocation = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                "Downloads");
-
             InitializeComponent();
+
+            DefaultLocation = defaultLocation;
+            defaultDestinationRadioButton.Content = Path.GetFileName(DefaultLocation) + " (default)";
             // Check for auto-population of magnet link
             if (Clipboard.ContainsText())
             {
@@ -118,7 +116,7 @@ namespace Patchy
                 {
                     MagnetLink = new MagnetLink(magnetLinkTextBox.Text);
                     name = MagnetLink.Name;
-                    name = HttpUtility.UrlDecode(MagnetLink.Name);
+                    name = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(MagnetLink.Name));
                 }
                 else
                 {
@@ -151,7 +149,7 @@ namespace Patchy
             Close();
         }
 
-        private static string CleanFileName(string fileName)
+        public static string CleanFileName(string fileName)
         {
             return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
         }

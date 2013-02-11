@@ -77,7 +77,7 @@ namespace Patchy
             : base(magnetLink, savePath, settings, torrentSave)
         {
             Name = magnetLink.Name;
-            Name = HttpUtility.UrlDecode(Name);
+            Name = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(Name));
             Size = -1;
             IsMagnet = true;
         }
