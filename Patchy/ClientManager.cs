@@ -13,6 +13,7 @@ using MonoTorrent.Client.Encryption;
 using MonoTorrent.Common;
 using MonoTorrent.Dht;
 using MonoTorrent.Dht.Listeners;
+using System.Collections.ObjectModel;
 
 namespace Patchy
 {
@@ -20,7 +21,7 @@ namespace Patchy
     {
         public void Initialize()
         {
-            Torrents = new List<PeriodicTorrent>();
+            Torrents = new ObservableCollection<PeriodicTorrent>();
 
             // TODO: Customize most of these settings
             var settings = new EngineSettings(Path.Combine(
@@ -59,7 +60,7 @@ namespace Patchy
             return Torrents.FirstOrDefault(t => t.Torrent.Torrent == torrent);
         }
 
-        public List<PeriodicTorrent> Torrents { get; set; }
+        public ObservableCollection<PeriodicTorrent> Torrents { get; set; }
 
         private static ClientEngine Client { get; set; }
 

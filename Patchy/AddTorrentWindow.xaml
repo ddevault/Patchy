@@ -75,7 +75,7 @@
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <CheckBox x:Name="editSettingsCheckBox">Edit additional settings</CheckBox>
+            <CheckBox x:Name="editSettingsCheckBox" Margin="0 0 0 3" VerticalAlignment="Center">Edit additional settings</CheckBox>
             <Button Grid.Column="2" Margin="3" IsCancel="True" Click="CloseClicked">Cancel</Button>
             <Button Grid.Column="3" Margin="3" IsDefault="True" Click="AddClicked">Add</Button>
         </Grid>

@@ -32,6 +32,7 @@ namespace Patchy
             
             Client = new ClientManager();
             Initialize();
+            torrentGrid.ItemsSource = Client.Torrents;
         }
 
         private void InitializeNotifyIcon()

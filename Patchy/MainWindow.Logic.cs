@@ -43,13 +43,12 @@ namespace Patchy
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             var name = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(link.Name));
-            var torrent = new TorrentWrapper(link, path, new TorrentSettings(),
+            var wrapper = new TorrentWrapper(link, path, new TorrentSettings(),
                 Path.Combine(
                     SettingsManager.TorrentCachePath,
                     ClientManager.CleanFileName(name),
                     ".torrent"));
-            Client.AddTorrent(torrent);
-            torrentGrid.Items.Add(torrent);
+            Client.AddTorrent(wrapper);
         }
 
         public void AddTorrent(Torrent torrent, string path)
@@ -58,7 +57,6 @@ namespace Patchy
                 Directory.CreateDirectory(path);
             var wrapper = new TorrentWrapper(torrent, path, new TorrentSettings());
             Client.AddTorrent(wrapper);
-            torrentGrid.Items.Add(wrapper);
             // Save torrent to cache
             var cache = Path.Combine(SettingsManager.TorrentCachePath, Path.GetFileName(torrent.TorrentPath));
             if (File.Exists(cache))
