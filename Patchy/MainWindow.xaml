@@ -118,7 +118,7 @@
                             <Binding Path="Size" Converter="{StaticResource ResourceKey=torrentSizeConverter}"></Binding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn Header="Progress" Width="150">
+                    <DataGridTemplateColumn Header="Progress" Width="150" SortMemberPath="Progress">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -201,7 +201,7 @@
                                     <Binding Path="Length" Converter="{StaticResource ResourceKey=torrentSizeConverter}"></Binding>
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
-                            <DataGridTemplateColumn Header="Progress" Width="150">
+                            <DataGridTemplateColumn Header="Progress" Width="150" SortMemberPath="Progress">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid>
@@ -212,7 +212,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Priority" Width="100">
+                            <DataGridTemplateColumn Header="Priority" Width="100" SortMemberPath="Priority">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox Tag="{Binding}" SelectionChanged="filePriorityBoxChanged"
