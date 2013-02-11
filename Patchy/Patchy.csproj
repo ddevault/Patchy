@@ -71,7 +71,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.UI.xaml">
+    <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -87,8 +87,8 @@
     <Compile Include="Converters\TorrentSizeConverter.cs" />
     <Compile Include="Converters\TorrentSpeedConverter.cs" />
     <Compile Include="Converters\TorrentStatusToStringConverter.cs" />
-    <Compile Include="MainWindow.UI.xaml.cs">
-      <DependentUpon>MainWindow.UI.xaml</DependentUpon>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
