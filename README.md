@@ -4,6 +4,8 @@ Patchy is an open source bittorrent client for Windows.
 
 Patchy is powered by [MonoTorrent](https://github.com/mono/monotorrent).
 
+[![Screenshot](http://i.imgur.com/PhbLEhT.png)](http://i.imgur.com/PhbLEhT.png "Click to enlarge")
+
 ## Why should I use it?
 
 *Note: Patchy is currently a work in progress, and to use it now would be silly. Treat this section as
