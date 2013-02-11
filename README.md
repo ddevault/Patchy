@@ -27,7 +27,7 @@ Feel free to file bug reports as [GitHub Issues](https://github.com/SirCmpwn/Pat
 as descriptive as possible. You may also submit feature requests and ask questions through the same mechanism.
 
 You can also join
-[#patchy](http://webchat.freenode.net/?channels=reddit-ks) ([irc://](irc://irc.freenode.net/#patchy))
+[#patchy](http://webchat.freenode.net/?channels=patchy) ([irc://](irc://irc.freenode.net/#patchy))
 on irc.freenode.net for assistance and Patchy-related discussion.
 
 ## Compiling
