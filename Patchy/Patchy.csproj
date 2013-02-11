@@ -63,13 +63,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\TorrentProgressConverter.cs" />
+    <Compile Include="MainWindow.Commands.cs" />
+    <Compile Include="MainWindow.Logic.cs" />
     <Compile Include="PeriodicFile.cs" />
     <Compile Include="SettingsManager.cs" />
     <Page Include="AddTorrentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="MainWindow.UI.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -85,8 +87,8 @@
     <Compile Include="Converters\TorrentSizeConverter.cs" />
     <Compile Include="Converters\TorrentSpeedConverter.cs" />
     <Compile Include="Converters\TorrentStatusToStringConverter.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="MainWindow.UI.xaml.cs">
+      <DependentUpon>MainWindow.UI.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

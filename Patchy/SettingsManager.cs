@@ -33,6 +33,11 @@ namespace Patchy
             }
         }
 
+        public string TorrentCachePath
+        {
+            get { return Path.Combine(SettingsPath, "torrentcache"); }
+        }
+
         public void Initialize()
         {
             if (!Directory.Exists(SettingsPath))

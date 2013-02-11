@@ -5,7 +5,7 @@
         xmlns:mt="clr-namespace:MonoTorrent.Common;assembly=MonoTorrent"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="Patchy" Height="600" Width="1200" Icon="Images/patchy.ico"
-        Closed="WindowClosed">
+        Closing="WindowClosing" Closed="WindowClosed">
     <Window.Resources>
         <ResourceDictionary>
             <c:TorrentStatusToStringConverter x:Key="torrentStatusConverter"></c:TorrentStatusToStringConverter>
@@ -76,9 +76,9 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock x:Name="quickAddName" FontWeight="Bold">[name]</TextBlock>
                 </StackPanel>
-                <Button Grid.Column="1" Margin="2 0 2 0" Width="80" Click="quickAddClicked">Quick Add</Button>
-                <Button Grid.Column="2" Width="80" Click="quickAddAdvancedClciked">Add...</Button>
-                <Button Grid.Column="3" Click="quickAddDismissClicked" OverridesDefaultStyle="True" 
+                <Button Grid.Column="1" Margin="2 0 2 0" Width="80" Click="QuickAddClicked">Quick Add</Button>
+                <Button Grid.Column="2" Width="80" Click="QuickAddAdvancedClciked">Add...</Button>
+                <Button Grid.Column="3" Click="QuickAddDismissClicked" OverridesDefaultStyle="True" 
                         VerticalAlignment="Center" Margin="3">
                     <Button.Template>
                         <ControlTemplate>
@@ -90,8 +90,8 @@
         </Grid>
         <Grid Grid.Row="2" x:Name="upperGrid">
             <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
-                      GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="torrentGridSelectionChanged"
-                      IsReadOnly="True" MouseDoubleClick="torrentGrid_MouseDoubleClick">
+                      GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="TorrentGridSelectionChanged"
+                      IsReadOnly="True" MouseDoubleClick="TorrentGridMouseDoubleClick">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="BorderThickness" Value="0"/>
@@ -185,7 +185,7 @@
                 <TabItem Header="Files">
                     <DataGrid ItemsSource="{Binding Files}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False"
                         GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="fileListGrid" IsReadOnly="True"
-                        MouseDoubleClick="fileListGrid_MouseDoubleClick">
+                        MouseDoubleClick="FileListGridMouseDoubleClick">
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="BorderThickness" Value="0"/>
@@ -216,7 +216,7 @@
                             <DataGridTemplateColumn Header="Priority" Width="100" SortMemberPath="Priority">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ComboBox Tag="{Binding}" SelectionChanged="filePriorityBoxChanged"
+                                        <ComboBox Tag="{Binding}" SelectionChanged="FilePriorityBoxChanged"
                                             ItemsSource="{Binding Source={StaticResource ResourceKey=priorityDataProvider}}"
                                             SelectedItem="{Binding Priority, Mode=TwoWay}">
                                         </ComboBox>
@@ -229,7 +229,7 @@
                 <TabItem Header="Peers">
                     <DataGrid ItemsSource="{Binding PeerList}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False"
                         GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="peerListGrid" IsReadOnly="True"
-                        MouseDoubleClick="fileListGrid_MouseDoubleClick">
+                        MouseDoubleClick="FileListGridMouseDoubleClick">
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="BorderThickness" Value="0"/>
