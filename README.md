@@ -1,4 +1,4 @@
-# ![Patchy](http://i.imgur.com/gbum1O6.png) Patchy Bittorrent Client
+# ![Patchy](http://i.imgur.com/gbum1O6.png) Patchy: A Bittorrent Client
 
 Patchy is an open source bittorrent client for Windows.
 
