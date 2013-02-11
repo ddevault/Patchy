@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -33,6 +34,7 @@ namespace Patchy
         private Timer Timer { get; set; }
         private SettingsManager SettingsManager { get; set; }
         private string IgnoredClipboardValue { get; set; }
+        private PeriodicTorrent BalloonTorrent { get; set; }
 
         public MainWindow()
         {
@@ -44,6 +46,7 @@ namespace Patchy
                 new Uri("pack://application:,,,/Patchy;component/Images/patchy.ico")).Stream);
             NotifyIcon.Visible = true;
             NotifyIcon.DoubleClick += NotifyIcon_Click;
+            NotifyIcon.BalloonTipClicked += NotifyIcon_BalloonTipClicked;
             var menu = new System.Windows.Forms.ContextMenu();
             menu.MenuItems.Add("Add Torrent", (s, e) => ExecuteNew(null, null));
             menu.MenuItems.Add("Exit", (s, e) =>
@@ -69,6 +72,7 @@ namespace Patchy
                                     NotifyIcon.ShowBalloonTip(5000, "Download Complete",
                                         torrent.Name, System.Windows.Forms.ToolTipIcon.Info);
                                     torrent.NotifiedComplete = true;
+                                    BalloonTorrent = torrent;
                                 }
                             }
                             if (Client.Torrents.Count == 0)
@@ -137,6 +141,11 @@ namespace Patchy
             }
             else
                 Visibility = Visibility.Hidden;
+        }
+
+        void NotifyIcon_BalloonTipClicked(object sender, EventArgs e)
+        {
+            Process.Start("explorer", BalloonTorrent.Torrent.SavePath);
         }
 
         void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -262,6 +271,32 @@ namespace Patchy
             var source = sender as ComboBox;
             var file = source.Tag as PeriodicFile;
             file.File.Priority = (Priority)source.SelectedIndex;
+        }
+
+        private void fileListGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            foreach (PeriodicFile item in fileListGrid.SelectedItems)
+            {
+                var extension = Path.GetExtension(item.File.Path);
+                // TODO: Expand list of naughty file extensions
+                bool open = true;
+                if (extension == ".exe")
+                {
+                    open = MessageBox.Show("This file could be dangerous. Are you sure you want to open it?",
+                        "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
+                }
+                if (open)
+                {
+                    var torrent = torrentGrid.SelectedItem as PeriodicTorrent;
+                    Process.Start(Path.Combine(torrent.Torrent.SavePath, item.File.Path));
+                }
+            }
+        }
+
+        private void torrentGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            foreach (PeriodicTorrent item in torrentGrid.SelectedItems)
+                Process.Start("explorer", item.Torrent.SavePath);
         }
     }
 }

@@ -41,14 +41,14 @@ namespace Patchy
             TotalDownloaded = Torrent.Monitor.DataBytesDownloaded;
             TotalUploaded = Torrent.Monitor.DataBytesUploaded;
             DownloadToUploadRatio = (double)Torrent.Monitor.DataBytesUploaded / (double)Torrent.Monitor.DataBytesDownloaded;
-            if (Torrent.State == TorrentState.Downloading && files == null)
+            if ((Torrent.State == TorrentState.Downloading || Torrent.State == TorrentState.Seeding) && files == null)
             {
                 files = new PeriodicFile[Torrent.Torrent.Files.Length];
                 for (int i = 0; i < files.Length; i++)
                     files[i] = new PeriodicFile(Torrent.Torrent.Files[i]);
                 PropertyChanged(this, new PropertyChangedEventArgs("Files"));
             }
-            if (Torrent.IsMagnet && Torrent.State == TorrentState.Downloading && Torrent.Size == -1)
+            if (Torrent.IsMagnet && (Torrent.State == TorrentState.Downloading || Torrent.State == TorrentState.Seeding) && Torrent.Size == -1)
                 Size = Torrent.Torrent.Files.Select(f => f.Length).Aggregate((a, b) => a + b);
             if (files != null)
             {

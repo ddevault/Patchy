@@ -91,7 +91,7 @@
         <Grid Grid.Row="2" x:Name="upperGrid">
             <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
                       GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="torrentGridSelectionChanged"
-                      IsReadOnly="True">
+                      IsReadOnly="True" MouseDoubleClick="torrentGrid_MouseDoubleClick">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="BorderThickness" Value="0"/>
@@ -184,7 +184,8 @@
                 </TabItem>
                 <TabItem Header="Files">
                     <DataGrid ItemsSource="{Binding Files}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False"
-                        GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="fileListGrid" IsReadOnly="True">
+                        GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="fileListGrid" IsReadOnly="True"
+                        MouseDoubleClick="fileListGrid_MouseDoubleClick">
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="BorderThickness" Value="0"/>
@@ -217,7 +218,7 @@
                                     <DataTemplate>
                                         <ComboBox Tag="{Binding}" SelectionChanged="filePriorityBoxChanged"
                                             ItemsSource="{Binding Source={StaticResource ResourceKey=priorityDataProvider}}"
-                                            SelectedItem="{Binding Priority}">
+                                            SelectedItem="{Binding Priority, Mode=OneWay}">
                                         </ComboBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
