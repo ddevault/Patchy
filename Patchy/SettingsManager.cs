@@ -42,6 +42,8 @@ namespace Patchy
         {
             if (!Directory.Exists(SettingsPath))
                 Directory.CreateDirectory(SettingsPath);
+            if (!Directory.Exists(TorrentCachePath))
+                Directory.CreateDirectory(TorrentCachePath);
         }
 
         public string DefaultDownloadLocation { get; set; }

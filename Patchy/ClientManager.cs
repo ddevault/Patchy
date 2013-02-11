@@ -62,6 +62,11 @@ namespace Patchy
         public List<PeriodicTorrent> Torrents { get; set; }
 
         private static ClientEngine Client { get; set; }
+
+        public static string CleanFileName(string fileName)
+        {
+            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), String.Empty));
+        }
     }
 
     public class TorrentWrapper : TorrentManager

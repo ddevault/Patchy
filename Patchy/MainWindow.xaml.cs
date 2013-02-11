@@ -138,7 +138,7 @@ namespace Patchy
             var name = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(link.Name));
 
             var path = Path.Combine(SettingsManager.DefaultDownloadLocation, 
-                AddTorrentWindow.CleanFileName(name));
+                ClientManager.CleanFileName(name));
 
             AddTorrent(link, path);
         }

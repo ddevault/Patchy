@@ -23,11 +23,11 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <RadioButton x:Name="torrentFileRadioButton" IsChecked="True" VerticalAlignment="Center" 
-                             Checked="torrentFileRadioButton_Checked">Torrent File</RadioButton>
+                             Checked="TorrentFileRadioButtonChecked">Torrent File</RadioButton>
                 <RadioButton x:Name="magnetLinkRadioButton" Grid.Row="1" VerticalAlignment="Center"
-                             Checked="magnetLinkRadioButton_Checked">Magnet Link</RadioButton>
+                             Checked="MagnetLinkRadioButtonChecked">Magnet Link</RadioButton>
                 <TextBox x:Name="torrentFileTextBox" Grid.Column="1" Margin="3"></TextBox>
-                <Button Grid.Column="2" x:Name="browseTorrentTextBox" Height="23" Width="20">...</Button>
+                <Button Grid.Column="2" x:Name="browseTorrentTextBox" Height="23" Width="20" Click="BrowseTorrentButtonClicked">...</Button>
                 <TextBox x:Name="magnetLinkTextBox" IsEnabled="false" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Margin="3"></TextBox>
             </Grid>
         </GroupBox>
@@ -44,15 +44,15 @@
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <RadioButton x:Name="defaultDestinationRadioButton" IsChecked="True">Downloads (default)</RadioButton><!--TODO: Populate this dynamically-->
+                <RadioButton x:Name="defaultDestinationRadioButton" IsChecked="True">Downloads (default)</RadioButton>
                 <RadioButton VerticalAlignment="Center" x:Name="recentRadioButton" Grid.Row="1"
-                             Checked="recentRadioButton_Checked">Recent</RadioButton>
+                             Checked="RecentRadioButtonChecked">Recent</RadioButton>
                 <ComboBox x:Name="recentItemsComboBox" Grid.Row="1" Grid.Column="1" SelectedIndex="1" IsEnabled="False">
-                    <ComboBoxItem>Videos</ComboBoxItem>
+                    <ComboBoxItem>Videos</ComboBoxItem><!--TODO-->
                 </ComboBox>
-                <RadioButton x:Name="otherRadioButton" Checked="otherRadioButton_Checked" Grid.Row="2">Other:</RadioButton>
-                <TextBox IsEnabled="False" Grid.ColumnSpan="2" x:Name="customDestinationTextBox" Grid.Row="3" Text="C:\"></TextBox>
-                <ListView IsEnabled="False" Grid.ColumnSpan="2" Grid.Row="4" x:Name="folderBrowser">
+                <RadioButton x:Name="otherRadioButton" Checked="OtherRadioButtonChecked" Grid.Row="2">Other:</RadioButton>
+                <TextBox IsEnabled="False" Grid.ColumnSpan="2" x:Name="customDestinationTextBox" Grid.Row="3" Text="C:\" KeyDown="FolderBrowserTextBoxKeyDown"></TextBox>
+                <ListView IsEnabled="False" Grid.ColumnSpan="2" Grid.Row="4" x:Name="folderBrowser" MouseDoubleClick="FolderBrowserMouseDoubleClick">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -61,7 +61,7 @@
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <Image Source="Images/folder.png"></Image>
-                                <TextBlock Grid.Column="1" Text="{Binding Name}"></TextBlock>
+                                <TextBlock Grid.Column="1" Text="{Binding}"></TextBlock>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>

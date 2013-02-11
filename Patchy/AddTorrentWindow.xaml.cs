@@ -14,6 +14,7 @@ using System.IO;
 using MonoTorrent.Common;
 using MonoTorrent;
 using System.Web;
+using Microsoft.Win32;
 
 namespace Patchy
 {
@@ -32,13 +33,21 @@ namespace Patchy
 
         private class FolderBrowserItem
         {
-            public FolderBrowserItem(string fullPath)
+            public FolderBrowserItem(string fullPath, bool isDrive)
             {
                 FullPath = fullPath;
+                IsDrive = isDrive;
             }
 
             public string FullPath { get; set; }
-            public string Name { get { return Path.GetFileName(FullPath); } }
+            private bool IsDrive { get; set; }
+
+            public override string ToString()
+            {
+                if (IsDrive)
+                    return FullPath;
+                return Path.GetFileName(FullPath);
+            }
         }
 
         public AddTorrentWindow(string defaultLocation)
@@ -66,43 +75,31 @@ namespace Patchy
 
         private void UpdateFileBrower(string path)
         {
-            customDestinationTextBox.Text = path;
-            var directories = Directory.GetDirectories(path);
-            var items = new FolderBrowserItem[directories.Length];
-            for (int i = 0; i < items.Length; i++)
-                items[i] = new FolderBrowserItem(directories[i]);
-            folderBrowser.ItemsSource = items;
+            try
+            {
+                string[] directories;
+                if (path != null)
+                    directories = Directory.GetDirectories(path);
+                else
+                    directories = Directory.GetLogicalDrives();
+                var items = new FolderBrowserItem[directories.Length + (path != null ? 1 : 0)];
+                for (int i = 0; i < directories.Length; i++)
+                    items[i + (path != null ? 1 : 0)] = new FolderBrowserItem(directories[i], path == null);
+                if (path != null)
+                    items[0] = new FolderBrowserItem("..", true);
+                folderBrowser.ItemsSource = items;
+                folderBrowser.Tag = path;
+                customDestinationTextBox.Text = path;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("Access is denied.");
+            }
         }
 
         private void CloseClicked(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private void torrentFileRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            if (magnetLinkTextBox == null)
-                return;
-            magnetLinkTextBox.IsEnabled = false;
-            torrentFileTextBox.IsEnabled = browseTorrentTextBox.IsEnabled = true;
-        }
-
-        private void magnetLinkRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            magnetLinkTextBox.IsEnabled = true;
-            torrentFileTextBox.IsEnabled = browseTorrentTextBox.IsEnabled = false;
-        }
-
-        private void recentRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            recentItemsComboBox.IsEnabled = true;
-            folderBrowser.IsEnabled = customDestinationTextBox.IsEnabled = false;
-        }
-
-        private void otherRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            recentItemsComboBox.IsEnabled = false;
-            folderBrowser.IsEnabled = customDestinationTextBox.IsEnabled = true;
         }
 
         private void AddClicked(object sender, RoutedEventArgs e)
@@ -115,7 +112,6 @@ namespace Patchy
                 if (magnetLinkRadioButton.IsChecked.Value)
                 {
                     MagnetLink = new MagnetLink(magnetLinkTextBox.Text);
-                    name = MagnetLink.Name;
                     name = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(MagnetLink.Name));
                 }
                 else
@@ -134,10 +130,7 @@ namespace Patchy
                 else
                     DestinationPath = customDestinationTextBox.Text;
 
-                DestinationPath = Path.Combine(DestinationPath, CleanFileName(name));
-
-                if (!Directory.Exists(DestinationPath))
-                    Directory.CreateDirectory(DestinationPath);
+                DestinationPath = Path.Combine(DestinationPath, ClientManager.CleanFileName(name));
             }
             catch
             {
@@ -149,9 +142,77 @@ namespace Patchy
             Close();
         }
 
-        public static string CleanFileName(string fileName)
+        #region UI Interaction
+
+        private void BrowseTorrentButtonClicked(object sender, RoutedEventArgs e)
         {
-            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
+            var dialog = new OpenFileDialog();
+            dialog.FileName = string.Empty;
+            dialog.Filter = "Torrents (.torrent)|*.torrent|All Files|*.*";
+            dialog.DefaultExt = ".torrent";
+            if (dialog.ShowDialog().GetValueOrDefault(false))
+                torrentFileTextBox.Text = dialog.FileName;
         }
+
+        private void FolderBrowserMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var file = folderBrowser.SelectedItem as FolderBrowserItem;
+            var path = file.FullPath;
+            if (file.FullPath == "..")
+            {
+                var parent = Directory.GetParent(folderBrowser.Tag as string);
+                if (parent != null)
+                    path = parent.FullName;
+                else
+                    path = null;
+            }
+            UpdateFileBrower(path);
+        }
+
+        private void FolderBrowserTextBoxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (!Directory.Exists(customDestinationTextBox.Text))
+                {
+                    MessageBox.Show("Directory does not exist.");
+                    customDestinationTextBox.Text = folderBrowser.Tag as string;
+                    return;
+                }
+                UpdateFileBrower(customDestinationTextBox.Text);
+            }
+        }
+
+        #region Radio Button Visibility Hooks
+
+        private void TorrentFileRadioButtonChecked(object sender, RoutedEventArgs e)
+        {
+            if (magnetLinkTextBox == null)
+                return;
+            magnetLinkTextBox.IsEnabled = false;
+            torrentFileTextBox.IsEnabled = browseTorrentTextBox.IsEnabled = true;
+        }
+
+        private void MagnetLinkRadioButtonChecked(object sender, RoutedEventArgs e)
+        {
+            magnetLinkTextBox.IsEnabled = true;
+            torrentFileTextBox.IsEnabled = browseTorrentTextBox.IsEnabled = false;
+        }
+
+        private void RecentRadioButtonChecked(object sender, RoutedEventArgs e)
+        {
+            recentItemsComboBox.IsEnabled = true;
+            folderBrowser.IsEnabled = customDestinationTextBox.IsEnabled = false;
+        }
+
+        private void OtherRadioButtonChecked(object sender, RoutedEventArgs e)
+        {
+            recentItemsComboBox.IsEnabled = false;
+            folderBrowser.IsEnabled = customDestinationTextBox.IsEnabled = true;
+        }
+
+        #endregion
+
+        #endregion
     }
 }

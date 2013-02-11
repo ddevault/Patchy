@@ -122,8 +122,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding Path=Progress}"></ProgressBar>
-                                    <TextBlock Text="{Binding Path=Progress, Converter={StaticResource ResourceKey=torrentProgressConverter}}"
+                                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding Path=Progress, Mode=OneWay}"></ProgressBar>
+                                    <TextBlock Text="{Binding Path=Progress, Mode=OneWay, Converter={StaticResource ResourceKey=torrentProgressConverter}}"
                                                Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                                 </Grid>
                             </DataTemplate>
@@ -179,7 +179,7 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                         </Grid.RowDefinitions>
                         <TextBlock>Progress</TextBlock>
-                        <ProgressBar Height="25" Grid.Row="1" Minimum="0" Maximum="100" Value="{Binding Path=Progress}"></ProgressBar>
+                        <ProgressBar Height="25" Grid.Row="1" Minimum="0" Maximum="100" Value="{Binding Path=Progress, Mode=OneWay}"></ProgressBar>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Files">
@@ -206,8 +206,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid>
-                                            <ProgressBar Minimum="0" Maximum="100" Value="{Binding Path=Progress}"></ProgressBar>
-                                            <TextBlock Text="{Binding Path=Progress, Converter={StaticResource ResourceKey=torrentProgressConverter}}"
+                                            <ProgressBar Minimum="0" Maximum="100" Value="{Binding Path=Progress, Mode=OneWay}"></ProgressBar>
+                                            <TextBlock Text="{Binding Path=Progress, Mode=OneWay, Converter={StaticResource ResourceKey=torrentProgressConverter}}"
                                                Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                                         </Grid>
                                     </DataTemplate>
