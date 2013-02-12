@@ -43,15 +43,17 @@ namespace Patchy
                                 var wrapper = new TorrentWrapper(Torrent.Load(torrent), path, new TorrentSettings());
                                 Dispatcher.Invoke(new Action(() =>
                                     {
+                                        PeriodicTorrent periodicTorrent;
                                         if (resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
                                         {
-                                            Client.LoadFastResume(
+                                            periodicTorrent = Client.LoadFastResume(
                                                 new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
                                         }
                                         else
                                         {
-                                            Client.AddTorrent(wrapper);
+                                            periodicTorrent = Client.AddTorrent(wrapper);
                                         }
+                                        periodicTorrent.CacheFilePath = torrent;
                                     }));
                             }
                             catch (Exception e)
@@ -70,15 +72,16 @@ namespace Patchy
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             var name = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(link.Name));
-            var wrapper = new TorrentWrapper(link, path, new TorrentSettings(),
-                Path.Combine(
+            var cache = Path.Combine(
                     SettingsManager.TorrentCachePath,
-                    ClientManager.CleanFileName(name) + ".torrent"));
-            Client.AddTorrent(wrapper);
+                    ClientManager.CleanFileName(name) + ".torrent");
+            var wrapper = new TorrentWrapper(link, path, new TorrentSettings(), cache);
+            var periodic = Client.AddTorrent(wrapper);
             File.WriteAllText(Path.Combine(
                     SettingsManager.TorrentCachePath,
                     ClientManager.CleanFileName(name) + ".info"),
                     path);
+            periodic.CacheFilePath = cache;
         }
 
         public void AddTorrent(Torrent torrent, string path)
@@ -86,7 +89,7 @@ namespace Patchy
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             var wrapper = new TorrentWrapper(torrent, path, new TorrentSettings());
-            Client.AddTorrent(wrapper);
+            var periodic = Client.AddTorrent(wrapper);
             // Save torrent to cache
             var cache = Path.Combine(SettingsManager.TorrentCachePath, Path.GetFileName(torrent.TorrentPath));
             if (File.Exists(cache))
@@ -94,6 +97,7 @@ namespace Patchy
             File.Copy(torrent.TorrentPath, cache);
             File.WriteAllText(Path.Combine(Path.GetDirectoryName(cache),
                 Path.GetFileNameWithoutExtension(cache)) + ".info", path);
+            periodic.CacheFilePath = cache;
         }
 
         private void PeriodicUpdate()

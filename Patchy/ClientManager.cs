@@ -14,6 +14,8 @@ using MonoTorrent.Common;
 using MonoTorrent.Dht;
 using MonoTorrent.Dht.Listeners;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Windows;
 
 namespace Patchy
 {
@@ -37,21 +39,74 @@ namespace Patchy
             Client.DhtEngine.Start();
         }
 
-        public void AddTorrent(TorrentWrapper torrent)
+        public PeriodicTorrent AddTorrent(TorrentWrapper torrent)
         {
-            Torrents.Add(new PeriodicTorrent(torrent));
+            var periodicTorrent = new PeriodicTorrent(torrent);
+            Torrents.Add(periodicTorrent);
             torrent.Index = Torrents.Count;
             Client.Register(torrent);
             torrent.Start();
+            return periodicTorrent;
         }
 
-        public void LoadFastResume(FastResume resume, TorrentWrapper torrent)
+        public PeriodicTorrent LoadFastResume(FastResume resume, TorrentWrapper torrent)
         {
-            Torrents.Add(new PeriodicTorrent(torrent));
+            var periodicTorrent = new PeriodicTorrent(torrent);
+            Torrents.Add(periodicTorrent);
             torrent.Index = Torrents.Count;
             torrent.LoadFastResume(resume);
             Client.Register(torrent);
             torrent.Start();
+            return periodicTorrent;
+        }
+
+        public void RemoveTorrent(PeriodicTorrent torrent)
+        {
+            torrent.Torrent.TorrentStateChanged += (s, e) =>
+                {
+                    if (e.NewState == TorrentState.Stopped)
+                    {
+                        Client.Unregister(torrent.Torrent);
+                        // Delete cache
+                        if (File.Exists(torrent.CacheFilePath))
+                            File.Delete(torrent.CacheFilePath);
+                        if (File.Exists(Path.Combine(SettingsManager.TorrentCachePath,
+                            Path.GetFileNameWithoutExtension(torrent.CacheFilePath) + ".info")))
+                        {
+                            File.Delete(Path.Combine(SettingsManager.TorrentCachePath,
+                                Path.GetFileNameWithoutExtension(torrent.CacheFilePath) + ".info"));
+                        }
+                        torrent.Torrent.Dispose();
+                        Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Remove(torrent)));
+                    }
+                };
+            Task.Factory.StartNew(() => torrent.Torrent.Stop());
+        }
+
+        public void RemoveTorrentAndFiles(PeriodicTorrent torrent)
+        {
+            torrent.Torrent.TorrentStateChanged += (s, e) =>
+            {
+                if (e.NewState == TorrentState.Stopped)
+                {
+                    Client.Unregister(torrent.Torrent);
+                    // Delete cache
+                    if (File.Exists(torrent.CacheFilePath))
+                        File.Delete(torrent.CacheFilePath);
+                    if (File.Exists(Path.Combine(SettingsManager.TorrentCachePath,
+                        Path.GetFileNameWithoutExtension(torrent.CacheFilePath) + ".info")))
+                    {
+                        File.Delete(Path.Combine(SettingsManager.TorrentCachePath,
+                            Path.GetFileNameWithoutExtension(torrent.CacheFilePath) + ".info"));
+                    }
+                    // Delete files
+                    Directory.Delete(torrent.Torrent.SavePath, true);
+
+                    torrent.Torrent.Dispose();
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Remove(torrent)));
+                }
+            };
+            Task.Factory.StartNew(() => torrent.Torrent.Stop());
         }
 
         public void Shutdown()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Threading;
 using System.Web;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Shell;
 using MonoTorrent;
@@ -198,6 +200,45 @@ namespace Patchy
         {
             foreach (PeriodicTorrent item in torrentGrid.SelectedItems)
                 Process.Start("explorer", item.Torrent.SavePath);
+        }
+
+        private void torrentGridContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            e.Handled = torrentGrid.SelectedItems.Count == 0;
+        }
+
+        private void torrentGridOpenFolder(object sender, RoutedEventArgs e)
+        {
+            foreach (PeriodicTorrent torrent in torrentGrid.SelectedItems)
+                Process.Start("explorer", torrent.Torrent.SavePath);
+        }
+
+        private void torrentGridRemoveTorrent(object sender, RoutedEventArgs e)
+        {
+            foreach (PeriodicTorrent torrent in torrentGrid.SelectedItems)
+            {
+                if (torrent.State == TorrentState.Downloading)
+                {
+                    if (MessageBox.Show(torrent.Name + " is not complete. Are you sure you want to remove it?",
+                        "Confirm Removal", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                        continue;
+                }
+                Client.RemoveTorrent(torrent);
+            }
+        }
+
+        private void torrentGridRemoveTorrentAndData(object sender, RoutedEventArgs e)
+        {
+            foreach (PeriodicTorrent torrent in torrentGrid.SelectedItems)
+            {
+                if (torrent.State == TorrentState.Downloading)
+                {
+                    if (MessageBox.Show(torrent.Name + " is not complete. Are you sure you want to remove it?",
+                        "Confirm Removal", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                        continue;
+                }
+                Client.RemoveTorrentAndFiles(torrent);
+            }
         }
     }
 }

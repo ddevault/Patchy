@@ -20,6 +20,8 @@ namespace Patchy
         public TorrentWrapper Torrent { get; set; }
         public bool CompletedOnAdd { get; set; }
         public bool NotifiedComplete { get; set; }
+        public bool[] RecievedPieces { get; set; }
+        public string CacheFilePath { get; set; }
 
         public PeriodicTorrent(TorrentWrapper wrapper)
         {

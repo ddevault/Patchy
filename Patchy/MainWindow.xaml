@@ -4,7 +4,7 @@
         xmlns:c="clr-namespace:Patchy.Converters"
         xmlns:mt="clr-namespace:MonoTorrent.Common;assembly=MonoTorrent"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        Title="Patchy" Height="600" Width="1200" Icon="Images/patchy.ico"
+        Title="Patchy" Height="600" Width="1150" Icon="Images/patchy.ico"
         Closing="WindowClosing" Closed="WindowClosed">
     <Window.Resources>
         <ResourceDictionary>
@@ -94,16 +94,30 @@
         <Grid Grid.Row="2" x:Name="upperGrid">
             <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
                       GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="TorrentGridSelectionChanged"
-                      IsReadOnly="True" MouseDoubleClick="TorrentGridMouseDoubleClick">
+                      IsReadOnly="True" MouseDoubleClick="TorrentGridMouseDoubleClick" ContextMenuOpening="torrentGridContextMenuOpening">
+                <DataGrid.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DodgerBlue"/>
+                </DataGrid.Resources>
+                <DataGrid.Background>
+                    <ImageBrush ImageSource="Images/patchy.png" AlignmentX="Right" AlignmentY="Bottom"
+                                Viewport="0,20,70,70" ViewportUnits="Absolute" Opacity="0.5"></ImageBrush>
+                </DataGrid.Background>
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="BorderThickness" Value="0"/>
                     </Style>
                 </DataGrid.CellStyle>
-                <DataGrid.Background>
-                    <ImageBrush ImageSource="Images/patchy.png" AlignmentX="Left" AlignmentY="Top"
-                                Viewport="0,20,70,70" ViewportUnits="Absolute" Opacity="0.5"></ImageBrush>
-                </DataGrid.Background>
+                <DataGrid.ContextMenu>
+                    <ContextMenu x:Name="torrentGridContextMenu">
+                        <MenuItem Header="Open Folder" Click="torrentGridOpenFolder"></MenuItem>
+                        <Separator></Separator>
+                        <MenuItem x:Name="torrentGridContextMenuPauseResume" Header="Pause"></MenuItem>
+                        <MenuItem Header="Remove">
+                            <MenuItem Header="Torrent only" Click="torrentGridRemoveTorrent"></MenuItem>
+                            <MenuItem Header="Torrent and data" Click="torrentGridRemoveTorrentAndData"></MenuItem>
+                        </MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <!--It would be nice if we could assign these elsewhere-->
                     <DataGridTextColumn Header="#">

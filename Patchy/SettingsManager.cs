@@ -33,7 +33,7 @@ namespace Patchy
             }
         }
 
-        public string TorrentCachePath
+        public static string TorrentCachePath
         {
             get { return Path.Combine(SettingsPath, "torrentcache"); }
         }
