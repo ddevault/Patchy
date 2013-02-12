@@ -24,12 +24,12 @@ namespace Patchy
         public PeriodicTorrent(TorrentWrapper wrapper)
         {
             Torrent = wrapper;
+            PeerList = new ObservableCollection<PeerId>();
             Update();
             Name = Torrent.Name;
             Size = Torrent.Size;
             CompletedOnAdd = Torrent.Complete;
             NotifiedComplete = false;
-            PeerList = new ObservableCollection<PeerId>();
         }
 
         internal void Update()
@@ -63,6 +63,17 @@ namespace Patchy
             Peers = Torrent.Peers.Available;
             Seeders = Torrent.Peers.Seeds;
             Leechers = Torrent.Peers.Leechs;
+            var peerList = Torrent.GetPeers();
+            foreach (var peer in peerList)
+            {
+                if (!PeerList.Contains(peer))
+                    PeerList.Add(peer);
+            }
+            for (int i = 0; i < PeerList.Count; i++)
+            {
+                if (!peerList.Contains(PeerList[i]))
+                    PeerList.RemoveAt(i--);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
