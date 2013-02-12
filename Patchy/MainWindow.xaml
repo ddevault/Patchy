@@ -264,12 +264,12 @@
                                     <Binding Path="ClientApp" Converter="{StaticResource ResourceKey=peerClientConverter}"></Binding>
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="Pieces Sent">
+                            <DataGridTextColumn Header="Pieces Sent" Width="100">
                                 <DataGridTextColumn.Binding>
                                     <Binding Path="PiecesSent"></Binding>
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="Pieces Received">
+                            <DataGridTextColumn Header="Pieces Received" Width="100">
                                 <DataGridTextColumn.Binding>
                                     <Binding Path="PiecesReceived"></Binding>
                                 </DataGridTextColumn.Binding>
