@@ -35,31 +35,24 @@ namespace Patchy
                         var torrents = Directory.GetFiles(SettingsManager.TorrentCachePath, "*.torrent");
                         foreach (var torrent in torrents)
                         {
-                            try
+                            var path = File.ReadAllText(Path.Combine(
+                                SettingsManager.TorrentCachePath, Path.GetFileNameWithoutExtension(torrent))
+                                                        + ".info");
+                            var wrapper = new TorrentWrapper(Torrent.Load(torrent), path, new TorrentSettings());
+                            Dispatcher.Invoke(new Action(() =>
                             {
-                                var path = File.ReadAllText(Path.Combine(
-                                    SettingsManager.TorrentCachePath, Path.GetFileNameWithoutExtension(torrent))
-                                    + ".info");
-                                var wrapper = new TorrentWrapper(Torrent.Load(torrent), path, new TorrentSettings());
-                                Dispatcher.Invoke(new Action(() =>
-                                    {
-                                        PeriodicTorrent periodicTorrent;
-                                        if (resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
-                                        {
-                                            periodicTorrent = Client.LoadFastResume(
-                                                new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
-                                        }
-                                        else
-                                        {
-                                            periodicTorrent = Client.AddTorrent(wrapper);
-                                        }
-                                        periodicTorrent.CacheFilePath = torrent;
-                                    }));
-                            }
-                            catch (Exception e)
-                            {
-                                throw;
-                            }
+                                PeriodicTorrent periodicTorrent;
+                                if (resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
+                                {
+                                    periodicTorrent = Client.LoadFastResume(
+                                        new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
+                                }
+                                else
+                                {
+                                    periodicTorrent = Client.AddTorrent(wrapper);
+                                }
+                                periodicTorrent.CacheFilePath = torrent;
+                            }));
                         }
                     }).Start();
             }

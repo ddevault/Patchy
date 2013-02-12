@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -40,11 +40,12 @@ namespace Patchy
 
         private void InitializeNotifyIcon()
         {
-            NotifyIcon = new System.Windows.Forms.NotifyIcon();
-            NotifyIcon.Text = "Patchy";
-            NotifyIcon.Icon = new System.Drawing.Icon(Application.GetResourceStream(
-                new Uri("pack://application:,,,/Patchy;component/Images/patchy.ico")).Stream);
-            NotifyIcon.Visible = true;
+            NotifyIcon = new System.Windows.Forms.NotifyIcon 
+            {
+                Text = "Patchy",
+                Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/Patchy;component/Images/patchy.ico" )).Stream),
+                Visible = true
+            };
             NotifyIcon.DoubleClick += NotifyIconClick;
             NotifyIcon.BalloonTipClicked += NotifyIconBalloonTipClicked;
             var menu = new System.Windows.Forms.ContextMenu();
@@ -181,9 +182,11 @@ namespace Patchy
             foreach (PeriodicFile item in fileListGrid.SelectedItems)
             {
                 var extension = Path.GetExtension(item.File.Path);
+
                 // TODO: Expand list of naughty file extensions
+
                 bool open = true;
-                if (extension == ".exe")
+                if (extension.Equals(".exe", StringComparison.OrdinalIgnoreCase))
                 {
                     open = MessageBox.Show("This file could be dangerous. Are you sure you want to open it?",
                         "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
