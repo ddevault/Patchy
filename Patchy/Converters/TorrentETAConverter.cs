@@ -14,7 +14,7 @@ namespace Patchy.Converters
             TimeSpan time = (TimeSpan)value;
 
             if (time == TimeSpan.MaxValue || time == TimeSpan.MinValue)
-                return "∞";
+                return "n/a";
             if (time.TotalSeconds < 60)
                 return (int)time.TotalSeconds + " secs";
             if (time.TotalSeconds < (60 * 5))
