@@ -46,8 +46,7 @@ namespace Patchy
             var wrapper = new TorrentWrapper(link, path, new TorrentSettings(),
                 Path.Combine(
                     SettingsManager.TorrentCachePath,
-                    ClientManager.CleanFileName(name),
-                    ".torrent"));
+                    ClientManager.CleanFileName(name) + ".torrent"));
             Client.AddTorrent(wrapper);
         }
 

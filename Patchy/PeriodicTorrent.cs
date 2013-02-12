@@ -50,7 +50,7 @@ namespace Patchy
                 files = new PeriodicFile[Torrent.Torrent.Files.Length];
                 for (int i = 0; i < files.Length; i++)
                     files[i] = new PeriodicFile(Torrent.Torrent.Files[i]);
-                //if (PropertyChanged != null)
+                if (PropertyChanged != null)
                     PropertyChanged(this, new PropertyChangedEventArgs("Files"));
             }
             if (Torrent.IsMagnet && (Torrent.State == TorrentState.Downloading || Torrent.State == TorrentState.Seeding) && Torrent.Size == -1)

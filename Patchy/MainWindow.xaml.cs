@@ -8,6 +8,7 @@ using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Shell;
 using MonoTorrent;
 using MonoTorrent.BEncoding;
 using MonoTorrent.Client;
@@ -58,16 +59,22 @@ namespace Patchy
         private void UpdateNotifyIcon()
         {
             if (Client.Torrents.Count == 0)
+            {
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                 NotifyIcon.Text = "Patchy";
+            }
             else if (Client.Torrents.Any(t => !t.Complete))
             {
+                int progress = (int)(Client.Torrents.Where(t => !t.Complete).Select(t => t.Progress)
+                        .Aggregate((t, n) => t + n) / Client.Torrents.Count(t => !t.Complete));
                 NotifyIcon.Text = string.Format(
                     "Patchy - {0} torrent{3}, {1} downloading at {2}%",
                     Client.Torrents.Count,
                     Client.Torrents.Count(t => !t.Complete),
-                    (int)(Client.Torrents.Where(t => !t.Complete).Select(t => t.Progress)
-                        .Aggregate((t, n) => t + n) / Client.Torrents.Count(t => !t.Complete)),
+                    progress,
                     Client.Torrents.Count == 1 ? "" : "s");
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                TaskbarItemInfo.ProgressValue = progress / 100.0;
             }
             else
             {
@@ -75,6 +82,7 @@ namespace Patchy
                     "Patchy - Seeding {0} torrent{1}",
                     Client.Torrents.Count,
                     Client.Torrents.Count == 1 ? "" : "s");
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
             }
         }
 
