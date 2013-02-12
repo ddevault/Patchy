@@ -29,9 +29,29 @@ namespace Patchy
             {
                 var resume = BEncodedValue.Decode<BEncodedDictionary>(
                     File.ReadAllBytes(SettingsManager.FastResumePath));
-                foreach (var torrent in resume)
+                var torrents = Directory.GetFiles(SettingsManager.TorrentCachePath, "*.torrent");
+                foreach (var torrent in torrents)
                 {
-                    // TODO
+                    try
+                    {
+                        var path = File.ReadAllText(Path.Combine(
+                            SettingsManager.TorrentCachePath, Path.GetFileNameWithoutExtension(torrent))
+                            + ".info");
+                        var wrapper = new TorrentWrapper(Torrent.Load(torrent), path, new TorrentSettings());
+                        if (resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
+                        {
+                            Client.LoadFastResume(
+                                new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
+                        }
+                        else
+                        {
+                            Client.AddTorrent(wrapper);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw;
+                    }
                 }
             }
             Timer = new Timer(o => Dispatcher.Invoke(new Action(PeriodicUpdate)),
@@ -48,6 +68,10 @@ namespace Patchy
                     SettingsManager.TorrentCachePath,
                     ClientManager.CleanFileName(name) + ".torrent"));
             Client.AddTorrent(wrapper);
+            File.WriteAllText(Path.Combine(
+                    SettingsManager.TorrentCachePath,
+                    ClientManager.CleanFileName(name) + ".info"),
+                    path);
         }
 
         public void AddTorrent(Torrent torrent, string path)
@@ -61,6 +85,8 @@ namespace Patchy
             if (File.Exists(cache))
                 File.Delete(cache);
             File.Copy(torrent.TorrentPath, cache);
+            File.WriteAllText(Path.Combine(Path.GetDirectoryName(cache),
+                Path.GetFileNameWithoutExtension(cache)) + ".info", path);
         }
 
         private void PeriodicUpdate()

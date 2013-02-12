@@ -45,9 +45,13 @@ namespace Patchy
             torrent.Start();
         }
 
-        public void LoadFastResume(FastResume resume)
+        public void LoadFastResume(FastResume resume, TorrentWrapper torrent)
         {
-            
+            Torrents.Add(new PeriodicTorrent(torrent));
+            torrent.Index = Torrents.Count;
+            torrent.LoadFastResume(resume);
+            Client.Register(torrent);
+            torrent.Start();
         }
 
         public void Shutdown()
