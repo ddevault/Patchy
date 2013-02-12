@@ -12,8 +12,9 @@ namespace Patchy.Converters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             TimeSpan time = (TimeSpan)value;
-            if (time == TimeSpan.MaxValue)
-                return "n/a";
+
+            if (time == TimeSpan.MaxValue || time == TimeSpan.MinValue)
+                return "∞";
             if (time.TotalSeconds < 60)
                 return (int)time.TotalSeconds + " secs";
             if (time.TotalSeconds < (60 * 5))
