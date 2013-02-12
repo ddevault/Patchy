@@ -27,32 +27,39 @@ namespace Patchy
             // Load prior session
             if (File.Exists(SettingsManager.FastResumePath))
             {
-                var resume = BEncodedValue.Decode<BEncodedDictionary>(
-                    File.ReadAllBytes(SettingsManager.FastResumePath));
-                var torrents = Directory.GetFiles(SettingsManager.TorrentCachePath, "*.torrent");
-                foreach (var torrent in torrents)
-                {
-                    try
+                // Load on another thread because it takes some time
+                new Thread(() =>
                     {
-                        var path = File.ReadAllText(Path.Combine(
-                            SettingsManager.TorrentCachePath, Path.GetFileNameWithoutExtension(torrent))
-                            + ".info");
-                        var wrapper = new TorrentWrapper(Torrent.Load(torrent), path, new TorrentSettings());
-                        if (resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
+                        var resume = BEncodedValue.Decode<BEncodedDictionary>(
+                            File.ReadAllBytes(SettingsManager.FastResumePath));
+                        var torrents = Directory.GetFiles(SettingsManager.TorrentCachePath, "*.torrent");
+                        foreach (var torrent in torrents)
                         {
-                            Client.LoadFastResume(
-                                new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
+                            try
+                            {
+                                var path = File.ReadAllText(Path.Combine(
+                                    SettingsManager.TorrentCachePath, Path.GetFileNameWithoutExtension(torrent))
+                                    + ".info");
+                                var wrapper = new TorrentWrapper(Torrent.Load(torrent), path, new TorrentSettings());
+                                Dispatcher.Invoke(new Action(() =>
+                                    {
+                                        if (resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
+                                        {
+                                            Client.LoadFastResume(
+                                                new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
+                                        }
+                                        else
+                                        {
+                                            Client.AddTorrent(wrapper);
+                                        }
+                                    }));
+                            }
+                            catch (Exception e)
+                            {
+                                throw;
+                            }
                         }
-                        else
-                        {
-                            Client.AddTorrent(wrapper);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        throw;
-                    }
-                }
+                    }).Start();
             }
             Timer = new Timer(o => Dispatcher.Invoke(new Action(PeriodicUpdate)),
                 null, 1000, 1000);
