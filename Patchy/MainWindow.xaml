@@ -13,6 +13,7 @@
             <c:TorrentSpeedConverter x:Key="torrentSpeedConverter"></c:TorrentSpeedConverter>
             <c:TorrentETAConverter x:Key="torrentEtaConverter"></c:TorrentETAConverter>
             <c:TorrentProgressConverter x:Key="torrentProgressConverter"></c:TorrentProgressConverter>
+            <c:PeerClientConverter x:Key="peerClientConverter"></c:PeerClientConverter>
             <ObjectDataProvider x:Key="priorityDataProvider" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="mt:Priority"></x:Type>
@@ -253,9 +254,24 @@
                             </Style>
                         </DataGrid.CellStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Address" Width="100">
+                            <DataGridTextColumn Header="Address" Width="150">
                                 <DataGridTextColumn.Binding>
                                     <Binding Path="Uri"></Binding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Software" Width="100">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="ClientApp" Converter="{StaticResource ResourceKey=peerClientConverter}"></Binding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Pieces Sent">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="PiecesSent"></Binding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Pieces Received">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="PiecesReceived"></Binding>
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
                         </DataGrid.Columns>
