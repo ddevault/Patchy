@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -40,10 +40,10 @@ namespace Patchy
 
         private void InitializeNotifyIcon()
         {
-            NotifyIcon = new System.Windows.Forms.NotifyIcon {
+            NotifyIcon = new System.Windows.Forms.NotifyIcon 
+            {
                 Text = "Patchy",
-                Icon = new System.Drawing.Icon( Application.GetResourceStream(
-                    new Uri( "pack://application:,,,/Patchy;component/Images/patchy.ico" ) ).Stream ),
+                Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/Patchy;component/Images/patchy.ico" )).Stream),
                 Visible = true
             };
             NotifyIcon.DoubleClick += NotifyIconClick;
