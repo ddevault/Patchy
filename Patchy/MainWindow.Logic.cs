@@ -70,6 +70,11 @@ namespace Patchy
                     SettingsManager.TorrentCachePath,
                     ClientManager.CleanFileName(name) + ".torrent");
             var wrapper = new TorrentWrapper(link, path, new TorrentSettings(), cache);
+            if (Client.Torrents.Any(t => t.Torrent.InfoHash == wrapper.InfoHash))
+            {
+                MessageBox.Show(name + " has already been added.", "Error");
+                return;
+            }
             var periodic = Client.AddTorrent(wrapper);
             File.WriteAllText(Path.Combine(
                     SettingsManager.TorrentCachePath,
@@ -83,6 +88,11 @@ namespace Patchy
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             var wrapper = new TorrentWrapper(torrent, path, new TorrentSettings());
+            if (Client.Torrents.Any(t => t.Torrent.InfoHash == wrapper.InfoHash))
+            {
+                MessageBox.Show(torrent.Name + " has already been added.", "Error");
+                return;
+            }
             var periodic = Client.AddTorrent(wrapper);
             // Save torrent to cache
             var cache = Path.Combine(SettingsManager.TorrentCachePath, Path.GetFileName(torrent.TorrentPath));
