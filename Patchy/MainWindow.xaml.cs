@@ -89,6 +89,11 @@ namespace Patchy
                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                 TaskbarItemInfo.ProgressValue = 0;
             }
+            if (Client.Torrents.Any(t => t.State == TorrentState.Error))
+            {
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Error;
+                TaskbarItemInfo.ProgressValue = 1;
+            }
         }
 
         private void NotifyIconClick(object sender, EventArgs e)

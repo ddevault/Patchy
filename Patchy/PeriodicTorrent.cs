@@ -34,6 +34,33 @@ namespace Patchy
             CompletedOnAdd = Torrent.Complete;
             NotifiedComplete = false;
             PiecePicker = new RandomisedPicker(new StandardPicker());
+            wrapper.PieceManager.BlockReceived += PieceManager_BlockReceived;
+            wrapper.PieceHashed += wrapper_PieceHashed;
+        }
+
+        void wrapper_PieceHashed(object sender, PieceHashedEventArgs e)
+        {
+            if (RecievedPieces == null)
+            {
+                RecievedPieces = new bool[Torrent.Torrent.Pieces.Count];
+                for (int i = 0; i < RecievedPieces.Length; i++)
+                    RecievedPieces[i] = false;
+            }
+            if (e.HashPassed)
+                RecievedPieces[e.PieceIndex] = true;
+        }
+
+        void PieceManager_BlockReceived(object sender, BlockEventArgs e)
+        {
+            if (RecievedPieces == null)
+            {
+                RecievedPieces = new bool[Torrent.Torrent.Pieces.Count];
+                for (int i = 0; i < RecievedPieces.Length; i++)
+                    RecievedPieces[i] = false;
+            }
+            RecievedPieces[e.Piece.Index] = true;
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("RecievedPieces"));
         }
 
         internal void Update()
