@@ -66,6 +66,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\PeerClientConverter.cs" />
+    <Compile Include="Converters\TimeSpanConverter.cs" />
+    <Compile Include="Converters\TorrentCreationDateConverter.cs" />
+    <Compile Include="Converters\TorrentETADateTimeConverter.cs" />
     <Compile Include="Converters\TorrentProgressConverter.cs" />
     <Compile Include="MainWindow.Commands.cs" />
     <Compile Include="MainWindow.Logic.cs" />

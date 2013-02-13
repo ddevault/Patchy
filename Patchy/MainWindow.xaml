@@ -5,7 +5,7 @@
         xmlns:mt="clr-namespace:MonoTorrent.Common;assembly=MonoTorrent"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:pt="clr-namespace:Patchy"
-        Title="Patchy" Height="600" Width="1150" Icon="Images/patchy.ico"
+        Title="Patchy" Height="600" Width="1200" Icon="Images/patchy.ico"
         Closing="WindowClosing" Closed="WindowClosed">
     <Window.Resources>
         <ResourceDictionary>
@@ -15,6 +15,9 @@
             <c:TorrentETAConverter x:Key="torrentEtaConverter"></c:TorrentETAConverter>
             <c:TorrentProgressConverter x:Key="torrentProgressConverter"></c:TorrentProgressConverter>
             <c:PeerClientConverter x:Key="peerClientConverter"></c:PeerClientConverter>
+            <c:TimeSpanConverter x:Key="timeSpanConverter"></c:TimeSpanConverter>
+            <c:TorrentETADateTimeConverter x:Key="torrentEtaDateTimeConverter"></c:TorrentETADateTimeConverter>
+            <c:TorrentCreationDateConverter x:Key="torrentCreationDateConverter"></c:TorrentCreationDateConverter>
             <ObjectDataProvider x:Key="priorityDataProvider" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="mt:Priority"></x:Type>
@@ -124,7 +127,7 @@
                     <!--It would be nice if we could assign these elsewhere-->
                     <DataGridTextColumn Header="#">
                         <DataGridTextColumn.Binding>
-                            <Binding Path="Index"></Binding>
+                            <Binding Path="Torrent.Index"></Binding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Name" Width="300">
@@ -178,9 +181,14 @@
                             <Binding Path="TotalUploaded" Converter="{StaticResource ResourceKey=torrentSizeConverter}"></Binding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Ratio" Width="80">
+                    <DataGridTextColumn Width="60" Header="Seeders">
                         <DataGridTextColumn.Binding>
-                            <Binding Path="DownloadToUploadRatio" StringFormat="0.00 d/u"></Binding>
+                            <Binding Path="Seeders"></Binding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="60" Header="Leechers">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="Leechers"></Binding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
@@ -196,11 +204,70 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <TextBlock Margin="5">Progress</TextBlock>
                         <pt:PiecedProgressBar Height="25" Grid.Row="1" DataContext="{Binding}"></pt:PiecedProgressBar>
-                        <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"
                                    Text="{Binding Progress,Converter={StaticResource ResourceKey=torrentProgressConverter}}"></TextBlock>
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <!--Left column-->
+                            <TextBlock FontWeight="Bold" FontSize="14">Transfer</TextBlock>
+                            <TextBlock Grid.Row="1" Text="Elapsed time: "></TextBlock>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ElapsedTime, Converter={StaticResource ResourceKey=timeSpanConverter}}"></TextBlock>
+                            <TextBlock Grid.Row="2" Text="Estimated completion: "></TextBlock>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding EstimatedTime, Converter={StaticResource ResourceKey=torrentEtaDateTimeConverter}}"></TextBlock>
+                            <TextBlock Grid.Row="3" Text="Download speed: "></TextBlock>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding DownloadSpeed, Converter={StaticResource ResourceKey=torrentSpeedConverter}}"></TextBlock>
+                            <TextBlock Grid.Row="4" Text="Upload speed: "></TextBlock>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding UploadSpeed, Converter={StaticResource ResourceKey=torrentSpeedConverter}}"></TextBlock>
+                            <TextBlock Grid.Row="5" Text="Downloaded: "></TextBlock>
+                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding TotalDownloaded, Converter={StaticResource ResourceKey=torrentSizeConverter}}"></TextBlock>
+                            <TextBlock Grid.Row="6" Text="Uploaded: "></TextBlock>
+                            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding TotalUploaded, Converter={StaticResource ResourceKey=torrentSizeConverter}}"></TextBlock>
+                            <TextBlock Grid.Row="7" Text="U/D ratio: "></TextBlock>
+                            <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Ratio}"></TextBlock>
+                            <!--Middle column-->
+                            <TextBlock Grid.Column="2" FontWeight="Bold" FontSize="14">Tracker</TextBlock>
+                            <TextBlock Grid.Column="2" Grid.Row="1" Text="Address: "></TextBlock>
+                            <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding Path=Torrent.TrackerManager.CurrentTracker.Uri}"></TextBlock>
+                            <TextBlock Grid.Column="2" Grid.Row="2" Text="Status: "></TextBlock>
+                            <TextBlock Grid.Column="3" Grid.Row="2" Text="{Binding Path=Torrent.TrackerManager.CurrentTracker.Status}"></TextBlock>
+                            <TextBlock Grid.Column="2" Grid.Row="3" Text="Next Update: "></TextBlock>
+                            <TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding Path=Torrent.TrackerManager.CurrentTracker.UpdateInterval, Converter={StaticResource ResourceKey=torrentEtaDateTimeConverter}}"></TextBlock>
+                            <TextBlock Grid.Column="2" Grid.Row="4" Text="Message: "></TextBlock>
+                            <TextBlock Grid.Column="3" Grid.Row="4" Text="{Binding Path=Torrent.TrackerManager.CurrentTracker.WarningMessage}"></TextBlock>
+                            <!--Right column-->
+                            <TextBlock Grid.Column="4" FontSize="14" FontWeight="Bold">General</TextBlock>
+                            <TextBlock Grid.Column="4" Grid.Row="1" Text="Name: "></TextBlock>
+                            <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding Path=Name}"></TextBlock>
+                            <TextBlock Grid.Column="4" Grid.Row="2" Text="Save path: "></TextBlock>
+                            <TextBlock Grid.Column="5" Grid.Row="2" Text="{Binding Path=Torrent.SavePath}"></TextBlock>
+                            <TextBlock Grid.Column="4" Grid.Row="3" Text="Size: "></TextBlock>
+                            <TextBlock Grid.Column="5" Grid.Row="3" Text="{Binding Size, Converter={StaticResource ResourceKey=torrentSizeConverter}}"></TextBlock>
+                            <TextBlock Grid.Column="4" Grid.Row="4" Text="Creation Date: "></TextBlock>
+                            <TextBlock Grid.Column="5" Grid.Row="4" Text="{Binding Path=Torrent.Torrent.CreationDate, Converter={StaticResource ResourceKey=torrentCreationDateConverter}}"></TextBlock>
+                            <TextBlock Grid.Column="4" Grid.Row="5" Text="Comment: "></TextBlock>
+                            <TextBlock Grid.Column="5" Grid.Row="5" Text="{Binding Path=Torrent.Torrent.Comment}"></TextBlock>
+                        </Grid>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Files">

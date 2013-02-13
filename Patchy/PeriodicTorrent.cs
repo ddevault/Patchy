@@ -70,13 +70,14 @@ namespace Patchy
             Complete = Torrent.Complete;
             DownloadSpeed = Torrent.Monitor.DownloadSpeed;
             UploadSpeed = Torrent.Monitor.UploadSpeed;
+            ElapsedTime = DateTime.Now - Torrent.StartTime;
             if (Torrent.State == TorrentState.Metadata)
                 EstimatedTime = TimeSpan.MaxValue;
             else
                 EstimatedTime = new TimeSpan((long)((DateTime.Now - Torrent.StartTime).Ticks / (Torrent.Progress / 100)));
             TotalDownloaded = Torrent.Monitor.DataBytesDownloaded;
             TotalUploaded = Torrent.Monitor.DataBytesUploaded;
-            DownloadToUploadRatio = (double)Torrent.Monitor.DataBytesUploaded / Torrent.Monitor.DataBytesDownloaded;
+            Ratio = (double)Torrent.Monitor.DataBytesUploaded / Torrent.Monitor.DataBytesDownloaded;
             if ((Torrent.State == TorrentState.Downloading || Torrent.State == TorrentState.Seeding) && files == null)
             {
                 files = new PeriodicFile[Torrent.Torrent.Files.Length];
@@ -140,6 +141,22 @@ namespace Patchy
                 state = value;
                 if (fire && PropertyChanged != null)
                     PropertyChanged(this, new PropertyChangedEventArgs("State"));
+            }
+        }
+
+        private TimeSpan elapsedTime;
+        public TimeSpan ElapsedTime
+        {
+            get
+            {
+                return elapsedTime;
+            }
+            private set
+            {
+                var fire = elapsedTime != value;
+                elapsedTime = value;
+                if (fire && PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("ElapsedTime"));
             }
         }
 
@@ -239,19 +256,19 @@ namespace Patchy
             }
         }
 
-        private double downloadToUploadRatio;
-        public double DownloadToUploadRatio
+        private double ratio;
+        public double Ratio
         {
             get
             {
-                return downloadToUploadRatio;
+                return ratio;
             }
             private set
             {
-                var fire = downloadToUploadRatio != value;
-                downloadToUploadRatio = value;
+                var fire = ratio != value;
+                ratio = value;
                 if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("DownloadToUploadRatio"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("Ratio"));
             }
         }
 
