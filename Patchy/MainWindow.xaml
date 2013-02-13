@@ -224,10 +224,10 @@
                       Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray"
                       Visibility="{Binding ElementName=viewTorrentDetailsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}"></GridSplitter>
         <!--Torrent detail grid-->
-        <Grid Grid.Row="4" Grid.Column="2" x:Name="lowerGrid" Height="200"
+        <Grid Grid.Row="4" Grid.Column="2" x:Name="lowerGrid" Height="215"
               Visibility="{Binding ElementName=viewTorrentDetailsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}">
             <TabControl>
-                <TabItem Header="Information">
+                <TabItem Header="Information" IsSelected="True">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
