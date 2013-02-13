@@ -40,6 +40,8 @@ namespace Patchy
                     return false;
                 if (item.Element("link") == null)
                     return false;
+                if (item.Element("pubDate") == null)
+                    return false;
                 if (item.Element(dc + "creator") == null)
                     return false;
             }
