@@ -206,8 +206,8 @@
                         MouseDoubleClick="FileListGridMouseDoubleClick" ContextMenuOpening="fileListGridContextMenuOpening">
                         <DataGrid.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Open"></MenuItem>
-                                <MenuItem Header="Open containing folder"></MenuItem>
+                                <MenuItem Header="Open" Click="fileListGridOpenFile"></MenuItem>
+                                <MenuItem Header="Open containing folder" Click="fileListGridOpenFolder"></MenuItem>
                                 <Separator></Separator>
                                 <MenuItem Header="Priority">
                                     <MenuItem Header="Do not download"></MenuItem>

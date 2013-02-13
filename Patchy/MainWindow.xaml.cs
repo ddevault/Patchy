@@ -284,5 +284,31 @@ namespace Patchy
                 torrent.ChangePicker(sliding);
             }
         }
+
+        private void fileListGridOpenFile(object sender, RoutedEventArgs e)
+        {
+            var item = fileListGrid.SelectedItem as PeriodicFile;
+            var extension = Path.GetExtension(item.File.Path);
+
+            // TODO: Expand list of naughty file extensions
+
+            bool open = true;
+            if (extension.Equals(".exe", StringComparison.OrdinalIgnoreCase))
+            {
+                open = MessageBox.Show("This file could be dangerous. Are you sure you want to open it?",
+                    "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
+            }
+            if (open)
+            {
+                var torrent = torrentGrid.SelectedItem as PeriodicTorrent;
+                Process.Start(Path.Combine(torrent.Torrent.SavePath, item.File.Path));
+            }
+        }
+
+        private void fileListGridOpenFolder(object sender, RoutedEventArgs e)
+        {
+            var item = fileListGrid.SelectedItem as PeriodicFile;
+            Process.Start("explorer", "/Select, " + item.File.FullPath);
+        }
     }
 }
