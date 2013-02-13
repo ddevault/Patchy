@@ -127,8 +127,11 @@ namespace Patchy
                             try
                             {
                                 var link = new MagnetLink(text);
-                                quickAddName.Text = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(link.Name));
-                                visibility = Visibility.Visible;
+                                if (!Client.Torrents.Any(t => t.Torrent.InfoHash == link.InfoHash))
+                                {
+                                    quickAddName.Text = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(link.Name));
+                                    visibility = Visibility.Visible;
+                                }
                             }
                             catch { }
                         }
