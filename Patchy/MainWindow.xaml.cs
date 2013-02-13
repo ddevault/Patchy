@@ -315,5 +315,22 @@ namespace Patchy
             var item = fileListGrid.SelectedItem as PeriodicFile;
             Process.Start("explorer", "/Select, " + item.File.FullPath);
         }
+
+        private void menuSourceCodeClicked(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/SirCmpwn/Patchy");
+        }
+
+        private void menuReportBugClicked(object sender, RoutedEventArgs e)
+        {
+            var systemInfo = string.Format("OS Name: {0}" + Environment.NewLine +
+                "Edition: {1}" + Environment.NewLine +
+                "Service Pack: {2}" + Environment.NewLine +
+                "Version: {3}" + Environment.NewLine +
+                "Architecture: {4} bit", OSInfo.Name, OSInfo.Edition, OSInfo.ServicePack, OSInfo.Version, OSInfo.Bits);
+            Process.Start(string.Format("https://github.com/SirCmpwn/Patchy/issues/new?title={0}&body={1}",
+                Uri.EscapeUriString("A brief description of your problem"),
+                Uri.EscapeUriString("[A more detailed description of your problem]" + Environment.NewLine + Environment.NewLine + systemInfo)));
+        }
     }
 }

@@ -62,8 +62,8 @@
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="Documentation"></MenuItem>
-                <MenuItem Header="Report Bug"></MenuItem>
-                <MenuItem Header="Source Code"></MenuItem>
+                <MenuItem Header="Report Bug" Click="menuReportBugClicked"></MenuItem>
+                <MenuItem Header="Source Code" Click="menuSourceCodeClicked"></MenuItem>
             </MenuItem>
         </Menu>
         <ComboBox Grid.Row="0" Width="200" HorizontalAlignment="Right" SelectedIndex="0">

@@ -72,6 +72,7 @@
     <Compile Include="Converters\TorrentProgressConverter.cs" />
     <Compile Include="MainWindow.Commands.cs" />
     <Compile Include="MainWindow.Logic.cs" />
+    <Compile Include="OSInfo.cs" />
     <Compile Include="PeriodicFile.cs" />
     <Compile Include="PiecedProgressBar.xaml.cs">
       <DependentUpon>PiecedProgressBar.xaml</DependentUpon>
