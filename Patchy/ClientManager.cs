@@ -36,7 +36,10 @@ namespace Patchy
             var dht = new DhtEngine(listener);
             Client.RegisterDht(dht);
             listener.Start();
-            Client.DhtEngine.Start();
+            if (File.Exists(SettingsManager.DhtCachePath))
+                dht.Start(File.ReadAllBytes(SettingsManager.DhtCachePath));
+            else
+                dht.Start();
         }
 
         public PeriodicTorrent AddTorrent(TorrentWrapper torrent)
@@ -111,6 +114,8 @@ namespace Patchy
 
         public void Shutdown()
         {
+            Client.DhtEngine.Stop();
+            File.WriteAllBytes(SettingsManager.DhtCachePath, Client.DhtEngine.SaveNodes());
             Client.Dispose();
         }
 

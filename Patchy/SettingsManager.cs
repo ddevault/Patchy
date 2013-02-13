@@ -18,24 +18,22 @@ namespace Patchy
 
         public static string SettingsPath
         {
-            get
-            {
-                return Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".patchy");
-            }
+            get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".patchy"); }
         }
 
         public static string FastResumePath
         {
-            get
-            {
-                return Path.Combine(SettingsPath, "fastresume");
-            }
+            get { return Path.Combine(SettingsPath, "fastresume"); }
         }
 
         public static string TorrentCachePath
         {
             get { return Path.Combine(SettingsPath, "torrentcache"); }
+        }
+
+        public static string DhtCachePath
+        {
+            get { return Path.Combine(SettingsPath, "dhtcache"); }
         }
 
         public void Initialize()
