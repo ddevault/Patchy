@@ -244,7 +244,7 @@
                             <TextBlock Grid.Row="6" Text="Uploaded: "></TextBlock>
                             <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding TotalUploaded, Converter={StaticResource ResourceKey=torrentSizeConverter}}"></TextBlock>
                             <TextBlock Grid.Row="7" Text="U/D ratio: "></TextBlock>
-                            <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Ratio}"></TextBlock>
+                            <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Ratio, StringFormat='0.00'}"></TextBlock>
                             <!--Middle column-->
                             <TextBlock Grid.Column="2" FontWeight="Bold" FontSize="14">Tracker</TextBlock>
                             <TextBlock Grid.Column="2" Grid.Row="1" Text="Address: "></TextBlock>
