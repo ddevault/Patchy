@@ -10,9 +10,9 @@ namespace Patchy
     {
         public enum RuleType
         {
-            Title,
-            Description,
-            CreatedBy
+            Title = 0,
+            CreatedBy = 1
+            // TODO: Offer more options?
         }
 
         public RssTorrentRule()
