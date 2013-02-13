@@ -51,6 +51,7 @@ namespace Patchy
                                 {
                                     periodicTorrent = Client.AddTorrent(wrapper);
                                 }
+                                periodicTorrent.CompletedOnAdd = wrapper.Complete;
                                 periodicTorrent.CacheFilePath = torrent;
                             }));
                         }

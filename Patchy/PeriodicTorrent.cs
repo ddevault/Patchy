@@ -38,6 +38,7 @@ namespace Patchy
         {
             State = Torrent.State;
             Progress = Torrent.Progress;
+            Complete = Torrent.Complete;
             DownloadSpeed = Torrent.Monitor.DownloadSpeed;
             UploadSpeed = Torrent.Monitor.UploadSpeed;
             if (Torrent.State == TorrentState.Metadata)

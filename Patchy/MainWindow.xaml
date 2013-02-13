@@ -96,9 +96,6 @@
             <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
                       GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="TorrentGridSelectionChanged"
                       IsReadOnly="True" MouseDoubleClick="TorrentGridMouseDoubleClick" ContextMenuOpening="torrentGridContextMenuOpening">
-                <DataGrid.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DodgerBlue"/>
-                </DataGrid.Resources>
                 <DataGrid.Background>
                     <ImageBrush ImageSource="Images/patchy.png" AlignmentX="Right" AlignmentY="Bottom"
                                 Viewport="0,20,70,70" ViewportUnits="Absolute" Opacity="0.5"></ImageBrush>

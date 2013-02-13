@@ -87,6 +87,7 @@ namespace Patchy
                     Client.Torrents.Count,
                     Client.Torrents.Count == 1 ? "" : "s");
                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                TaskbarItemInfo.ProgressValue = 0;
             }
         }
 
