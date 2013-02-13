@@ -40,9 +40,6 @@
     <Reference Include="MonoTorrent.Dht">
       <HintPath>..\lib\MonoTorrent.Dht.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
