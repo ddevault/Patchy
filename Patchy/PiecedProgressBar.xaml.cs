@@ -69,7 +69,7 @@ namespace Patchy
                     drawingContext.DrawRectangle(Brushes.White, null,
                         new Rect(Math.Ceiling(i * width), 0, Math.Ceiling(width), ActualHeight));
             }
-            drawingContext.DrawRectangle(null, new Pen(Brushes.Black, 1), new Rect(0, 0, this.ActualWidth, this.ActualHeight));
+            drawingContext.DrawRectangle(null, new Pen(Brushes.DarkGray, 1), new Rect(0, 0, this.ActualWidth, this.ActualHeight));
             base.OnRender(drawingContext);
         }
     }
