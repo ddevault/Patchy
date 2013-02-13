@@ -48,10 +48,12 @@ namespace Patchy
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            drawingContext.DrawRectangle(null, new Pen(Brushes.Black, 1), new Rect(0, 0, this.ActualWidth, this.ActualHeight));
             var torrent = DataContext as PeriodicTorrent;
             if (torrent == null)
+            {
+                drawingContext.DrawRectangle(null, new Pen(Brushes.Black, 1), new Rect(0, 0, this.ActualWidth, this.ActualHeight));
                 return;
+            }
             var pieces = torrent.RecievedPieces;
             if (pieces == null)
                 return;
@@ -61,12 +63,13 @@ namespace Patchy
                 if (pieces[i])
                 {
                     drawingContext.DrawRectangle(Brushes.LightGreen, null,
-                        new Rect(i * width, 0, width, ActualHeight));
+                        new Rect(Math.Ceiling(i * width), 0, Math.Ceiling(width), ActualHeight));
                 }
                 else
                     drawingContext.DrawRectangle(Brushes.White, null,
-                        new Rect(i * width, 0, width, ActualHeight));
+                        new Rect(Math.Ceiling(i * width), 0, Math.Ceiling(width), ActualHeight));
             }
+            drawingContext.DrawRectangle(null, new Pen(Brushes.Black, 1), new Rect(0, 0, this.ActualWidth, this.ActualHeight));
             base.OnRender(drawingContext);
         }
     }
