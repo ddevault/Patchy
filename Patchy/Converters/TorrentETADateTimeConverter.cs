@@ -12,6 +12,8 @@ namespace Patchy.Converters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var span = (TimeSpan)value;
+            if (span == TimeSpan.MinValue || span == TimeSpan.MaxValue)
+                return "n/a";
             return (DateTime.Now + span).ToShortTimeString();
         }
 
