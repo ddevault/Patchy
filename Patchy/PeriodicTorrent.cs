@@ -22,6 +22,7 @@ namespace Patchy
         public bool NotifiedComplete { get; set; }
         public bool[] RecievedPieces { get; set; }
         public string CacheFilePath { get; set; }
+        public PiecePicker PiecePicker { get; set; }
 
         public PeriodicTorrent(TorrentWrapper wrapper)
         {
@@ -32,6 +33,7 @@ namespace Patchy
             Size = Torrent.Size;
             CompletedOnAdd = Torrent.Complete;
             NotifiedComplete = false;
+            PiecePicker = new RandomisedPicker(new StandardPicker());
         }
 
         internal void Update()
@@ -77,6 +79,12 @@ namespace Patchy
                 if (!peerList.Contains(PeerList[i]))
                     PeerList.RemoveAt(i--);
             }
+        }
+
+        public void ChangePicker(PiecePicker piecePicker)
+        {
+            Torrent.ChangePicker(piecePicker);
+            PiecePicker = piecePicker;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

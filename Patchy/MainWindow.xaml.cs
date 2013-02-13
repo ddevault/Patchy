@@ -210,6 +210,15 @@ namespace Patchy
         private void torrentGridContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             e.Handled = torrentGrid.SelectedItems.Count == 0;
+            torrentGridToggleStreamingMenuItem.IsEnabled = torrentGrid.SelectedItems.Count == 1;
+            torrentGridToggleStreamingMenuItem.IsChecked = false;
+            if (torrentGrid.SelectedItems.Count == 1)
+            {
+                var torrent = torrentGrid.SelectedItem as PeriodicTorrent;
+                torrentGridToggleStreamingMenuItem.Checked -= torrentGridToggleStreaming;
+                torrentGridToggleStreamingMenuItem.IsChecked = torrent.PiecePicker is SlidingWindowPicker;
+                torrentGridToggleStreamingMenuItem.Checked += torrentGridToggleStreaming;
+            }
         }
 
         private void torrentGridOpenFolder(object sender, RoutedEventArgs e)
@@ -254,6 +263,26 @@ namespace Patchy
             if (torrent.Torrent.TrackerManager.CurrentTracker != null)
                 link += "&tr=" + Uri.EscapeUriString(torrent.Torrent.TrackerManager.CurrentTracker.Uri.ToString());
             Clipboard.SetText(link);
+        }
+
+        private void fileListGridContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            e.Handled = fileListGrid.SelectedItems.Count == 0;
+        }
+
+        private void torrentGridToggleStreaming(object sender, RoutedEventArgs e)
+        {
+            var torrent = torrentGrid.SelectedItem as PeriodicTorrent;
+            if (torrent.PiecePicker is SlidingWindowPicker)
+                torrent.ChangePicker(new RandomisedPicker(new StandardPicker()));
+            else
+            {
+                var sliding = new SlidingWindowPicker(torrent.PiecePicker);
+                // TODO: Perhaps integrate streaming properly into the client
+                sliding.HighPrioritySetStart = 0;
+                sliding.HighPrioritySetSize = 1;
+                torrent.ChangePicker(sliding);
+            }
         }
     }
 }

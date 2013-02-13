@@ -110,6 +110,8 @@
                         <MenuItem Header="Open Folder" Click="torrentGridOpenFolder"></MenuItem>
                         <MenuItem Header="Copy Magnet Link" Click="torrentGridCopyMagnentLink"></MenuItem>
                         <Separator></Separator>
+                        <MenuItem Header="Download for streaming" IsCheckable="True" Checked="torrentGridToggleStreaming"
+                                  x:Name="torrentGridToggleStreamingMenuItem"></MenuItem>
                         <MenuItem x:Name="torrentGridContextMenuPauseResume" Header="Pause"></MenuItem>
                         <MenuItem Header="Remove">
                             <MenuItem Header="Torrent only" Click="torrentGridRemoveTorrent"></MenuItem>
@@ -201,7 +203,22 @@
                 <TabItem Header="Files">
                     <DataGrid ItemsSource="{Binding Files}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False"
                         GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="fileListGrid" IsReadOnly="True"
-                        MouseDoubleClick="FileListGridMouseDoubleClick">
+                        MouseDoubleClick="FileListGridMouseDoubleClick" ContextMenuOpening="fileListGridContextMenuOpening">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Open"></MenuItem>
+                                <MenuItem Header="Open containing folder"></MenuItem>
+                                <Separator></Separator>
+                                <MenuItem Header="Priority">
+                                    <MenuItem Header="Do not download"></MenuItem>
+                                    <MenuItem Header="Lowest"></MenuItem>
+                                    <MenuItem Header="Low"></MenuItem>
+                                    <MenuItem Header="Normal" IsChecked="True"></MenuItem>
+                                    <MenuItem Header="High"></MenuItem>
+                                    <MenuItem Header="Highest"></MenuItem>
+                                </MenuItem>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="BorderThickness" Value="0"/>
