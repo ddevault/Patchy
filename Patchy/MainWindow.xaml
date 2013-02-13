@@ -18,6 +18,7 @@
             <c:TimeSpanConverter x:Key="timeSpanConverter"></c:TimeSpanConverter>
             <c:TorrentETADateTimeConverter x:Key="torrentEtaDateTimeConverter"></c:TorrentETADateTimeConverter>
             <c:TorrentCreationDateConverter x:Key="torrentCreationDateConverter"></c:TorrentCreationDateConverter>
+            <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"></BooleanToVisibilityConverter>
             <ObjectDataProvider x:Key="priorityDataProvider" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="mt:Priority"></x:Type>
@@ -41,14 +42,24 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="6*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Menu Grid.Row="0" Grid.ColumnSpan="3">
             <MenuItem Header="File">
                 <MenuItem Header="Add Torrent..." Command="Open"></MenuItem>
                 <MenuItem Header="Create Torrent"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="Exit" Command="Close"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="View">
+                <!--TODO: Save user layout preferences-->
+                <MenuItem x:Name="viewTorrentDetailsMenuItem" IsCheckable="True" IsChecked="True" Header="Torrent Details"></MenuItem>
+                <MenuItem x:Name="viewRssFeedsMenuItem" IsChecked="False" IsCheckable="True" Header="RSS Feeds"></MenuItem>
             </MenuItem>
             <MenuItem Header="Torrent">
                 <MenuItem Header="Pause"></MenuItem>
@@ -66,14 +77,15 @@
                 <MenuItem Header="Source Code" Click="menuSourceCodeClicked"></MenuItem>
             </MenuItem>
         </Menu>
-        <ComboBox Grid.Row="0" Width="200" HorizontalAlignment="Right" SelectedIndex="0">
+        <ComboBox Grid.Row="0" Grid.ColumnSpan="3" Width="200" HorizontalAlignment="Right" SelectedIndex="0">
             <ComboBoxItem>All Torrents</ComboBoxItem>
             <ComboBoxItem>Downloading</ComboBoxItem>
             <ComboBoxItem>Seeding</ComboBoxItem>
             <ComboBoxItem>Paused</ComboBoxItem>
             <ComboBoxItem>Active</ComboBoxItem>
         </ComboBox>
-        <Grid Grid.Row="1" x:Name="quickAddGrid" Visibility="Collapsed" Background="#FFEC9B">
+        <!--Quick add-->
+        <Grid Grid.Row="1" Grid.ColumnSpan="3" x:Name="quickAddGrid" Visibility="Collapsed" Background="#FFEC9B">
             <Grid Margin="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -96,7 +108,21 @@
                 </Button>
             </Grid>
         </Grid>
-        <Grid Grid.Row="2" x:Name="upperGrid">
+        <!--RSS Feed Left-->
+        <Grid x:Name="rssFeedGrid" Grid.RowSpan="4" Grid.Row="1" Width="200" Margin="3"
+              Visibility="{Binding ElementName=viewRssFeedsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock FontSize="16">RSS Feeds</TextBlock>
+            <ListView x:Name="rssListView" Grid.Row="1" BorderThickness="0"></ListView>
+        </Grid>
+        <GridSplitter Grid.RowSpan="4" Grid.Row="1" Grid.Column="1" ResizeDirection="Columns" Height="Auto"
+                      Width="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray"
+                      Visibility="{Binding ElementName=viewRssFeedsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}"></GridSplitter>
+        <!--Main torrent grid-->
+        <Grid Grid.Row="2" Grid.Column="2" x:Name="upperGrid">
             <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
                       GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="TorrentGridSelectionChanged"
                       IsReadOnly="True" ContextMenuOpening="torrentGridContextMenuOpening">
@@ -194,10 +220,12 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        <GridSplitter Grid.Row="3" ResizeDirection="Rows" Width="Auto"
-                      Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      Background="LightGray"></GridSplitter>
-        <Grid Grid.Row="4" x:Name="lowerGrid">
+        <GridSplitter Grid.Row="3" Grid.Column="2" ResizeDirection="Rows" Width="Auto"
+                      Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray"
+                      Visibility="{Binding ElementName=viewTorrentDetailsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}"></GridSplitter>
+        <!--Torrent detail grid-->
+        <Grid Grid.Row="4" Grid.Column="2" x:Name="lowerGrid" Height="200"
+              Visibility="{Binding ElementName=viewTorrentDetailsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}">
             <TabControl>
                 <TabItem Header="Information">
                     <Grid>
