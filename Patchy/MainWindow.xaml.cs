@@ -43,7 +43,8 @@ namespace Patchy
             NotifyIcon = new System.Windows.Forms.NotifyIcon 
             {
                 Text = "Patchy",
-                Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/Patchy;component/Images/patchy.ico" )).Stream),
+                Icon = new System.Drawing.Icon(Application.GetResourceStream(
+                    new Uri("pack://application:,,,/Patchy;component/Images/patchy.ico" )).Stream),
                 Visible = true
             };
             NotifyIcon.DoubleClick += NotifyIconClick;
