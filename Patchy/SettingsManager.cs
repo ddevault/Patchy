@@ -14,6 +14,7 @@ namespace Patchy
             DefaultDownloadLocation = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 "Downloads");
+            RssFeeds = new List<RssFeed>();
         }
 
         public static string SettingsPath
@@ -45,5 +46,6 @@ namespace Patchy
         }
 
         public string DefaultDownloadLocation { get; set; }
+        public List<RssFeed> RssFeeds { get; set; }
     }
 }

@@ -343,5 +343,11 @@ namespace Patchy
                 Uri.EscapeUriString("A brief description of your problem"),
                 Uri.EscapeUriString("[A more detailed description of your problem]" + Environment.NewLine + Environment.NewLine + systemInfo)));
         }
+
+        private void ExecuteManageRssFeeds(object sender, ExecutedRoutedEventArgs e)
+        {
+            var manager = new RssFeedManager(SettingsManager.RssFeeds);
+            manager.ShowDialog();
+        }
     }
 }

@@ -32,4 +32,9 @@ namespace Patchy
             Close();
         }
     }
+
+    public static class Commands
+    {
+        public static readonly RoutedCommand ManageRssFeeds = new RoutedUICommand("Manage RSS Feeds", "ManageRssFeeds", typeof(MainWindow));
+    }
 }

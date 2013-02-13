@@ -29,6 +29,7 @@
     <Window.CommandBindings>
         <CommandBinding Command="Open" Executed="ExecuteNew"></CommandBinding>
         <CommandBinding Command="Close" Executed="ExecuteExit"></CommandBinding>
+        <CommandBinding Command="pt:Commands.ManageRssFeeds" Executed="ExecuteManageRssFeeds"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="Open" Key="O" Modifiers="Control"></KeyBinding>
@@ -52,7 +53,9 @@
         <Menu Grid.Row="0" Grid.ColumnSpan="3">
             <MenuItem Header="File">
                 <MenuItem Header="Add Torrent..." Command="Open"></MenuItem>
-                <MenuItem Header="Create Torrent"></MenuItem>
+                <MenuItem Header="Create Torrent" Command="New"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="Manage RSS Feeds" Command="pt:Commands.ManageRssFeeds"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="Exit" Command="Close"></MenuItem>
             </MenuItem>
@@ -109,7 +112,7 @@
             </Grid>
         </Grid>
         <!--RSS Feed Left-->
-        <Grid x:Name="rssFeedGrid" Grid.RowSpan="4" Grid.Row="1" Width="200" Margin="3"
+        <Grid x:Name="rssFeedGrid" Grid.RowSpan="4" Grid.Row="1" Width="300" Margin="3"
               Visibility="{Binding ElementName=viewRssFeedsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
@@ -125,7 +128,7 @@
         <Grid Grid.Row="2" Grid.Column="2" x:Name="upperGrid">
             <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
                       GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="TorrentGridSelectionChanged"
-                      IsReadOnly="True" ContextMenuOpening="torrentGridContextMenuOpening">
+                      IsReadOnly="True" ContextMenuOpening="torrentGridContextMenuOpening" CanUserResizeRows="False">
                 <DataGrid.Background>
                     <ImageBrush ImageSource="Images/patchy.png" AlignmentX="Right" AlignmentY="Bottom"
                                 Viewport="0,20,70,70" ViewportUnits="Absolute" Opacity="0.5"></ImageBrush>

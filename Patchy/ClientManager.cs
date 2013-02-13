@@ -47,8 +47,11 @@ namespace Patchy
             var periodicTorrent = new PeriodicTorrent(torrent);
             Torrents.Add(periodicTorrent);
             torrent.Index = Torrents.Count;
-            Client.Register(torrent);
-            torrent.Start();
+            Task.Factory.StartNew(() =>
+                {
+                    Client.Register(torrent);
+                    torrent.Start();
+                });
             return periodicTorrent;
         }
 
@@ -57,9 +60,12 @@ namespace Patchy
             var periodicTorrent = new PeriodicTorrent(torrent);
             Torrents.Add(periodicTorrent);
             torrent.Index = Torrents.Count;
-            torrent.LoadFastResume(resume);
-            Client.Register(torrent);
-            torrent.Start();
+            Task.Factory.StartNew(() =>
+                {
+                    torrent.LoadFastResume(resume);
+                    Client.Register(torrent);
+                    torrent.Start();
+                });
             return periodicTorrent;
         }
 

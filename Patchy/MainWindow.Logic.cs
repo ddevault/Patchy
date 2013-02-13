@@ -39,21 +39,21 @@ namespace Patchy
                                 SettingsManager.TorrentCachePath, Path.GetFileNameWithoutExtension(torrent))
                                                         + ".info");
                             var wrapper = new TorrentWrapper(Torrent.Load(torrent), path, new TorrentSettings());
-                            Dispatcher.Invoke(new Action(() =>
-                            {
-                                PeriodicTorrent periodicTorrent;
-                                if (resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
+                            PeriodicTorrent periodicTorrent;
+                            Dispatcher.BeginInvoke(new Action(() =>
                                 {
-                                    periodicTorrent = Client.LoadFastResume(
-                                        new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
-                                }
-                                else
-                                {
-                                    periodicTorrent = Client.AddTorrent(wrapper);
-                                }
-                                periodicTorrent.CompletedOnAdd = wrapper.Complete;
-                                periodicTorrent.CacheFilePath = torrent;
-                            }));
+                                    if (resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
+                                    {
+                                        periodicTorrent = Client.LoadFastResume(
+                                            new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
+                                    }
+                                    else
+                                    {
+                                        periodicTorrent = Client.AddTorrent(wrapper);
+                                    }
+                                    periodicTorrent.CompletedOnAdd = wrapper.Complete;
+                                    periodicTorrent.CacheFilePath = torrent;
+                                }));
                         }
                     }).Start();
             }
