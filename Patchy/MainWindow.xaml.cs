@@ -245,5 +245,15 @@ namespace Patchy
                 Client.RemoveTorrentAndFiles(torrent);
             }
         }
+
+        private void torrentGridCopyMagnentLink(object sender, RoutedEventArgs e)
+        {
+            var torrent = torrentGrid.SelectedItem as PeriodicTorrent;
+            var link = string.Format("magnet:?xl={0}&dn={1}&xt=urn:btih:{2}",
+                torrent.Size, Uri.EscapeUriString(torrent.Name), Uri.EscapeUriString(torrent.Torrent.InfoHash.ToHex()));
+            if (torrent.Torrent.TrackerManager.CurrentTracker != null)
+                link += "&tr=" + Uri.EscapeUriString(torrent.Torrent.TrackerManager.CurrentTracker.Uri.ToString());
+            Clipboard.SetText(link);
+        }
     }
 }

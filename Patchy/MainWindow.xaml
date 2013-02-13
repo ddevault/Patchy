@@ -108,6 +108,7 @@
                 <DataGrid.ContextMenu>
                     <ContextMenu x:Name="torrentGridContextMenu">
                         <MenuItem Header="Open Folder" Click="torrentGridOpenFolder"></MenuItem>
+                        <MenuItem Header="Copy Magnet Link" Click="torrentGridCopyMagnentLink"></MenuItem>
                         <Separator></Separator>
                         <MenuItem x:Name="torrentGridContextMenuPauseResume" Header="Pause"></MenuItem>
                         <MenuItem Header="Remove">
