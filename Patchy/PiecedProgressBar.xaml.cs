@@ -20,11 +20,13 @@ namespace Patchy
     public partial class PiecedProgressBar : UserControl
     {
         private PeriodicTorrent Torrent { get; set; }
+        private DateTime LastUpdate { get; set; }
 
         public PiecedProgressBar()
         {
             InitializeComponent();
             DataContextChanged += PiecedProgressBar_DataContextChanged;
+            LastUpdate = DateTime.MinValue;
         }
 
         void PiecedProgressBar_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -42,6 +44,9 @@ namespace Patchy
 
         void torrent_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            if ((DateTime.Now - LastUpdate).TotalSeconds < 1)
+                return;
+            LastUpdate = DateTime.Now;
             if (e.PropertyName == "RecievedPieces")
                 Dispatcher.Invoke(new Action(() => this.InvalidateVisual()));
         }
