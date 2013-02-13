@@ -15,6 +15,7 @@ using MonoTorrent;
 using MonoTorrent.BEncoding;
 using MonoTorrent.Client;
 using MonoTorrent.Common;
+using System.Windows.Media;
 
 namespace Patchy
 {
@@ -32,6 +33,16 @@ namespace Patchy
         {
             InitializeComponent();
             InitializeNotifyIcon();
+            torrentGrid.LoadingRow += (s, e) =>
+                {
+                    e.Row.MouseDoubleClick -= TorrentGridMouseDoubleClick; // Rumoured to be called again sometimes when rows are sorted
+                    e.Row.MouseDoubleClick += TorrentGridMouseDoubleClick;
+                };
+            fileListGrid.LoadingRow += (s, e) =>
+            {
+                e.Row.MouseDoubleClick -= FileListGridMouseDoubleClick;
+                e.Row.MouseDoubleClick += FileListGridMouseDoubleClick;
+            };
             
             Client = new ClientManager();
             Initialize();

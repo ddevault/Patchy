@@ -99,7 +99,7 @@
         <Grid Grid.Row="2" x:Name="upperGrid">
             <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
                       GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="TorrentGridSelectionChanged"
-                      IsReadOnly="True" MouseDoubleClick="TorrentGridMouseDoubleClick" ContextMenuOpening="torrentGridContextMenuOpening">
+                      IsReadOnly="True" ContextMenuOpening="torrentGridContextMenuOpening">
                 <DataGrid.Background>
                     <ImageBrush ImageSource="Images/patchy.png" AlignmentX="Right" AlignmentY="Bottom"
                                 Viewport="0,20,70,70" ViewportUnits="Absolute" Opacity="0.5"></ImageBrush>
@@ -273,7 +273,7 @@
                 <TabItem Header="Files">
                     <DataGrid ItemsSource="{Binding Files}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False"
                         GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="fileListGrid" IsReadOnly="True"
-                        MouseDoubleClick="FileListGridMouseDoubleClick" ContextMenuOpening="fileListGridContextMenuOpening">
+                        ContextMenuOpening="fileListGridContextMenuOpening">
                         <DataGrid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Open" Click="fileListGridOpenFile"></MenuItem>
