@@ -11,6 +11,8 @@ namespace Patchy.Converters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var span = (TimeSpan)value;
+            if (span == TimeSpan.MinValue || span == TimeSpan.MaxValue)
+                return "n/a";
             StringBuilder result = new StringBuilder();
             if (span.TotalDays >= 1)
                 result.AppendFormat("{0} days, ", (int)span.TotalDays);

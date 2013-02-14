@@ -373,7 +373,7 @@
                             <DataGridTemplateColumn Header="Priority" Width="100" SortMemberPath="Priority">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ComboBox Tag="{Binding}" SelectionChanged="FilePriorityBoxChanged"
+                                        <ComboBox Tag="{Binding}"
                                             ItemsSource="{Binding Source={StaticResource ResourceKey=priorityDataProvider}}"
                                             SelectedItem="{Binding Priority, Mode=TwoWay}">
                                         </ComboBox>
@@ -416,7 +416,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
-                <TabItem Header="Trackers"></TabItem>
+                <TabItem Header="Options"></TabItem>
             </TabControl>
             <Rectangle Fill="LightGray" Opacity="0.5" x:Name="lowerFill"></Rectangle>
         </Grid>

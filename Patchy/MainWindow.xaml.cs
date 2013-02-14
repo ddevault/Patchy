@@ -114,7 +114,7 @@ namespace Patchy
             if (Visibility == Visibility.Hidden)
             {
                 Visibility = Visibility.Visible;
-                Dispatcher.BeginInvoke(new Action(() => Focus()));
+                Dispatcher.BeginInvoke(new Action(() => Activate()));
             }
             else
                 Visibility = Visibility.Hidden;

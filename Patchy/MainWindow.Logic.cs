@@ -165,14 +165,14 @@ namespace Patchy
                 Dispatcher.BeginInvoke(new Action(() =>
                     {
                         Visibility = Visibility.Visible;
-                        Focus();
+                        Activate();
                     }));
                 return;
             }
             Dispatcher.BeginInvoke(new Action(() =>
                 {
                     Visibility = Visibility.Visible;
-                    Focus();
+                    Activate();
                     // TODO: Prompt for download location
                     try
                     {

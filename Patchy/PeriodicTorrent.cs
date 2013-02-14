@@ -72,7 +72,10 @@ namespace Patchy
             Complete = Torrent.Complete;
             DownloadSpeed = Torrent.Monitor.DownloadSpeed;
             UploadSpeed = Torrent.Monitor.UploadSpeed;
-            ElapsedTime = DateTime.Now - Torrent.StartTime;
+            if (Torrent.StartTime != DateTime.MinValue)
+                ElapsedTime = DateTime.Now - Torrent.StartTime;
+            else
+                ElapsedTime = TimeSpan.MinValue;
             if (Torrent.State == TorrentState.Metadata)
                 EstimatedTime = TimeSpan.MaxValue;
             else
