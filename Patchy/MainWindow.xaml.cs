@@ -47,6 +47,8 @@ namespace Patchy
             Client = new ClientManager();
             Initialize();
             torrentGrid.ItemsSource = Client.Torrents;
+
+            ReloadRssTimer();
         }
 
         private void InitializeNotifyIcon()
@@ -342,14 +344,6 @@ namespace Patchy
             Process.Start(string.Format("https://github.com/SirCmpwn/Patchy/issues/new?title={0}&body={1}",
                 Uri.EscapeUriString("A brief description of your problem"),
                 Uri.EscapeUriString("[A more detailed description of your problem]" + Environment.NewLine + Environment.NewLine + systemInfo)));
-        }
-
-        private void ExecuteManageRssFeeds(object sender, ExecutedRoutedEventArgs e)
-        {
-            var manager = new RssFeedManager(SettingsManager.RssFeeds);
-            manager.ShowDialog();
-            SettingsManager.RssFeeds = new List<RssFeed>(manager.RssFeeds);
-            SettingsManager.Save();
         }
     }
 }

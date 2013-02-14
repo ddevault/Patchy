@@ -77,7 +77,7 @@ namespace Patchy
             Regex regex;
             try
             {
-                regex = new Regex(ruleRegexTextBox.Text);
+                regex = new Regex(ruleRegexTextBox.Text, RegexOptions.IgnoreCase);
             }
             catch
             {

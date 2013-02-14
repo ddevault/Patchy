@@ -61,7 +61,7 @@ namespace Patchy
                 null, 1000, 1000);
         }
 
-        public void AddTorrent(MagnetLink link, string path)
+        public void AddTorrent(MagnetLink link, string path, bool suppressMessages = false)
         {
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
@@ -72,7 +72,8 @@ namespace Patchy
             var wrapper = new TorrentWrapper(link, path, new TorrentSettings(), cache);
             if (Client.Torrents.Any(t => t.Torrent.InfoHash == wrapper.InfoHash))
             {
-                MessageBox.Show(name + " has already been added.", "Error");
+                if (!suppressMessages)
+                    MessageBox.Show(name + " has already been added.", "Error");
                 return;
             }
             var periodic = Client.AddTorrent(wrapper);
@@ -83,14 +84,15 @@ namespace Patchy
             periodic.CacheFilePath = cache;
         }
 
-        public void AddTorrent(Torrent torrent, string path)
+        public void AddTorrent(Torrent torrent, string path, bool suppressMessages = false)
         {
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             var wrapper = new TorrentWrapper(torrent, path, new TorrentSettings());
             if (Client.Torrents.Any(t => t.Torrent.InfoHash == wrapper.InfoHash))
             {
-                MessageBox.Show(torrent.Name + " has already been added.", "Error");
+                if (!suppressMessages)
+                    MessageBox.Show(torrent.Name + " has already been added.", "Error");
                 return;
             }
             var periodic = Client.AddTorrent(wrapper);

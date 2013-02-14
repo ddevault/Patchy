@@ -112,18 +112,35 @@
             </Grid>
         </Grid>
         <!--RSS Feed Left-->
-        <Grid x:Name="rssFeedGrid" Grid.RowSpan="4" Grid.Row="1" Width="300" Margin="3"
+        <Grid x:Name="rssFeedGrid" Grid.RowSpan="4" Grid.Row="1" Width="280" Margin="3"
               Visibility="{Binding ElementName=viewRssFeedsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <TextBlock FontSize="16">RSS Feeds</TextBlock>
-            <ListView x:Name="rssListView" Grid.Row="1" BorderThickness="0"></ListView>
+            <ListView x:Name="rssListView" Grid.Row="1" BorderThickness="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="LightGray" Margin="3" BorderThickness="2" CornerRadius="3" Width="250">
+                            <Grid Margin="3">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding Title}" FontSize="14" HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis"></TextBlock>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                    <TextBlock Text="By "></TextBlock>
+                                    <TextBlock Text="{Binding Creator}"></TextBlock>
+                                </StackPanel>
+                                <Button Click="rssEntryAddClicked" Grid.Row="2" Tag="{Binding}">Add Torrent</Button>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
-        <GridSplitter Grid.RowSpan="4" Grid.Row="1" Grid.Column="1" ResizeDirection="Columns" Height="Auto"
-                      Width="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray"
-                      Visibility="{Binding ElementName=viewRssFeedsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}"></GridSplitter>
         <!--Main torrent grid-->
         <Grid Grid.Row="2" Grid.Column="2" x:Name="upperGrid">
             <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
