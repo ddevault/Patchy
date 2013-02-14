@@ -19,7 +19,7 @@
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="Auto"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <StackPanel Orientation="Vertical" x:Name="registryBoundPreferences">
+                    <StackPanel x:Name="registryBoundPreferences">
                         <TextBlock FontWeight="Bold">Use Patchy as default for:</TextBlock>
                         <CheckBox x:Name="torrentAssociationCheckBox" Click="torrentAssociationCheckBoxChecked">.torrent files</CheckBox>
                         <CheckBox x:Name="magnetAssociationCheckBox" Click="magnetAssociationCheckBoxChecked">Magnet links</CheckBox>
@@ -28,10 +28,10 @@
                         <CheckBox IsEnabled="{Binding ElementName=startOnWindowsStartupCheckBox, Path=IsChecked}" 
                                   x:Name="startMinimizedCheckBox" Click="startupMinimizedChecked">Start minimized</CheckBox>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical" x:Name="elevatePermissionsPanel" Visibility="Collapsed" Grid.Row="1">
+                    <StackPanel x:Name="elevatePermissionsPanel" Visibility="Collapsed" Grid.Row="1">
                         <TextBlock Foreground="Red" TextWrapping="Wrap">You must run Patchy as Administrator to change these settings.</TextBlock>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical" Grid.Column="1" Grid.RowSpan="2">
+                    <StackPanel Grid.Column="1" Grid.RowSpan="2">
                         <TextBlock FontWeight="Bold">Privacy</TextBlock>
                         <Button Click="clearTorrentCacheClick">Clear torrent cache</Button>
                         <CheckBox>Save session</CheckBox>
@@ -39,13 +39,130 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Downloads"></TabItem>
-            <TabItem Header="Connections"></TabItem>
-            <TabItem Header="BitTorrent"></TabItem>
-            <TabItem Header="Interface"></TabItem>
-            <TabItem Header="Queueing"></TabItem>
-            <TabItem Header="Ban List"></TabItem>
+            <TabItem Header="Downloads">
+                <StackPanel Margin="3">
+                    <TextBlock FontWeight="Bold">Default download location:</TextBlock>
+                    <TextBox></TextBox>
+                    <TextBlock FontWeight="Bold">Move completed to:</TextBlock>
+                    <TextBox></TextBox>
+                    <TextBlock FontWeight="Bold">Automatically add .torrents from:</TextBlock>
+                    <TextBox></TextBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Connections">
+                <Grid Margin="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock FontWeight="Bold">Listener Settings</TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="0 0 5 0">Incoming port:</TextBlock>
+                            <TextBox Width="100" Margin="0 0 5 0"></TextBox>
+                            <Button>Randomize</Button>
+                        </StackPanel>
+                        <CheckBox>Randomize on startup</CheckBox>
+                        <CheckBox>Map with UPnP</CheckBox>
+                    </StackPanel>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock FontWeight="Bold">Bandwidth Settings</TextBlock>
+                        <TextBlock Grid.Row="1">Max Upload Speed (kB/s) [0 for unlimited]</TextBlock>
+                        <TextBox Grid.Row="1" Grid.Column="1"></TextBox>
+                        <TextBlock Grid.Row="2">Max Download Speed (kB/s) [0 for unlimited]</TextBlock>
+                        <TextBox Grid.Row="2" Grid.Column="1"></TextBox>
+                        <TextBlock Grid.Row="3">Global Max Connections</TextBlock>
+                        <TextBox Grid.Row="3" Grid.Column="1"></TextBox>
+                        <TextBlock Grid.Row="4">Max Connections per Torrent</TextBlock>
+                        <TextBox Grid.Row="4" Grid.Column="1"></TextBox>
+                        <TextBlock Grid.Row="5">Upload Slots per Torrent</TextBlock>
+                        <TextBox Grid.Row="5" Grid.Column="1"></TextBox>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="BitTorrent">
+                <StackPanel>
+                    <TextBlock FontWeight="Bold">General BitTorrent Settings</TextBlock>
+                    <CheckBox>Enable DHT</CheckBox>
+                    <TextBlock FontWeight="Bold">Encryption</TextBlock>
+                    <ComboBox SelectedIndex="0">
+                        <ComboBoxItem>Disabled</ComboBoxItem>
+                        <ComboBoxItem>Enabled</ComboBoxItem>
+                        <ComboBoxItem>Forced</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Interface">
+                <StackPanel>
+                    <GroupBox Header="Tray Options">
+                        <StackPanel>
+                            <CheckBox>Show tray icon</CheckBox>
+                            <CheckBox>Close to system tray</CheckBox>
+                            <CheckBox>Minimize to system tray</CheckBox>
+                            <CheckBox>Show notification on torrent completion</CheckBox>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="Confirmations">
+                        <StackPanel>
+                            <CheckBox>Confirm exit if there are active torrents</CheckBox>
+                            <CheckBox>Confirm torrent removal</CheckBox>
+                            <CheckBox>Start torrents immediately when added</CheckBox>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="Double Click">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0">Seeding torrents:</TextBlock>
+                            <TextBlock Grid.Row="1">Downloading torrents:</TextBlock>
+                            <ComboBox Grid.Row="0" Grid.Column="1" SelectedIndex="0">
+                                <ComboBoxItem>Open folder</ComboBoxItem>
+                                <ComboBoxItem>Open largest file</ComboBoxItem>
+                                <ComboBoxItem>Start/stop</ComboBoxItem>
+                            </ComboBox>
+                            <ComboBox Grid.Row="1" Grid.Column="1" SelectedIndex="0">
+                                <ComboBoxItem>Open folder</ComboBoxItem>
+                                <ComboBoxItem>Open largest file</ComboBoxItem>
+                                <ComboBoxItem>Start/stop</ComboBoxItem>
+                            </ComboBox>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Queueing">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock>Maximum active torrents</TextBlock>
+                    <TextBox Grid.Column="1"></TextBox>
+                    <TextBlock Grid.Row="1">Maximum active downloads</TextBlock>
+                    <TextBox Grid.Row="1" Grid.Column="1"></TextBox>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>
-
