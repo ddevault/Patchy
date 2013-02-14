@@ -151,5 +151,34 @@ namespace Patchy
             }
             quickAddGrid.Visibility = visibility;
         }
+
+        public void HandleArguments(string[] args)
+        {
+            if (args.Length == 0)
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        Visibility = Visibility.Visible;
+                        Focus();
+                    }));
+                return;
+            }
+            Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Visibility = Visibility.Visible;
+                    Focus();
+                    // TODO: Prompt for download location
+                    try
+                    {
+                        var magnetLink = new MagnetLink(args[0]);
+                        AddTorrent(magnetLink, SettingsManager.DefaultDownloadLocation);
+                    }
+                    catch
+                    {
+                        var torrent = Torrent.Load(args[0]);
+                        AddTorrent(torrent, SettingsManager.DefaultDownloadLocation);
+                    }
+                }));
+        }
     }
 }

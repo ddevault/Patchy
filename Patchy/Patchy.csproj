@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -68,6 +69,7 @@
     <Compile Include="Converters\TorrentCreationDateConverter.cs" />
     <Compile Include="Converters\TorrentETADateTimeConverter.cs" />
     <Compile Include="Converters\TorrentProgressConverter.cs" />
+    <Compile Include="IPC\SingletonService.cs" />
     <Compile Include="MainWindow.Commands.cs" />
     <Compile Include="MainWindow.Logic.cs" />
     <Compile Include="MainWindow.Rss.cs" />
