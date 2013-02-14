@@ -114,7 +114,12 @@ namespace Patchy
         {
             var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (startOnWindowsStartupCheckBox.IsChecked.Value)
-                key.SetValue("Patchy", Assembly.GetEntryAssembly().Location);
+            {
+                if (startMinimizedCheckBox.IsChecked.Value)
+                    key.SetValue("Patchy", "\"" + Assembly.GetEntryAssembly().Location + "\" --minimized");
+                else
+                    key.SetValue("Patchy", "\"" + Assembly.GetEntryAssembly().Location + "\"");
+            }
             else
                 key.DeleteValue("Patchy");
             key.Close();
@@ -124,9 +129,9 @@ namespace Patchy
         {
             var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (startMinimizedCheckBox.IsChecked.Value)
-                key.SetValue("Patchy", Assembly.GetEntryAssembly().Location + "--minimized");
+                key.SetValue("Patchy", "\"" + Assembly.GetEntryAssembly().Location + "\" --minimized");
             else
-                key.SetValue("Patchy", Assembly.GetEntryAssembly().Location);
+                key.SetValue("Patchy", "\"" + Assembly.GetEntryAssembly().Location + "\"");
             key.Close();
         }
     }
