@@ -122,7 +122,7 @@ namespace Patchy
 
         private void NotifyIconBalloonTipClicked(object sender, EventArgs e)
         {
-            Process.Start("explorer", BalloonTorrent.Torrent.SavePath);
+            Process.Start("explorer", "\"" + BalloonTorrent.Torrent.SavePath + "\"");
         }
 
         private void WindowClosing(object sender, CancelEventArgs e)
@@ -222,7 +222,7 @@ namespace Patchy
         private void TorrentGridMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             foreach (PeriodicTorrent item in torrentGrid.SelectedItems)
-                Process.Start("explorer", item.Torrent.SavePath);
+                Process.Start("explorer", "\"" + item.Torrent.SavePath + "\"");
         }
 
         private void torrentGridContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -326,7 +326,7 @@ namespace Patchy
         private void fileListGridOpenFolder(object sender, RoutedEventArgs e)
         {
             var item = fileListGrid.SelectedItem as PeriodicFile;
-            Process.Start("explorer", "/Select, " + item.File.FullPath);
+            Process.Start("explorer", "/Select, \"" + item.File.FullPath + "\"");
         }
 
         private void menuSourceCodeClicked(object sender, RoutedEventArgs e)

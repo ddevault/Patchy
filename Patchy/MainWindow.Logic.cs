@@ -171,12 +171,14 @@ namespace Patchy
                     try
                     {
                         var magnetLink = new MagnetLink(args[0]);
-                        AddTorrent(magnetLink, SettingsManager.DefaultDownloadLocation);
+                        AddTorrent(magnetLink, Path.Combine(SettingsManager.DefaultDownloadLocation,
+                            ClientManager.CleanFileName(HttpUtility.HtmlDecode(HttpUtility.UrlDecode(magnetLink.Name)))));
                     }
                     catch
                     {
                         var torrent = Torrent.Load(args[0]);
-                        AddTorrent(torrent, SettingsManager.DefaultDownloadLocation);
+                        AddTorrent(torrent, Path.Combine(SettingsManager.DefaultDownloadLocation,
+                            ClientManager.CleanFileName(torrent.Name)));
                     }
                 }));
         }
