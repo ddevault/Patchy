@@ -49,6 +49,13 @@ namespace Patchy
             torrentGrid.ItemsSource = Client.Torrents;
 
             ReloadRssTimer();
+            Loaded += new RoutedEventHandler(MainWindow_Loaded);
+        }
+
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (WindowStyle == WindowStyle.None)
+                Visibility = Visibility.Hidden;
         }
 
         private void InitializeNotifyIcon()
@@ -114,7 +121,15 @@ namespace Patchy
             if (Visibility == Visibility.Hidden)
             {
                 Visibility = Visibility.Visible;
-                Dispatcher.BeginInvoke(new Action(() => Activate()));
+                Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        ShowInTaskbar = true;
+                        ShowActivated = true;
+                        WindowStyle = WindowStyle.ThreeDBorderWindow;
+                        Width = 1200;
+                        Height = 600;
+                        Activate();
+                    }));
             }
             else
                 Visibility = Visibility.Hidden;

@@ -25,7 +25,8 @@
                         <CheckBox x:Name="magnetAssociationCheckBox" Click="magnetAssociationCheckBoxChecked">Magnet links</CheckBox>
                         <TextBlock FontWeight="Bold">Start Up</TextBlock>
                         <CheckBox x:Name="startOnWindowsStartupCheckBox" Click="startOnWindowsStartupChecked">Start when Windows starts</CheckBox>
-                        <CheckBox IsEnabled="{Binding ElementName=startOnWindowsStartupCheckBox}">Start minimized</CheckBox><!--TODO-->
+                        <CheckBox IsEnabled="{Binding ElementName=startOnWindowsStartupCheckBox, Path=IsChecked}" 
+                                  x:Name="startMinimizedCheckBox" Click="startupMinimizedChecked">Start minimized</CheckBox>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" x:Name="elevatePermissionsPanel" Visibility="Collapsed" Grid.Row="1">
                         <TextBlock Foreground="Red" TextWrapping="Wrap">You must run Patchy as Administrator to change these settings.</TextBlock>

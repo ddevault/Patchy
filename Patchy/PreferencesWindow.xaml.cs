@@ -50,6 +50,13 @@ namespace Patchy
                 var shell = (string)Registry.GetValue(@"HKEY_CLASSES_ROOT\Magnet\shell\open\command", null, null);
                 magnetAssociationCheckBox.IsChecked = shell == string.Format("\"{0}\" \"%1\"", Assembly.GetEntryAssembly().Location);
             }
+            var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            var startup = key.GetValue("Patchy", null) as string;
+            startOnWindowsStartupCheckBox.IsChecked = startup != null;
+            if (startup == null)
+                startMinimizedCheckBox.IsChecked = false;
+            else
+                startMinimizedCheckBox.IsChecked = startup.EndsWith("--minimized");
         }
 
         private void clearTorrentCacheClick(object sender, RoutedEventArgs e)
@@ -110,6 +117,16 @@ namespace Patchy
                 key.SetValue("Patchy", Assembly.GetEntryAssembly().Location);
             else
                 key.DeleteValue("Patchy");
+            key.Close();
+        }
+
+        private void startupMinimizedChecked(object sender, RoutedEventArgs e)
+        {
+            var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (startMinimizedCheckBox.IsChecked.Value)
+                key.SetValue("Patchy", Assembly.GetEntryAssembly().Location + "--minimized");
+            else
+                key.SetValue("Patchy", Assembly.GetEntryAssembly().Location);
             key.Close();
         }
     }

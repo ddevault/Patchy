@@ -169,6 +169,15 @@ namespace Patchy
                     }));
                 return;
             }
+            if (args[0] == "--minimized")
+            {
+                Visibility = Visibility.Hidden;
+                ShowInTaskbar = false;
+                ShowActivated = false;
+                WindowStyle = WindowStyle.None;
+                Width = Height = 0;
+                return;
+            }
             Dispatcher.BeginInvoke(new Action(() =>
                 {
                     Visibility = Visibility.Visible;
