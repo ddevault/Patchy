@@ -23,6 +23,7 @@ namespace Patchy
         public bool[] RecievedPieces { get; set; }
         public string CacheFilePath { get; set; }
         public PiecePicker PiecePicker { get; set; }
+        public DateTime CompletionTime { get; set; }
 
         public PeriodicTorrent(TorrentWrapper wrapper)
         {
@@ -68,6 +69,8 @@ namespace Patchy
             if (Torrent.State == TorrentState.Seeding && State == TorrentState.Stopped)
                 CompletedOnAdd = true;
             State = Torrent.State;
+            if (Torrent.Progress == 100 && Progress != 100)
+                CompletionTime = DateTime.Now;
             Progress = Torrent.Progress;
             Complete = Torrent.Complete;
             DownloadSpeed = Torrent.Monitor.DownloadSpeed;

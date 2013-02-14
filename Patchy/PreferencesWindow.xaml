@@ -102,6 +102,11 @@
                         <ComboBoxItem>Enabled</ComboBoxItem>
                         <ComboBoxItem>Forced</ComboBoxItem>
                     </ComboBox>
+                    <TextBlock FontWeight="Bold">Seeding</TextBlock>
+                    <TextBlock>Stop seeding after (hours): [0 to never stop seeding]</TextBlock>
+                    <TextBox></TextBox>
+                    <TextBlock>Stop seeding after reaching a certain ratio: [0 to never stop seeding]</TextBlock>
+                    <TextBox></TextBox>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Interface">
