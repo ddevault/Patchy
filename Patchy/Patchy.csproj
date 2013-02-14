@@ -76,6 +76,7 @@
       <DependentUpon>PiecedProgressBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="RssFeed.cs" />
+    <Compile Include="RssFeedEntry.cs" />
     <Compile Include="RssFeedManager.xaml.cs">
       <DependentUpon>RssFeedManager.xaml</DependentUpon>
     </Compile>

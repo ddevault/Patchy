@@ -11,10 +11,12 @@ namespace Patchy
     {
         public SettingsManager()
         {
+            // Default settings
             DefaultDownloadLocation = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 "Downloads");
             RssFeeds = new List<RssFeed>();
+            MinutesBetweenRssUpdates = 5;
         }
 
         public static string SettingsPath
@@ -45,7 +47,13 @@ namespace Patchy
                 Directory.CreateDirectory(TorrentCachePath);
         }
 
+        public void Save()
+        {
+            // TODO
+        }
+
         public string DefaultDownloadLocation { get; set; }
         public List<RssFeed> RssFeeds { get; set; }
+        public int MinutesBetweenRssUpdates { get; set; }
     }
 }

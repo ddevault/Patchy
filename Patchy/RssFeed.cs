@@ -4,14 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.Xml.Linq;
+using System.Net;
 
 namespace Patchy
 {
     public class RssFeed
     {
+        private static WebClient WebClient { get; set; }
+
+        static RssFeed()
+        {
+            WebClient = new WebClient();
+        }
+
         public RssFeed()
         {
             TorrentRules = new ObservableCollection<RssTorrentRule>();
+            Entries = new List<RssFeedEntry>();
         }
 
         public RssFeed(string address) : this()
@@ -21,6 +30,41 @@ namespace Patchy
 
         public string Address { get; set; }
         public ObservableCollection<RssTorrentRule> TorrentRules { get; set; }
+        public List<RssFeedEntry> Entries { get; set; }
+
+        /// <summary>
+        /// Returns all new entries
+        /// </summary>
+        public List<RssFeedEntry> Update()
+        {
+            List<RssFeedEntry> diff = new List<RssFeedEntry>();
+            var dc = XNamespace.Get("http://purl.org/dc/elements/1.1/");
+            var oldEntries = Entries.ToArray();
+            try
+            {
+                var rawFeed = WebClient.DownloadString(Address);
+                var feed = XDocument.Parse(rawFeed);
+                var channel = feed.Root.Element("channel");
+                Entries = new List<RssFeedEntry>();
+                foreach (var item in channel.Elements("item"))
+                {
+                    Entries.Add(new RssFeedEntry
+                    {
+                        Title = item.Element("title").Value,
+                        Creator = item.Element(dc + "creator").Value,
+                        Link = item.Element("link").Value,
+                        PublishTime = DateTime.Parse(item.Element("pubDate").Value)
+                    });
+                }
+                foreach (var entry in Entries)
+                {
+                    if (!oldEntries.Contains(entry))
+                        diff.Add(entry);
+                }
+            }
+            catch {  }
+            return diff;
+        }
 
         public static bool ValidateFeed(XDocument document)
         {
