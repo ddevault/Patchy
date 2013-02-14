@@ -44,7 +44,7 @@ namespace Patchy
 
         void torrent_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if ((DateTime.Now - LastUpdate).TotalSeconds < 1)
+            if ((DateTime.Now - LastUpdate).TotalSeconds < 1 && (sender as PeriodicTorrent).Progress != 100)
                 return;
             LastUpdate = DateTime.Now;
             if (e.PropertyName == "RecievedPieces")
