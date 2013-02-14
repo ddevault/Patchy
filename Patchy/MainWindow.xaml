@@ -30,6 +30,7 @@
         <CommandBinding Command="Open" Executed="ExecuteNew"></CommandBinding>
         <CommandBinding Command="Close" Executed="ExecuteExit"></CommandBinding>
         <CommandBinding Command="pt:Commands.ManageRssFeeds" Executed="ExecuteManageRssFeeds"></CommandBinding>
+        <CommandBinding Command="pt:Commands.EditPreferences" Executed="ExecuteEditPreferences"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="Open" Key="O" Modifiers="Control"></KeyBinding>
@@ -72,7 +73,7 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Options">
-                <MenuItem Header="Preferences"></MenuItem>
+                <MenuItem Header="Preferences" Command="pt:Commands.EditPreferences"></MenuItem>
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="Documentation"></MenuItem>

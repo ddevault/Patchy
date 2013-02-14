@@ -31,10 +31,17 @@ namespace Patchy
             NotifyIcon.Dispose();
             Close();
         }
+
+        private void ExecuteEditPreferences(object sender, ExecutedRoutedEventArgs e)
+        {
+            var window = new PreferencesWindow();
+            window.ShowDialog();
+        }
     }
 
     public static class Commands
     {
         public static readonly RoutedCommand ManageRssFeeds = new RoutedUICommand("Manage RSS Feeds", "ManageRssFeeds", typeof(MainWindow));
+        public static readonly RoutedCommand EditPreferences = new RoutedUICommand("Edit Preferences", "EditPreferences", typeof(MainWindow));
     }
 }

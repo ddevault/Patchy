@@ -78,6 +78,9 @@
     <Compile Include="PiecedProgressBar.xaml.cs">
       <DependentUpon>PiecedProgressBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PreferencesWindow.xaml.cs">
+      <DependentUpon>PreferencesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RssFeed.cs" />
     <Compile Include="RssFeedEntry.cs" />
     <Compile Include="RssFeedManager.xaml.cs">
@@ -110,6 +113,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PiecedProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PreferencesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

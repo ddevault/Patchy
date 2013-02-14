@@ -1,0 +1,22 @@
+﻿<Window x:Class="Patchy.PreferencesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Preferences" Height="500" Width="700" Icon="Images/patchy.ico">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="18">Preferences</TextBlock>
+        <TabControl Grid.Row="1" TabStripPlacement="Left">
+            <TabItem Header="General"></TabItem>
+            <TabItem Header="Downloads"></TabItem>
+            <TabItem Header="Connections"></TabItem>
+            <TabItem Header="BitTorrent"></TabItem>
+            <TabItem Header="Privacy"></TabItem>
+            <TabItem Header="Interface"></TabItem>
+            <TabItem Header="Queueing"></TabItem>
+            <TabItem Header="Ban List"></TabItem>
+        </TabControl>
+    </Grid>
+</Window>
