@@ -10,6 +10,8 @@ using MonoTorrent;
 using MonoTorrent.BEncoding;
 using MonoTorrent.Client;
 using MonoTorrent.Common;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
 
 namespace Patchy
 {
@@ -18,6 +20,9 @@ namespace Patchy
         private ClientManager Client { get; set; }
         private Timer Timer { get; set; }
         private SettingsManager SettingsManager { get; set; }
+
+        [DllImport("user32.dll")]
+        static extern bool FlashWindow(IntPtr hwnd, bool bInvert);
 
         private void Initialize()
         {
@@ -117,6 +122,7 @@ namespace Patchy
                         torrent.Name, System.Windows.Forms.ToolTipIcon.Info);
                     torrent.NotifiedComplete = true;
                     BalloonTorrent = torrent;
+                    FlashWindow(new WindowInteropHelper(this).Handle, true);
                 }
             }
             UpdateNotifyIcon();
@@ -173,12 +179,14 @@ namespace Patchy
                         var magnetLink = new MagnetLink(args[0]);
                         AddTorrent(magnetLink, Path.Combine(SettingsManager.DefaultDownloadLocation,
                             ClientManager.CleanFileName(HttpUtility.HtmlDecode(HttpUtility.UrlDecode(magnetLink.Name)))));
+                        FlashWindow(new WindowInteropHelper(this).Handle, true);
                     }
                     catch
                     {
                         var torrent = Torrent.Load(args[0]);
                         AddTorrent(torrent, Path.Combine(SettingsManager.DefaultDownloadLocation,
                             ClientManager.CleanFileName(torrent.Name)));
+                        FlashWindow(new WindowInteropHelper(this).Handle, true);
                     }
                 }));
         }
