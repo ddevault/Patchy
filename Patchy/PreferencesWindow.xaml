@@ -131,8 +131,8 @@
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Row="0">Seeding torrents:</TextBlock>
-                            <TextBlock Grid.Row="1">Downloading torrents:</TextBlock>
+                            <TextBlock Grid.Row="0" VerticalAlignment="Center" Margin="0 0 5 0">Seeding torrents:</TextBlock>
+                            <TextBlock Grid.Row="1" VerticalAlignment="Center" Margin="0 0 5 0">Downloading torrents:</TextBlock>
                             <ComboBox Grid.Row="0" Grid.Column="1" SelectedIndex="0">
                                 <ComboBoxItem>Open folder</ComboBoxItem>
                                 <ComboBoxItem>Open largest file</ComboBoxItem>
@@ -151,16 +151,63 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="Auto"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBlock>Maximum active torrents</TextBlock>
-                    <TextBox Grid.Column="1"></TextBox>
-                    <TextBlock Grid.Row="1">Maximum active downloads</TextBlock>
-                    <TextBox Grid.Row="1" Grid.Column="1"></TextBox>
+                    <TextBlock Margin="0 0 5 0">Maximum active torrents</TextBlock>
+                    <TextBox Grid.Column="1" Width="100"></TextBox>
+                    <TextBlock Margin="0 0 5 0" Grid.Row="1">Maximum active downloads</TextBlock>
+                    <TextBox Grid.Row="1" Grid.Column="1" Width="100"></TextBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Completion">
+                <StackPanel>
+                    <TextBlock>When torrents finish downloading, run the following command:</TextBlock>
+                    <TextBox></TextBox>
+                    <TextBlock>You may use the following variables in your command:</TextBlock>
+                    <TextBlock>%F: Name of file in torrents with one file</TextBlock>
+                    <TextBlock>%D: Torrent download directory</TextBlock>
+                    <TextBlock>%N: Torrent name</TextBlock>
+                    <TextBlock>%I: Info hash (in hex)</TextBlock>
+                    <TextBlock>%T: Tracker address</TextBlock>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="RSS">
+                <TextBlock>TODO: Move RSS management into this dialog</TextBlock>
+            </TabItem>
+            <TabItem Header="About">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock FontWeight="Bold">Patchy Bittorrent Client</TextBlock>
+                    <TextBlock Grid.Row="1">Version: Git</TextBlock>
+                    <Button Content="Browse source code" Cursor="Hand" Grid.Row="2" Click="browseSourceClick">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <TextBlock TextDecorations="Underline">
+                                    <ContentPresenter />
+                                </TextBlock>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Foreground" Value="Blue" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter Property="Foreground" Value="Red" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <TextBox Grid.Row="3" x:Name="licenseText" TextWrapping="Wrap" KeyDown="licenseText_KeyDown"></TextBox>
                 </Grid>
             </TabItem>
         </TabControl>

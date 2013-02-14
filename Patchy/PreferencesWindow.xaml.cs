@@ -26,6 +26,8 @@ namespace Patchy
         {
             InitializeComponent();
             InitializeRegistryBoundItems();
+            var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Patchy.LICENSE"));
+            licenseText.Text = reader.ReadToEnd();
         }
 
         private void InitializeRegistryBoundItems()
@@ -133,6 +135,16 @@ namespace Patchy
             else
                 key.SetValue("Patchy", "\"" + Assembly.GetEntryAssembly().Location + "\"");
             key.Close();
+        }
+
+        private void licenseText_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void browseSourceClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/SirCmpwn/Patchy");
         }
     }
 }
