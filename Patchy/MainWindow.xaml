@@ -129,7 +129,11 @@
                                     <RowDefinition Height="Auto"></RowDefinition>
                                     <RowDefinition Height="Auto"></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="{Binding Title}" FontSize="14" HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis"></TextBlock>
+                                <TextBlock Text="{Binding Title}" FontSize="14" HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip Content="{Binding Title}"></ToolTip>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                                     <TextBlock Text="By "></TextBlock>
                                     <TextBlock Text="{Binding Creator}"></TextBlock>

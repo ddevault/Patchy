@@ -52,6 +52,7 @@ namespace Patchy
                 }
                 catch { }
             }
+            entries = new List<RssFeedEntry>(entries.OrderBy(e => e.PublishTime).ToArray());
             RssEntries = entries;
             Dispatcher.BeginInvoke(new Action(() => rssListView.ItemsSource = RssEntries));
             // Add new torrents
