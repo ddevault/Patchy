@@ -242,7 +242,7 @@ namespace Patchy
         private void torrentGridOpenFolder(object sender, RoutedEventArgs e)
         {
             foreach (PeriodicTorrent torrent in torrentGrid.SelectedItems)
-                Process.Start("explorer", torrent.Torrent.SavePath);
+                Process.Start("explorer", "\"" + torrent.Torrent.SavePath + "\"");
         }
 
         private void torrentGridRemoveTorrent(object sender, RoutedEventArgs e)
