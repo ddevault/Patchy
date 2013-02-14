@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ApplicationIcon>..\images\patchy.ico</ApplicationIcon>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -34,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FileAssociation">
+      <HintPath>..\lib\FileAssociation.dll</HintPath>
+    </Reference>
     <Reference Include="MonoTorrent">
       <HintPath>..\lib\MonoTorrent.dll</HintPath>
     </Reference>
@@ -88,6 +94,7 @@
     </Compile>
     <Compile Include="RssTorrentRule.cs" />
     <Compile Include="SettingsManager.cs" />
+    <Compile Include="UACHelper.cs" />
     <Page Include="AddTorrentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

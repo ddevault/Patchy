@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Patchy.IPC;
+using System.IO;
 
 namespace Patchy
 {
@@ -16,9 +17,17 @@ namespace Patchy
     /// </summary>
     public partial class App : Application
     {
+        public static bool ClearCacheOnExit { get; set; }
+
         private Mutex Singleton { get; set; }
         private readonly Guid SingletonGuid = Guid.Parse("B11931EB-32BC-441F-BF57-859FE282236A");
         private ServiceHost SingletonServcieHost { get; set; }
+
+        internal void ShutdownSingleton()
+        {
+            Singleton.ReleaseMutex();
+            Singleton.Dispose();
+        }
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -60,6 +69,14 @@ namespace Patchy
         {
             if (SingletonServcieHost != null)
                 SingletonServcieHost.Close();
+            if (ClearCacheOnExit)
+                Directory.Delete(SettingsManager.SettingsPath, true);
+            try
+            {
+                Singleton.ReleaseMutex();
+                Singleton.Dispose();
+            }
+            catch { }
             base.OnExit(e);
         }
     }

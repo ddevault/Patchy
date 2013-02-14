@@ -9,14 +9,42 @@
         </Grid.RowDefinitions>
         <TextBlock FontSize="18">Preferences</TextBlock>
         <TabControl Grid.Row="1" TabStripPlacement="Left">
-            <TabItem Header="General"></TabItem>
+            <TabItem Header="General">
+                <Grid Margin="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Vertical" x:Name="registryBoundPreferences">
+                        <TextBlock FontWeight="Bold">Use Patchy as default for:</TextBlock>
+                        <CheckBox x:Name="torrentAssociationCheckBox" Click="torrentAssociationCheckBoxChecked">.torrent files</CheckBox>
+                        <CheckBox x:Name="magnetAssociationCheckBox" Click="magnetAssociationCheckBoxChecked">Magnet links</CheckBox>
+                        <TextBlock FontWeight="Bold">Start Up</TextBlock>
+                        <CheckBox x:Name="startOnWindowsStartupCheckBox" Click="startOnWindowsStartupChecked">Start when Windows starts</CheckBox>
+                        <CheckBox IsEnabled="{Binding ElementName=startOnWindowsStartupCheckBox}">Start minimized</CheckBox><!--TODO-->
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" x:Name="elevatePermissionsPanel" Visibility="Collapsed" Grid.Row="1">
+                        <TextBlock Foreground="Red" TextWrapping="Wrap">You must run Patchy as Administrator to change these settings.</TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Grid.RowSpan="2">
+                        <TextBlock FontWeight="Bold">Privacy</TextBlock>
+                        <Button Click="clearTorrentCacheClick">Clear torrent cache</Button>
+                        <CheckBox>Save session</CheckBox>
+                        <CheckBox>Check for updates automatically</CheckBox>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
             <TabItem Header="Downloads"></TabItem>
             <TabItem Header="Connections"></TabItem>
             <TabItem Header="BitTorrent"></TabItem>
-            <TabItem Header="Privacy"></TabItem>
             <TabItem Header="Interface"></TabItem>
             <TabItem Header="Queueing"></TabItem>
             <TabItem Header="Ban List"></TabItem>
         </TabControl>
     </Grid>
 </Window>
+
