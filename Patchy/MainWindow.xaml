@@ -119,7 +119,8 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <TextBlock FontSize="16">RSS Feeds</TextBlock>
-            <ItemsControl x:Name="rssListView" Grid.Row="1" BorderThickness="0">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden">
+                <ItemsControl x:Name="rssListView" BorderThickness="0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border BorderBrush="LightGray" Margin="3" BorderThickness="2" CornerRadius="3" Width="250">
@@ -144,6 +145,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            </ScrollViewer>
         </Grid>
         <!--Main torrent grid-->
         <Grid Grid.Row="2" Grid.Column="2" x:Name="upperGrid">
