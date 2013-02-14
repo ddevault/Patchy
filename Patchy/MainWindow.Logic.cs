@@ -51,7 +51,6 @@ namespace Patchy
                                     {
                                         periodicTorrent = Client.AddTorrent(wrapper);
                                     }
-                                    periodicTorrent.CompletedOnAdd = wrapper.Complete;
                                     periodicTorrent.CacheFilePath = torrent;
                                 }));
                         }
@@ -112,7 +111,7 @@ namespace Patchy
             foreach (var torrent in Client.Torrents)
             {
                 torrent.Update();
-                if (torrent.Torrent.Complete && !torrent.CompletedOnAdd && !torrent.NotifiedComplete)
+                if (torrent.Torrent.Complete && !torrent.CompletedOnAdd && !torrent.NotifiedComplete && torrent.State == TorrentState.Seeding)
                 {
                     NotifyIcon.ShowBalloonTip(5000, "Download Complete",
                         torrent.Name, System.Windows.Forms.ToolTipIcon.Info);

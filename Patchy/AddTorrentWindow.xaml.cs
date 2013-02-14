@@ -78,10 +78,18 @@ namespace Patchy
             try
             {
                 string[] directories;
-                if (path != null)
-                    directories = Directory.GetDirectories(path);
-                else
-                    directories = Directory.GetLogicalDrives();
+                try
+                {
+                    if (path != null)
+                        directories = Directory.GetDirectories(path);
+                    else
+                        directories = Directory.GetLogicalDrives();
+                }
+                catch
+                {
+                    UpdateFileBrower(folderBrowser.Tag as string);
+                    return;
+                }
                 var items = new FolderBrowserItem[directories.Length + (path != null ? 1 : 0)];
                 for (int i = 0; i < directories.Length; i++)
                     items[i + (path != null ? 1 : 0)] = new FolderBrowserItem(directories[i], path == null);
