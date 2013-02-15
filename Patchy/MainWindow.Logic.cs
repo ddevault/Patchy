@@ -128,12 +128,17 @@ namespace Patchy
                             {
                                 torrent.Torrent.Stop();
                                 while (torrent.Torrent.State != TorrentState.Stopped) ;
+                                var oldPath = torrent.Torrent.SavePath;
                                 var path = Path.Combine(SettingsManager.PostCompletionDestination,
                                     Path.GetFileName(torrent.Torrent.SavePath));
                                 if (!Directory.Exists(path))
                                     Directory.CreateDirectory(path);
                                 torrent.Torrent.MoveFiles(path, true);
                                 torrent.Torrent.Start();
+                                Directory.Delete(oldPath, true);
+                                var cache = Path.Combine(SettingsManager.TorrentCachePath, Path.GetFileName(oldPath));
+                                File.WriteAllText(Path.Combine(Path.GetDirectoryName(cache),
+                                    Path.GetFileNameWithoutExtension(cache)) + ".info", path);
                             });
                     }
                 }
