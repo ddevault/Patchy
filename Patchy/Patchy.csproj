@@ -97,6 +97,7 @@
     <Compile Include="RssTorrentRule.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="UACHelper.cs" />
+    <Compile Include="Validators\ValidDirectoryValidationRule.cs" />
     <Page Include="AddTorrentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

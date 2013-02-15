@@ -27,6 +27,7 @@ namespace Patchy
         private System.Windows.Forms.NotifyIcon NotifyIcon { get; set; }
         private PeriodicTorrent BalloonTorrent { get; set; }
         private string IgnoredClipboardValue { get; set; }
+        private FileSystemWatcher AutoWatcher { get; set; }
         internal bool AllowClose { get; set; }
 
         public MainWindow()
@@ -45,7 +46,17 @@ namespace Patchy
             };
             
             Client = new ClientManager();
+
             Initialize();
+            if (string.IsNullOrEmpty(SettingsManager.AutomaticAddDirectory))
+                AutoWatcher = new FileSystemWatcher();
+            else
+                AutoWatcher = new FileSystemWatcher(SettingsManager.AutomaticAddDirectory);
+            AutoWatcher.Filter = "*.torrent";
+            if (!string.IsNullOrEmpty(SettingsManager.AutomaticAddDirectory))
+                AutoWatcher.EnableRaisingEvents = true;
+            AutoWatcher.Created += AutoWatcher_Created;
+
             torrentGrid.ItemsSource = Client.Torrents;
 
             Loaded += new RoutedEventHandler(MainWindow_Loaded);
@@ -53,6 +64,18 @@ namespace Patchy
 
             if (UacHelper.IsProcessElevated)
                 elevatedPermissionsGrid.Visibility = Visibility.Visible;
+        }
+
+        void AutoWatcher_Created(object sender, FileSystemEventArgs e)
+        {
+            try
+            {
+                var torrent = Torrent.Load(e.FullPath);
+                AddTorrent(torrent, SettingsManager.DefaultDownloadLocation, true);
+                BalloonTorrent = null;
+                NotifyIcon.ShowBalloonTip(5000, "Added torrent from torrent path", torrent.Name, System.Windows.Forms.ToolTipIcon.Info);
+            }
+            catch { }
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -153,17 +176,20 @@ namespace Patchy
 
         private void WindowClosed(object sender, EventArgs e)
         {
-            var resume = new BEncodedDictionary();
-            foreach (var torrent in Client.Torrents)
+            if (SettingsManager.SaveSession)
             {
-                torrent.Torrent.Stop();
-                while (torrent.Torrent.State != TorrentState.Stopped && torrent.Torrent.State != TorrentState.Error)
-                    Thread.Sleep(100);
-                // TODO: Notify users on error? The application is shutting down here, it wouldn't be particualry
-                // easy to get information to the user
-                resume.Add(torrent.Torrent.InfoHash.ToHex(), torrent.Torrent.SaveFastResume().Encode());
+                var resume = new BEncodedDictionary();
+                foreach (var torrent in Client.Torrents)
+                {
+                    torrent.Torrent.Stop();
+                    while (torrent.Torrent.State != TorrentState.Stopped && torrent.Torrent.State != TorrentState.Error)
+                        Thread.Sleep(100);
+                    // TODO: Notify users on error? The application is shutting down here, it wouldn't be particualry
+                    // easy to get information to the user
+                    resume.Add(torrent.Torrent.InfoHash.ToHex(), torrent.Torrent.SaveFastResume().Encode());
+                }
+                File.WriteAllBytes(SettingsManager.FastResumePath, resume.Encode());
             }
-            File.WriteAllBytes(SettingsManager.FastResumePath, resume.Encode());
             Client.Shutdown();
         }
 

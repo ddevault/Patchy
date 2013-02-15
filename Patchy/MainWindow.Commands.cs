@@ -91,6 +91,17 @@ namespace Patchy
                 case "MinutesBetweenRssUpdates":
                     ReloadRssTimer();
                     break;
+                case "AutomaticAddDirectory":
+                    if (AutoWatcher == null)
+                        break;
+                    if (string.IsNullOrEmpty(SettingsManager.AutomaticAddDirectory))
+                        AutoWatcher.EnableRaisingEvents = false;
+                    else
+                    {
+                        AutoWatcher.Path = SettingsManager.AutomaticAddDirectory;
+                        AutoWatcher.EnableRaisingEvents = true;
+                    }
+                    break;
             }
         }
     }

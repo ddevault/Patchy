@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:c="clr-namespace:Patchy.Converters"
+        xmlns:v="clr-namespace:Patchy.Validators"
         Title="Preferences" Height="500" Width="700" Icon="Images/patchy.ico">
     <Window.Resources>
         <ResourceDictionary>
@@ -49,11 +50,35 @@
             <TabItem Header="Downloads">
                 <StackPanel Margin="3">
                     <TextBlock FontWeight="Bold">Default download location:</TextBlock>
-                    <TextBox Text="{Binding DefaultDownloadLocation}"></TextBox>
+                    <TextBox>
+                        <TextBox.Text>
+                            <Binding Path="DefaultDownloadLocation">
+                                <Binding.ValidationRules>
+                                    <v:ValidDirectoryValidationRule></v:ValidDirectoryValidationRule>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                     <TextBlock FontWeight="Bold">Move completed to:</TextBlock>
-                    <TextBox Text="{Binding PostCompletionDestination}"></TextBox>
+                    <TextBox>
+                        <TextBox.Text>
+                            <Binding Path="PostCompletionDestination">
+                                <Binding.ValidationRules>
+                                    <v:ValidDirectoryValidationRule></v:ValidDirectoryValidationRule>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                     <TextBlock FontWeight="Bold">Automatically add .torrents from:</TextBlock>
-                    <TextBox Text="{Binding AutomaticAddDirectory}"></TextBox>
+                    <TextBox>
+                        <TextBox.Text>
+                            <Binding Path="AutomaticAddDirectory">
+                                <Binding.ValidationRules>
+                                    <v:ValidDirectoryValidationRule></v:ValidDirectoryValidationRule>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Connections">

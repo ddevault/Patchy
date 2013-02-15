@@ -111,7 +111,8 @@ namespace Patchy
             Task.Factory.StartNew(() =>
                 {
                     Client.Register(torrent);
-                    torrent.Start();
+                    if (SettingsManager.StartTorrentsImmediately)
+                        torrent.Start();
                 });
             Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Add(periodicTorrent)));
             return periodicTorrent;
@@ -124,7 +125,8 @@ namespace Patchy
                 {
                     torrent.LoadFastResume(resume);
                     Client.Register(torrent);
-                    torrent.Start();
+                    if (SettingsManager.StartTorrentsImmediately)
+                        torrent.Start();
                 });
             Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Add(periodicTorrent)));
             return periodicTorrent;
