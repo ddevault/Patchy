@@ -74,6 +74,8 @@ namespace Patchy
             var cache = Path.Combine(
                     SettingsManager.TorrentCachePath,
                     ClientManager.CleanFileName(name) + ".torrent");
+            for (int i = 0; i < link.AnnounceUrls.Count; i++)
+                link.AnnounceUrls[i] = HttpUtility.UrlDecode(HttpUtility.UrlDecode(link.AnnounceUrls[i]));
             var wrapper = new TorrentWrapper(link, path, new TorrentSettings(), cache);
             if (Client.Torrents.Any(t => t.Torrent.InfoHash == wrapper.InfoHash))
             {
