@@ -4,9 +4,9 @@ Patchy is an open source bittorrent client for Windows.
 
 Patchy is powered by [MonoTorrent](https://github.com/mono/monotorrent).
 
-**Current Status**: Pre-alpha
+**Current Status**: Alpha [(Download)](http://bit.ly/patchy-alpha)
 
-Alpha begins on Friday, February 15th. Beta begins on Friday, February 22nd.
+Beta begins on Friday, February 22nd.
 
 [![Screenshot](http://i.imgur.com/LbAlCZU.png)](http://i.imgur.com/LbAlCZU.png "Click to enlarge")
 
