@@ -44,7 +44,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="6*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="215"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -113,46 +113,57 @@
             </Grid>
         </Grid>
         <!--RSS Feed Left-->
-        <Grid x:Name="rssFeedGrid" Grid.RowSpan="3" Grid.Row="2" Width="280" Margin="3"
+        <Grid x:Name="rssFeedGrid" Grid.RowSpan="3" Grid.Row="2" Margin="3" MinWidth="250"
               Visibility="{Binding ElementName=viewRssFeedsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <TextBlock FontSize="16">RSS Feeds</TextBlock>
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden">
-                <ItemsControl x:Name="rssListView" BorderThickness="0">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="LightGray" Margin="3" BorderThickness="2" CornerRadius="3" Width="250">
-                            <Grid Margin="3">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"></RowDefinition>
-                                    <RowDefinition Height="Auto"></RowDefinition>
-                                    <RowDefinition Height="Auto"></RowDefinition>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="{Binding Title}" FontSize="14" HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip Content="{Binding Title}"></ToolTip>
-                                    </TextBlock.ToolTip>
-                                </TextBlock>
-                                <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                    <TextBlock Text="By "></TextBlock>
-                                    <TextBlock Text="{Binding Creator}"></TextBlock>
-                                </StackPanel>
-                                <Button Click="rssEntryAddClicked" Grid.Row="2" Tag="{Binding}">Add Torrent</Button>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="Images/rss.png"></Image>
+                    <TextBlock FontSize="24" Margin="5 0 0 0" Grid.Column="1">RSS Feeds</TextBlock>
+                    <ItemsControl x:Name="rssListView" BorderThickness="0" Grid.Row="1" Grid.ColumnSpan="2">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="LightGray" Margin="3" BorderThickness="2" CornerRadius="3">
+                                    <Grid Margin="3">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{Binding Title}" FontSize="14" HorizontalAlignment="Stretch"
+                                                   TextTrimming="CharacterEllipsis" MaxWidth="250">
+                                            <TextBlock.ToolTip>
+                                                <ToolTip Content="{Binding Title}"></ToolTip>
+                                            </TextBlock.ToolTip>
+                                        </TextBlock>
+                                        <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                            <TextBlock Text="By "></TextBlock>
+                                            <TextBlock Text="{Binding Creator}"></TextBlock>
+                                        </StackPanel>
+                                        <Button Click="rssEntryAddClicked" Grid.Row="2" Tag="{Binding}">Add Torrent</Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
             </ScrollViewer>
         </Grid>
+        <GridSplitter Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" ResizeDirection="Columns" Width="3"
+                      Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray"
+                      Visibility="{Binding ElementName=viewRssFeedsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}"></GridSplitter>
         <!--Main torrent grid-->
         <Grid Grid.Row="2" Grid.Column="2" x:Name="upperGrid">
             <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
                       GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="TorrentGridSelectionChanged"
-                      IsReadOnly="True" ContextMenuOpening="torrentGridContextMenuOpening" CanUserResizeRows="False">
+                      IsReadOnly="True" ContextMenuOpening="torrentGridContextMenuOpening" CanUserResizeRows="False" BorderThickness="0">
                 <DataGrid.Background>
                     <ImageBrush ImageSource="Images/patchy.png" AlignmentX="Right" AlignmentY="Bottom"
                                 Viewport="0,20,70,70" ViewportUnits="Absolute" Opacity="0.5"></ImageBrush>
