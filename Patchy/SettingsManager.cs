@@ -87,6 +87,7 @@ namespace Patchy
             ShowNotificationOnCompletion = true;
             ConfirmExitWhenActive = true;
             ConfirmTorrentRemoval = true;
+            WarnOnDangerousFiles = true;
             StartTorrentsImmediately = true;
             DoubleClickSeeding = DoubleClickAction.OpenFolder;
             DoubleClickDownloading = DoubleClickAction.OpenFolder;
@@ -403,6 +404,17 @@ namespace Patchy
             {
                 _ConfirmTorrentRemoval = value;
                 OnPropertyChanged("ConfirmTorrentRemoval");
+            }
+        }
+
+        private bool _WarnOnDangerousFiles;
+        public bool WarnOnDangerousFiles
+        {
+            get { return _WarnOnDangerousFiles; }
+            set
+            {
+                _WarnOnDangerousFiles = value;
+                OnPropertyChanged("WarnOnDangerousFiles");
             }
         }
 

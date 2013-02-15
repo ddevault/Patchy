@@ -158,6 +158,7 @@
                             <CheckBox IsChecked="{Binding ConfirmExitWhenActive}">Confirm exit if there are active torrents</CheckBox>
                             <CheckBox IsChecked="{Binding ConfirmTorrentRemoval}">Confirm torrent removal</CheckBox>
                             <CheckBox IsChecked="{Binding StartTorrentsImmediately}">Start torrents immediately when added</CheckBox>
+                            <CheckBox IsChecked="{Binding WarnOnDangerousFiles}">Warn before opening potentially dangerous files</CheckBox>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Header="Double Click">

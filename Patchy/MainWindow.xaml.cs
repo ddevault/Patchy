@@ -64,6 +64,19 @@ namespace Patchy
 
             if (UacHelper.IsProcessElevated)
                 elevatedPermissionsGrid.Visibility = Visibility.Visible;
+            StateChanged += MainWindow_StateChanged;
+        }
+
+        void MainWindow_StateChanged(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                if (SettingsManager.MinimizeToSystemTray && SettingsManager.ShowTrayIcon)
+                {
+                    Visibility = Visibility.Hidden;
+                    WindowState = WindowState.Normal;
+                }
+            }
         }
 
         void AutoWatcher_Created(object sender, FileSystemEventArgs e)
@@ -168,8 +181,15 @@ namespace Patchy
 
         private void WindowClosing(object sender, CancelEventArgs e)
         {
-            if (AllowClose)
+            if (AllowClose || (!SettingsManager.CloseToSystemTray && SettingsManager.ShowTrayIcon))
+            {
+                if (SettingsManager.ConfirmExitWhenActive && Client.Torrents.Any(t => t.State == TorrentState.Downloading || t.State == TorrentState.Seeding))
+                {
+                    e.Cancel = MessageBox.Show("You still have active torrents! Are you sure you want to exit?",
+                        "Confirm Exit", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No;
+                }
                 return;
+            }
             e.Cancel = true;
             Visibility = Visibility.Hidden;
         }
@@ -250,7 +270,7 @@ namespace Patchy
                 // TODO: Expand list of naughty file extensions
 
                 bool open = true;
-                if (extension.Equals(".exe", StringComparison.OrdinalIgnoreCase))
+                if (extension.Equals(".exe", StringComparison.OrdinalIgnoreCase) && SettingsManager.WarnOnDangerousFiles)
                 {
                     open = MessageBox.Show("This file could be dangerous. Are you sure you want to open it?",
                         "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
@@ -266,7 +286,30 @@ namespace Patchy
         private void TorrentGridMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             foreach (PeriodicTorrent item in torrentGrid.SelectedItems)
-                Process.Start("explorer", "\"" + item.Torrent.SavePath + "\"");
+            {
+                DoubleClickAction action;
+                if (item.State == TorrentState.Downloading)
+                    action = SettingsManager.DoubleClickDownloading;
+                else
+                    action = SettingsManager.DoubleClickSeeding;
+                switch (action)
+                {
+                    case DoubleClickAction.OpenFolder:
+                        Process.Start("explorer", "\"" + item.Torrent.SavePath + "\"");
+                        break;
+                    case DoubleClickAction.OpenLargestFile:
+                        var largest = item.Torrent.Torrent.Files.OrderBy(f => f.Length).FirstOrDefault();
+                        if (largest != null)
+                            Process.Start(largest.FullPath);
+                        break;
+                    case DoubleClickAction.ToggleActive:
+                        if (item.State == TorrentState.Paused)
+                            item.Torrent.Start();
+                        else
+                            item.Torrent.Pause();
+                        break;
+                }
+            }
         }
 
         private void torrentGridContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -355,7 +398,7 @@ namespace Patchy
             // TODO: Expand list of naughty file extensions
 
             bool open = true;
-            if (extension.Equals(".exe", StringComparison.OrdinalIgnoreCase))
+            if (extension.Equals(".exe", StringComparison.OrdinalIgnoreCase) && SettingsManager.WarnOnDangerousFiles)
             {
                 open = MessageBox.Show("This file could be dangerous. Are you sure you want to open it?",
                     "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;

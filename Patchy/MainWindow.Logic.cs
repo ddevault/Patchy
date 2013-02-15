@@ -117,11 +117,14 @@ namespace Patchy
                 torrent.Update();
                 if (torrent.Torrent.Complete && !torrent.CompletedOnAdd && !torrent.NotifiedComplete && torrent.State == TorrentState.Seeding)
                 {
-                    NotifyIcon.ShowBalloonTip(5000, "Download Complete",
-                        torrent.Name, System.Windows.Forms.ToolTipIcon.Info);
+                    if (SettingsManager.ShowNotificationOnCompletion)
+                    {
+                        NotifyIcon.ShowBalloonTip(5000, "Download Complete",
+                            torrent.Name, System.Windows.Forms.ToolTipIcon.Info);
+                        BalloonTorrent = torrent;
+                        FlashWindow(new WindowInteropHelper(this).Handle, true);
+                    }
                     torrent.NotifiedComplete = true;
-                    BalloonTorrent = torrent;
-                    FlashWindow(new WindowInteropHelper(this).Handle, true);
                     if (!string.IsNullOrEmpty(SettingsManager.PostCompletionDestination))
                     {
                         Task.Factory.StartNew(() =>
