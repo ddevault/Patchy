@@ -73,10 +73,11 @@ h2:after {
     height: 600px;
     border-radius: 6px;
     overflow: hidden;
+    background: #fff;
 }
 
 .outset > img {
-    position: relative;
+    position: absolute;
 }
 
 .download {
@@ -102,7 +103,8 @@ h3 > a {
     top: 3px;
     width: 21px;
     height: 21px;
-    background: url('../images/link.png') no-repeat;display: none;
+    background: url('../images/link.png') no-repeat;
+    display: none;
 }
 
 h3:hover > a {
@@ -132,4 +134,8 @@ h3:hover > a {
 
 .outset:hover > .navleft, .outset:hover > .navright {
     opacity: 1;
+}
+
+a:active {
+    outline: none;
 }
