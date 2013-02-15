@@ -112,6 +112,24 @@
                 </Button>
             </Grid>
         </Grid>
+        <!--Notification grid-->
+        <Grid Grid.Row="1" Grid.ColumnSpan="3" x:Name="elevatedPermissionsGrid" Visibility="Collapsed" Background="Orange">
+            <Grid Margin="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock FontWeight="Bold" VerticalAlignment="Center">Running Patchy as Administrator! Use caution when opening torrents, they will all be run as Administrator as well.</TextBlock>
+                <Button Grid.Column="1" Click="ElevatedGridDismissClicked" OverridesDefaultStyle="True" 
+                        VerticalAlignment="Center" Margin="3">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="Images/close.png" Cursor="Hand" Width="16" Height="16"></Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Grid>
         <!--RSS Feed Left-->
         <Grid x:Name="rssFeedGrid" Grid.RowSpan="3" Grid.Row="2" Margin="3" MinWidth="250"
               Visibility="{Binding ElementName=viewRssFeedsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}">

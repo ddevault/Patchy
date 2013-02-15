@@ -27,7 +27,7 @@ namespace Patchy
         private System.Windows.Forms.NotifyIcon NotifyIcon { get; set; }
         private PeriodicTorrent BalloonTorrent { get; set; }
         private string IgnoredClipboardValue { get; set; }
-        private bool AllowClose { get; set; } // TODO: Refactor this away
+        internal bool AllowClose { get; set; }
 
         public MainWindow()
         {
@@ -50,6 +50,9 @@ namespace Patchy
 
             ReloadRssTimer();
             Loaded += new RoutedEventHandler(MainWindow_Loaded);
+
+            if (UacHelper.IsProcessElevated)
+                elevatedPermissionsGrid.Visibility = Visibility.Visible;
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -359,6 +362,11 @@ namespace Patchy
             Process.Start(string.Format("https://github.com/SirCmpwn/Patchy/issues/new?title={0}&body={1}",
                 Uri.EscapeUriString("A brief description of your problem"),
                 Uri.EscapeUriString("[A more detailed description of your problem]" + Environment.NewLine + Environment.NewLine + systemInfo)));
+        }
+
+        private void ElevatedGridDismissClicked(object sender, RoutedEventArgs e)
+        {
+            elevatedPermissionsGrid.Visibility = Visibility.Collapsed;
         }
     }
 }

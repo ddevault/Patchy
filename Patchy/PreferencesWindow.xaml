@@ -30,6 +30,7 @@
                     </StackPanel>
                     <StackPanel x:Name="elevatePermissionsPanel" Visibility="Collapsed" Grid.Row="1">
                         <TextBlock Foreground="Red" TextWrapping="Wrap">You must run Patchy as Administrator to change these settings.</TextBlock>
+                        <Button Click="elevatePermissionsButtonClicked">Restart Patchy as Administrator</Button>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Grid.RowSpan="2">
                         <TextBlock FontWeight="Bold">Privacy</TextBlock>

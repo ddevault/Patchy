@@ -146,5 +146,16 @@ namespace Patchy
         {
             Process.Start("https://github.com/SirCmpwn/Patchy");
         }
+
+        private void elevatePermissionsButtonClicked(object sender, RoutedEventArgs e)
+        {
+            var info = new ProcessStartInfo(Assembly.GetEntryAssembly().Location);
+            info.Verb = "runas";
+            (Application.Current as App).ShutdownSingleton();
+            (Application.Current.MainWindow as MainWindow).AllowClose = true;
+            Application.Current.MainWindow.Close();
+            Process.Start(info);
+            Application.Current.Shutdown();
+        }
     }
 }
