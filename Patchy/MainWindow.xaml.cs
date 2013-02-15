@@ -362,6 +362,23 @@ namespace Patchy
         private void fileListGridContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             e.Handled = fileListGrid.SelectedItems.Count == 0;
+            
+            foreach (MenuItem child in filePriorityContextMenuItem.Items)
+                    child.IsChecked = false;
+            if (fileListGrid.SelectedItems.Count == 1)
+            {
+                var file = fileListGrid.SelectedItem as PeriodicFile;
+                int index = (int)new PriorityToIndexConverter().Convert(file.Priority, typeof(int), null, null);
+                (filePriorityContextMenuItem.Items[index] as MenuItem).IsChecked = true;
+            }
+        }
+
+        private void filePriorityContetMenuClick(object sender, RoutedEventArgs e)
+        {
+            var menuItem = sender as MenuItem;
+            var newPriority = (Priority)new PriorityToIndexConverter().ConvertBack(menuItem.Tag, typeof(Priority), null, null);
+            foreach (PeriodicFile file in fileListGrid.SelectedItems)
+                file.Priority = newPriority;
         }
 
         private void torrentGridToggleStreaming(object sender, RoutedEventArgs e)

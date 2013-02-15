@@ -33,7 +33,7 @@ namespace Patchy.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            int priority = (int)value;
+            int priority = System.Convert.ToInt32(value.ToString());
             switch (priority)
             {
                 case 0:

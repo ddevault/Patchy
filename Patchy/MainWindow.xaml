@@ -365,13 +365,14 @@
                                 <MenuItem Header="Open" Click="fileListGridOpenFile"></MenuItem>
                                 <MenuItem Header="Open containing folder" Click="fileListGridOpenFolder"></MenuItem>
                                 <Separator></Separator>
-                                <MenuItem Header="Priority">
-                                    <MenuItem Header="Do not download"></MenuItem>
-                                    <MenuItem Header="Lowest"></MenuItem>
-                                    <MenuItem Header="Low"></MenuItem>
-                                    <MenuItem Header="Normal" IsChecked="True"></MenuItem>
-                                    <MenuItem Header="High"></MenuItem>
-                                    <MenuItem Header="Highest"></MenuItem>
+                                <MenuItem Header="Priority" x:Name="filePriorityContextMenuItem">
+                                    <MenuItem Click="filePriorityContetMenuClick" IsCheckable="True" Tag="0" Header="Do not download"></MenuItem>
+                                    <MenuItem Click="filePriorityContetMenuClick" IsCheckable="True" Tag="1" Header="Lowest"></MenuItem>
+                                    <MenuItem Click="filePriorityContetMenuClick" IsCheckable="True" Tag="2" Header="Low"></MenuItem>
+                                    <MenuItem Click="filePriorityContetMenuClick" IsCheckable="True" Tag="3" Header="Normal"></MenuItem>
+                                    <MenuItem Click="filePriorityContetMenuClick" IsCheckable="True" Tag="4" Header="High"></MenuItem>
+                                    <MenuItem Click="filePriorityContetMenuClick" IsCheckable="True" Tag="5" Header="Highest"></MenuItem>
+                                    <MenuItem Click="filePriorityContetMenuClick" IsCheckable="True" Tag="6" Header="Immediate"></MenuItem>
                                 </MenuItem>
                             </ContextMenu>
                         </DataGrid.ContextMenu>
