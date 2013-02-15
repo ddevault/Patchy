@@ -298,7 +298,7 @@ namespace Patchy
                         Process.Start("explorer", "\"" + item.Torrent.SavePath + "\"");
                         break;
                     case DoubleClickAction.OpenLargestFile:
-                        var largest = item.Torrent.Torrent.Files.OrderBy(f => f.Length).FirstOrDefault();
+                        var largest = item.Torrent.Torrent.Files.OrderByDescending(f => f.Length).FirstOrDefault();
                         if (largest != null)
                             Process.Start(largest.FullPath);
                         break;
