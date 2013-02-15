@@ -49,7 +49,7 @@
             <TabItem Header="Downloads">
                 <StackPanel Margin="3">
                     <TextBlock FontWeight="Bold">Default download location:</TextBlock>
-                    <TextBox></TextBox>
+                    <TextBox Text="{Binding DefaultDownloadLocation, Mode=TwoWay}"></TextBox>
                     <TextBlock FontWeight="Bold">Move completed to:</TextBlock>
                     <TextBox></TextBox>
                     <TextBlock FontWeight="Bold">Automatically add .torrents from:</TextBlock>
@@ -188,7 +188,7 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="RSS">
-                <Grid x:Name="rssManagerGrid">
+                <Grid x:Name="rssManagerGrid" DataContext="{Binding RssFeeds}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>

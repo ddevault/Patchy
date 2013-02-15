@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace Patchy
 {
-    public class SettingsManager
+    public class SettingsManager : INotifyPropertyChanged
     {
         public SettingsManager()
         {
@@ -53,8 +54,35 @@ namespace Patchy
             // TODO
         }
 
-        public string DefaultDownloadLocation { get; set; }
         public ObservableCollection<RssFeed> RssFeeds { get; set; }
-        public int MinutesBetweenRssUpdates { get; set; }
+        private string defaultDownloadLocation;
+        public string DefaultDownloadLocation 
+        {
+            get { return defaultDownloadLocation; }
+            set
+            {
+                defaultDownloadLocation = value;
+                OnPropertyChanged("DefaultDownloadLocation");
+            }
+        }
+
+        private int minutesBetweenRssUpdates;
+        public int MinutesBetweenRssUpdates
+        {
+            get { return minutesBetweenRssUpdates; }
+            set
+            {
+                minutesBetweenRssUpdates = value;
+                OnPropertyChanged("MinutesBetweenRssUpdates");
+            }
+        }
+
+        protected internal virtual void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

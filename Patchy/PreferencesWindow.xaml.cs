@@ -36,7 +36,7 @@ namespace Patchy
             var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Patchy.LICENSE"));
             licenseText.Text = reader.ReadToEnd();
             Settings = manager;
-            rssManagerGrid.DataContext = Settings.RssFeeds;
+            DataContext = Settings;
         }
 
         private void InitializeRegistryBoundItems()
