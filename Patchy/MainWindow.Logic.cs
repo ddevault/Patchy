@@ -198,22 +198,70 @@ namespace Patchy
             }
             Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    Visibility = Visibility.Visible;
-                    Activate();
-                    // TODO: Prompt for download location
                     try
                     {
                         var magnetLink = new MagnetLink(args[0]);
-                        AddTorrent(magnetLink, Path.Combine(SettingsManager.DefaultDownloadLocation,
-                            ClientManager.CleanFileName(HttpUtility.HtmlDecode(HttpUtility.UrlDecode(magnetLink.Name)))));
-                        FlashWindow(new WindowInteropHelper(this).Handle, true);
+                        if (SettingsManager.PromptForSaveOnShellLinks)
+                        {
+                            var window = new AddTorrentWindow(SettingsManager);
+                            window.MagnetLink = magnetLink;
+                            if (window.ShowDialog().Value)
+                            {
+                                if (window.IsMagnet)
+                                    AddTorrent(window.MagnetLink, window.DestinationPath);
+                                else
+                                    AddTorrent(window.Torrent, window.DestinationPath);
+
+                                SaveSettings();
+
+                                Visibility = Visibility.Visible;
+                                Activate();
+                                FlashWindow(new WindowInteropHelper(this).Handle, true);
+                            }
+                        }
+                        else
+                        {
+                            var path = Path.Combine(SettingsManager.DefaultDownloadLocation, ClientManager.CleanFileName(magnetLink.Name));
+                            if (!Directory.Exists(path))
+                                Directory.CreateDirectory(path);
+                            AddTorrent(magnetLink, path, true);
+                        }
                     }
                     catch
                     {
-                        var torrent = Torrent.Load(args[0]);
-                        AddTorrent(torrent, Path.Combine(SettingsManager.DefaultDownloadLocation,
-                            ClientManager.CleanFileName(torrent.Name)));
-                        FlashWindow(new WindowInteropHelper(this).Handle, true);
+                        try
+                        {
+                            var torrent = Torrent.Load(args[0]);
+                            if (SettingsManager.PromptForSaveOnShellLinks)
+                            {
+                                var window = new AddTorrentWindow(SettingsManager, args[0]);
+                                if (window.ShowDialog().Value)
+                                {
+                                    if (window.IsMagnet)
+                                        AddTorrent(window.MagnetLink, window.DestinationPath);
+                                    else
+                                        AddTorrent(window.Torrent, window.DestinationPath);
+
+                                    SaveSettings();
+
+                                    Visibility = Visibility.Visible;
+                                    Activate();
+                                    FlashWindow(new WindowInteropHelper(this).Handle, true);
+                                }
+                            }
+                            else
+                            {
+                                var path = Path.Combine(SettingsManager.DefaultDownloadLocation, ClientManager.CleanFileName(torrent.Name));
+                                if (!Directory.Exists(path))
+                                    Directory.CreateDirectory(path);
+                                AddTorrent(torrent, path, true);
+
+                                Visibility = Visibility.Visible;
+                                Activate();
+                                FlashWindow(new WindowInteropHelper(this).Handle, true);
+                            }
+                        }
+                        catch { }
                     }
                 }));
         }

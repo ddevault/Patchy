@@ -55,6 +55,7 @@ namespace Patchy
             // General
             SaveSession = true;
             AutoUpdate = true;
+            PromptForSaveOnShellLinks = true;
 
             // Downloads
             DefaultDownloadLocation = Path.Combine(
@@ -144,6 +145,17 @@ namespace Patchy
             {
                 _AutoUpdate = value;
                 OnPropertyChanged("AutoUpdate");
+            }
+        }
+
+        private bool _PromptForSaveOnShellLinks;
+        public bool PromptForSaveOnShellLinks
+        {
+            get { return _PromptForSaveOnShellLinks; }
+            set
+            {
+                _PromptForSaveOnShellLinks = value;
+                OnPropertyChanged("PromptForSaveOnShellLinks");
             }
         }
 

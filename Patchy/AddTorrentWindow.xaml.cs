@@ -29,7 +29,28 @@ namespace Patchy
 
         public bool IsMagnet { get { return magnetLinkRadioButton.IsChecked.Value; } }
         public Torrent Torrent { get; set; }
-        public MagnetLink MagnetLink { get; set; }
+        private MagnetLink _magnetLink;
+        public MagnetLink MagnetLink
+        {
+            get { return _magnetLink; }
+            set
+            {
+                _magnetLink = value;
+                magnetLinkRadioButton.IsChecked = true;
+                magnetLinkTextBox.Text = ConvertMagnetToString(value);
+            }
+        }
+
+        private string ConvertMagnetToString(MagnetLink value)
+        {
+            var result = "magnet:?";
+            result += "xt=urn:btih:" + value.InfoHash.ToHex();
+            result += "&dn=" + value.Name;
+            foreach (var url in value.AnnounceUrls)
+                result += "&tr=" + Uri.EscapeUriString(url);
+            return result;
+        }
+
         public string DestinationPath { get; set; }
         public bool EditAdditionalSettings { get { return editSettingsCheckBox.IsChecked.Value; } }
 
@@ -52,7 +73,7 @@ namespace Patchy
             }
         }
 
-        public AddTorrentWindow(SettingsManager settingsManager)
+        public AddTorrentWindow(SettingsManager settingsManager, string torrentPath = null)
         {
             Settings = settingsManager;
             InitializeComponent();
@@ -78,6 +99,8 @@ namespace Patchy
                 }
             }
             UpdateFileBrower("C:\\");
+            if (torrentPath != null)
+                torrentFileRadioButton.IsChecked = true;
         }
 
         private void UpdateFileBrower(string path)

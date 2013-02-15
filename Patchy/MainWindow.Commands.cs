@@ -13,7 +13,7 @@ namespace Patchy
         private void ExecuteNew(object sender, ExecutedRoutedEventArgs e)
         {
             var window = new AddTorrentWindow(SettingsManager);
-            if (window.ShowDialog().GetValueOrDefault(false))
+            if (window.ShowDialog().Value)
             {
                 if (window.IsMagnet)
                     AddTorrent(window.MagnetLink, window.DestinationPath);
@@ -23,7 +23,7 @@ namespace Patchy
                 if (Visibility == Visibility.Hidden)
                 {
                     Visibility = Visibility.Visible;
-                    Focus();
+                    Activate();
                 }
                 SaveSettings();
             }
