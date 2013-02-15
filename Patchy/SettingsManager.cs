@@ -88,6 +88,7 @@ namespace Patchy
             ConfirmExitWhenActive = true;
             ConfirmTorrentRemoval = true;
             WarnOnDangerousFiles = true;
+            WarnWhenRunningAsAdministrator = true;
             StartTorrentsImmediately = true;
             DoubleClickSeeding = DoubleClickAction.OpenFolder;
             DoubleClickDownloading = DoubleClickAction.OpenFolder;
@@ -415,6 +416,17 @@ namespace Patchy
             {
                 _WarnOnDangerousFiles = value;
                 OnPropertyChanged("WarnOnDangerousFiles");
+            }
+        }
+
+        private bool _WarnWhenRunningAsAdministrator;
+        public bool WarnWhenRunningAsAdministrator
+        {
+            get { return _WarnWhenRunningAsAdministrator; }
+            set
+            {
+                _WarnWhenRunningAsAdministrator = value;
+                OnPropertyChanged("WarnWhenRunningAsAdministrator");
             }
         }
 

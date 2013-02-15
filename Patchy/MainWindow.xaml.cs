@@ -63,7 +63,7 @@ namespace Patchy
             Loaded += new RoutedEventHandler(MainWindow_Loaded);
             ReloadRssTimer();
 
-            if (UacHelper.IsProcessElevated)
+            if (UacHelper.IsProcessElevated && SettingsManager.WarnWhenRunningAsAdministrator)
                 elevatedPermissionsGrid.Visibility = Visibility.Visible;
             StateChanged += MainWindow_StateChanged;
         }

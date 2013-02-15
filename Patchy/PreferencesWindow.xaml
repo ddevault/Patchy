@@ -159,6 +159,7 @@
                             <CheckBox IsChecked="{Binding ConfirmTorrentRemoval}">Confirm torrent removal</CheckBox>
                             <CheckBox IsChecked="{Binding StartTorrentsImmediately}">Start torrents immediately when added</CheckBox>
                             <CheckBox IsChecked="{Binding WarnOnDangerousFiles}">Warn before opening potentially dangerous files</CheckBox>
+                            <CheckBox IsChecked="{Binding WarnWhenRunningAsAdministrator}">Show warning when running Patchy as administrator</CheckBox>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Header="Double Click">
