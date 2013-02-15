@@ -99,7 +99,7 @@ namespace Patchy
                 var program = new ProgramAssociationInfo(torrent.ProgID);
                 if (!program.Exists)
                 {
-                    program.Create("Patchy Torrent Files", new ProgramVerb("Open", string.Format(
+                    program.Create("Patchy Torrent File", new ProgramVerb("Open", string.Format(
                         "\"{0}\" \"%1\"", Path.Combine(Directory.GetCurrentDirectory(), "Patchy.exe"))));
                     program.DefaultIcon = new ProgramIcon(Assembly.GetEntryAssembly().Location);
                 }

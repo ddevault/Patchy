@@ -56,12 +56,15 @@ namespace Patchy
             var torrent = DataContext as PeriodicTorrent;
             if (torrent == null)
             {
-                drawingContext.DrawRectangle(null, new Pen(Brushes.Black, 1), new Rect(0, 0, this.ActualWidth, this.ActualHeight));
+                drawingContext.DrawRectangle(null, new Pen(Brushes.DarkGray, 1), new Rect(0, 0, this.ActualWidth, this.ActualHeight));
                 return;
             }
             var pieces = torrent.RecievedPieces;
             if (pieces == null)
+            {
+                drawingContext.DrawRectangle(null, new Pen(Brushes.DarkGray, 1), new Rect(0, 0, this.ActualWidth, this.ActualHeight));
                 return;
+            }
             double width = ActualWidth / pieces.Length;
             for (int i = 0; i < pieces.Length; i++)
             {
