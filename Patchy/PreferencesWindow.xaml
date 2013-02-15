@@ -114,10 +114,10 @@
                 <StackPanel>
                     <GroupBox Header="Tray Options">
                         <StackPanel>
-                            <CheckBox>Show tray icon</CheckBox>
-                            <CheckBox>Close to system tray</CheckBox>
-                            <CheckBox>Minimize to system tray</CheckBox>
-                            <CheckBox>Show notification on torrent completion</CheckBox>
+                            <CheckBox x:Name="showTrayIconCheckBox">Show tray icon</CheckBox>
+                            <CheckBox IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Close to system tray</CheckBox>
+                            <CheckBox IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Minimize to system tray</CheckBox>
+                            <CheckBox IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Show notification on torrent completion</CheckBox>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Header="Confirmations">
