@@ -33,8 +33,16 @@ h2 {
     text-align: center;
     font-style: italic;
     font-size: 14pt;
-    color: #eee;
-    background: linear-gradient(to bottom, #267F00 0%,#1D6000 100%);
+    color: #fff;
+    text-shadow: 1px 1px 3px #000;
+    background: #267f00; /* Old browsers */
+    background: -moz-linear-gradient(top, #267f00 0%, #1d6000 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#267f00), color-stop(100%,#1d6000)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #267f00 0%,#1d6000 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #267f00 0%,#1d6000 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #267f00 0%,#1d6000 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #267f00 0%,#1d6000 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#267f00', endColorstr='#1d6000',GradientType=0 ); /* IE6-9 */
     padding: 5px;
     position: relative;
     left: -15px;
@@ -87,7 +95,8 @@ h2:after {
 }
 
 .content-body {
-    padding: 5px;
+    padding: 5px 20px 20px 20px;
+    line-height: 26px;
 }
 
 h3 {
