@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using MonoTorrent.Client;
@@ -44,6 +46,7 @@ namespace Patchy
 
         private void LoadSettings()
         {
+            SettingsManager.PropertyChanged += SettingsManager_PropertyChanged;
             if (!File.Exists(SettingsManager.SettingsFile))
             {
                 SettingsManager.SetToDefaults();
@@ -53,8 +56,18 @@ namespace Patchy
             {
                 var serializer = new JsonSerializer();
                 serializer.MissingMemberHandling = MissingMemberHandling.Ignore;
-                using (var reader = new StreamReader(SettingsManager.SettingsFile))
-                    serializer.Populate(reader, SettingsManager);
+                try
+                {
+                    using (var reader = new StreamReader(SettingsManager.SettingsFile))
+                        serializer.Populate(reader, SettingsManager);
+                }
+                catch
+                {
+                    MessageBox.Show("Your settings are corrupted. They have been reset to the defaults.",
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    SettingsManager.SetToDefaults();
+                    SaveSettings();
+                }
             }
         }
 
@@ -63,6 +76,11 @@ namespace Patchy
             var serializer = new JsonSerializer();
             using (var writer = new StreamWriter(SettingsManager.SettingsFile))
                 serializer.Serialize(writer, SettingsManager);
+        }
+
+        void SettingsManager_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            
         }
     }
 

@@ -16,31 +16,84 @@ using MonoTorrent.Dht.Listeners;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
+using System.ComponentModel;
 
 namespace Patchy
 {
     public class ClientManager
     {
-        public void Initialize()
+        private SettingsManager SettingsManager { get; set; }
+
+        public void Initialize(SettingsManager settingsManager)
         {
+            SettingsManager = settingsManager;
             Torrents = new ObservableCollection<PeriodicTorrent>();
             Torrents.CollectionChanged += Torrents_CollectionChanged;
 
-            // TODO: Customize most of these settings
-            var settings = new EngineSettings(Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads"), 22239);
-            settings.PreferEncryption = true;
-            settings.AllowedEncryption = EncryptionTypes.RC4Full | EncryptionTypes.RC4Header;
+            var port = SettingsManager.IncomingPort;
+            if (SettingsManager.UseRandomPort)
+                port = new Random().Next(1, 65536);
+            var settings = new EngineSettings(SettingsManager.DefaultDownloadLocation, port);
+
+            settings.PreferEncryption = SettingsManager.EncryptionSettings != EncryptionTypes.PlainText; // Always prefer encryption unless it's disabled
+            settings.AllowedEncryption = SettingsManager.EncryptionSettings;
             Client = new ClientEngine(settings);
-            Client.ChangeListenEndpoint(new IPEndPoint(IPAddress.Any, 22239));
-            var listener = new DhtListener(new IPEndPoint(IPAddress.Any, 22239));
-            var dht = new DhtEngine(listener);
-            Client.RegisterDht(dht);
-            listener.Start();
-            if (File.Exists(SettingsManager.DhtCachePath))
-                dht.Start(File.ReadAllBytes(SettingsManager.DhtCachePath));
-            else
-                dht.Start();
+            Client.ChangeListenEndpoint(new IPEndPoint(IPAddress.Any, port));
+            if (SettingsManager.EnableDHT)
+            {
+                var listener = new DhtListener(new IPEndPoint(IPAddress.Any, port));
+                var dht = new DhtEngine(listener);
+                Client.RegisterDht(dht);
+                listener.Start();
+                if (File.Exists(SettingsManager.DhtCachePath))
+                    dht.Start(File.ReadAllBytes(SettingsManager.DhtCachePath));
+                else
+                    dht.Start();
+            }
+            SettingsManager.PropertyChanged += SettingsManager_PropertyChanged;
+        }
+
+        void SettingsManager_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "IncomingPort":
+                    Client.Listener.ChangeEndpoint(new IPEndPoint(IPAddress.Any, SettingsManager.IncomingPort));
+                    break;
+                case "MapWithUPnP":
+                    // TODO: UPnP
+                    break;
+                case "MaxUploadSpeed":
+                    Client.Settings.GlobalMaxUploadSpeed = SettingsManager.MaxUploadSpeed * 1024;
+                    break;
+                case "MaxDownloadSpeed":
+                    Client.Settings.GlobalMaxDownloadSpeed = SettingsManager.MaxDownloadSpeed * 1024;
+                    break;
+                case "MaxConnections":
+                    Client.Settings.GlobalMaxConnections = SettingsManager.MaxConnections;
+                    break;
+                case "EnableDHT":
+                    if (SettingsManager.EnableDHT)
+                    {
+                        var port = SettingsManager.IncomingPort;
+                        if (SettingsManager.UseRandomPort)
+                            port = new Random().Next(1, 65536);
+                        var listener = new DhtListener(new IPEndPoint(IPAddress.Any, port));
+                        var dht = new DhtEngine(listener);
+                        Client.RegisterDht(dht);
+                        listener.Start();
+                        if (File.Exists(SettingsManager.DhtCachePath))
+                            dht.Start(File.ReadAllBytes(SettingsManager.DhtCachePath));
+                        else
+                            dht.Start();
+                    }
+                    else
+                        Client.DhtEngine.Stop();
+                    break;
+                case "EncryptionSettings":
+                    Client.Settings.AllowedEncryption = SettingsManager.EncryptionSettings;
+                    break;
+            }
         }
 
         void Torrents_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -133,8 +186,11 @@ namespace Patchy
 
         public void Shutdown()
         {
-            Client.DhtEngine.Stop();
-            File.WriteAllBytes(SettingsManager.DhtCachePath, Client.DhtEngine.SaveNodes());
+            if (SettingsManager.EnableDHT)
+            {
+                Client.DhtEngine.Stop();
+                File.WriteAllBytes(SettingsManager.DhtCachePath, Client.DhtEngine.SaveNodes());
+            }
             Client.Dispose();
         }
 

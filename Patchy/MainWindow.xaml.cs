@@ -49,7 +49,6 @@ namespace Patchy
             torrentGrid.ItemsSource = Client.Torrents;
 
             Loaded += new RoutedEventHandler(MainWindow_Loaded);
-            LoadSettings();
             ReloadRssTimer();
 
             if (UacHelper.IsProcessElevated)

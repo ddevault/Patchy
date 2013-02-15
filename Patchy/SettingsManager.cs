@@ -101,6 +101,14 @@ namespace Patchy
             RecentDownloadLocations = new string[0];
         }
 
+        public void ForcePropertyUpdate()
+        {
+            // Calls OnPropertyChanged for all properties
+            var properties = GetType().GetProperties();
+            foreach (var property in properties)
+                OnPropertyChanged(property.Name);
+        }
+
         public RssFeed[] RssFeeds { get; set; }
         public string[] RecentDownloadLocations { get; set; }
 
@@ -213,8 +221,8 @@ namespace Patchy
             }
         }
 
-        private double _MaxUploadSpeed;
-        public double MaxUploadSpeed
+        private int _MaxUploadSpeed;
+        public int MaxUploadSpeed
         {
             get { return _MaxUploadSpeed; }
             set
@@ -224,8 +232,8 @@ namespace Patchy
             }
         }
 
-        private double _MaxDownloadSpeed;
-        public double MaxDownloadSpeed
+        private int _MaxDownloadSpeed;
+        public int MaxDownloadSpeed
         {
             get { return _MaxDownloadSpeed; }
             set

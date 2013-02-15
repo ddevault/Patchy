@@ -27,9 +27,10 @@ namespace Patchy
 
         private void Initialize()
         {
-            Client.Initialize();
-            SettingsManager = new SettingsManager();
             SettingsManager.Initialize();
+            SettingsManager = new SettingsManager();
+            LoadSettings();
+            Client.Initialize(SettingsManager);
             // Load prior session
             if (File.Exists(SettingsManager.FastResumePath))
             {
