@@ -122,6 +122,20 @@ namespace Patchy
                     torrent.NotifiedComplete = true;
                     BalloonTorrent = torrent;
                     FlashWindow(new WindowInteropHelper(this).Handle, true);
+                    if (!string.IsNullOrEmpty(SettingsManager.PostCompletionDestination))
+                    {
+                        Task.Factory.StartNew(() =>
+                            {
+                                torrent.Torrent.Stop();
+                                while (torrent.Torrent.State != TorrentState.Stopped) ;
+                                var path = Path.Combine(SettingsManager.PostCompletionDestination,
+                                    Path.GetFileName(torrent.Torrent.SavePath));
+                                if (!Directory.Exists(path))
+                                    Directory.CreateDirectory(path);
+                                torrent.Torrent.MoveFiles(path, true);
+                                torrent.Torrent.Start();
+                            });
+                    }
                 }
             }
             UpdateNotifyIcon();
