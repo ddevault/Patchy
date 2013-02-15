@@ -45,8 +45,11 @@ namespace Patchy
 
         void Torrents_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            for (int i = 0; i < Torrents.Count; i++)
-                Torrents[i].Index = i + 1;
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    for (int i = 0; i < Torrents.Count; i++)
+                        Torrents[i].Index = i + 1;
+                }));
         }
 
         public PeriodicTorrent AddTorrent(TorrentWrapper torrent)
