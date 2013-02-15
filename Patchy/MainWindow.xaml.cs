@@ -50,9 +50,15 @@ namespace Patchy
 
             ReloadRssTimer();
             Loaded += new RoutedEventHandler(MainWindow_Loaded);
+            SettingsManager.RssFeeds.CollectionChanged += RssFeeds_CollectionChanged;
 
             if (UacHelper.IsProcessElevated)
                 elevatedPermissionsGrid.Visibility = Visibility.Visible;
+        }
+
+        void RssFeeds_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            UpdateRss();
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)

@@ -29,7 +29,6 @@
     <Window.CommandBindings>
         <CommandBinding Command="Open" Executed="ExecuteNew"></CommandBinding>
         <CommandBinding Command="Close" Executed="ExecuteExit"></CommandBinding>
-        <CommandBinding Command="pt:Commands.ManageRssFeeds" Executed="ExecuteManageRssFeeds"></CommandBinding>
         <CommandBinding Command="pt:Commands.EditPreferences" Executed="ExecuteEditPreferences"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
@@ -55,8 +54,6 @@
             <MenuItem Header="File">
                 <MenuItem Header="Add Torrent..." Command="Open"></MenuItem>
                 <MenuItem Header="Create Torrent" Command="New"></MenuItem>
-                <Separator></Separator>
-                <MenuItem Header="Manage RSS Feeds" Command="pt:Commands.ManageRssFeeds"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="Exit" Command="Close"></MenuItem>
             </MenuItem>

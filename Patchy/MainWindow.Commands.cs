@@ -34,14 +34,13 @@ namespace Patchy
 
         private void ExecuteEditPreferences(object sender, ExecutedRoutedEventArgs e)
         {
-            var window = new PreferencesWindow();
+            var window = new PreferencesWindow(SettingsManager);
             window.ShowDialog();
         }
     }
 
     public static class Commands
     {
-        public static readonly RoutedCommand ManageRssFeeds = new RoutedUICommand("Manage RSS Feeds", "ManageRssFeeds", typeof(MainWindow));
         public static readonly RoutedCommand EditPreferences = new RoutedUICommand("Edit Preferences", "EditPreferences", typeof(MainWindow));
     }
 }

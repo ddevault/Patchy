@@ -14,6 +14,11 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using BrendanGrant.Helpers.FileAssociation;
 using System.Reflection;
+using System.Collections.ObjectModel;
+using System.Net;
+using System.Xml.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Patchy
 {
@@ -22,12 +27,16 @@ namespace Patchy
     /// </summary>
     public partial class PreferencesWindow : Window
     {
-        public PreferencesWindow()
+        public SettingsManager Settings { get; set; }
+
+        public PreferencesWindow(SettingsManager manager)
         {
             InitializeComponent();
             InitializeRegistryBoundItems();
             var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Patchy.LICENSE"));
             licenseText.Text = reader.ReadToEnd();
+            Settings = manager;
+            rssManagerGrid.DataContext = Settings.RssFeeds;
         }
 
         private void InitializeRegistryBoundItems()
@@ -157,5 +166,86 @@ namespace Patchy
             Process.Start(info);
             Application.Current.Shutdown();
         }
+
+        #region RSS Manager
+
+        private void addNewFeedButtonClick(object sender, RoutedEventArgs e)
+        {
+            addNewFeedButton.IsEnabled = newFeedUrlTextBox.IsEnabled = false;
+            var address = newFeedUrlTextBox.Text;
+            if (Settings.RssFeeds.Any(f => f.Address == address))
+            {
+                MessageBox.Show("The specified feed has already been added.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                addNewFeedButton.IsEnabled = newFeedUrlTextBox.IsEnabled = true;
+                return;
+            }
+            Task.Factory.StartNew(() =>
+            {
+                // Validate feed
+                var client = new WebClient();
+                try
+                {
+                    var feed = client.DownloadString(address);
+                    var document = XDocument.Parse(feed);
+                    if (!RssFeed.ValidateFeed(document))
+                        throw new Exception();
+                    var rss = new RssFeed(address);
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        Settings.RssFeeds.Add(rss);
+                        addNewFeedButton.IsEnabled = newFeedUrlTextBox.IsEnabled = true;
+                        newFeedUrlTextBox.Text = string.Empty;
+                        feedListView.SelectedItem = rss;
+                    }));
+                }
+                catch
+                {
+                    MessageBox.Show("The specified feed is not valid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Dispatcher.BeginInvoke(new Action(() => addNewFeedButton.IsEnabled = newFeedUrlTextBox.IsEnabled = true));
+                }
+            });
+        }
+
+        private void addFeedRuleButtonClick(object sender, RoutedEventArgs e)
+        {
+            var feed = (RssFeed)feedListView.SelectedItem;
+            if (string.IsNullOrEmpty(ruleRegexTextBox.Text))
+                return;
+            Regex regex;
+            try
+            {
+                regex = new Regex(ruleRegexTextBox.Text, RegexOptions.IgnoreCase);
+            }
+            catch
+            {
+                MessageBox.Show("The specified regular expression is not valid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            var type = (RssTorrentRule.RuleType)ruleTypeComboBox.SelectedIndex;
+            if (feed.TorrentRules.Any(r => r.Type == type && r.Regex.ToString() == regex.ToString()))
+            {
+                MessageBox.Show("This rule has already been added.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            feed.TorrentRules.Add(new RssTorrentRule(type, regex));
+            ruleRegexTextBox.Text = string.Empty;
+        }
+
+        private void removeRulesButtonClick(object sender, RoutedEventArgs e)
+        {
+            var rules = new List<RssTorrentRule>(rulesListView.SelectedItems.Cast<RssTorrentRule>());
+            var feed = (RssFeed)feedListView.SelectedItem;
+            foreach (var rule in rules)
+                feed.TorrentRules.Remove(rule);
+        }
+
+        private void removeFeedsButtonClick(object sender, RoutedEventArgs e)
+        {
+            var feeds = new List<RssFeed>(feedListView.SelectedItems.Cast<RssFeed>());
+            foreach (var feed in feeds)
+                Settings.RssFeeds.Remove(feed);
+        }
+
+        #endregion
     }
 }

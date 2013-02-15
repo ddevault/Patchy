@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Collections.ObjectModel;
 
 namespace Patchy
 {
@@ -15,7 +16,7 @@ namespace Patchy
             DefaultDownloadLocation = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 "Downloads");
-            RssFeeds = new List<RssFeed>();
+            RssFeeds = new ObservableCollection<RssFeed>();
             MinutesBetweenRssUpdates = 5;
         }
 
@@ -53,7 +54,7 @@ namespace Patchy
         }
 
         public string DefaultDownloadLocation { get; set; }
-        public List<RssFeed> RssFeeds { get; set; }
+        public ObservableCollection<RssFeed> RssFeeds { get; set; }
         public int MinutesBetweenRssUpdates { get; set; }
     }
 }

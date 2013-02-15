@@ -79,14 +79,5 @@ namespace Patchy
             var magnetLink = new MagnetLink(entry.Link);
             AddTorrent(magnetLink, SettingsManager.DefaultDownloadLocation);
         }
-
-        private void ExecuteManageRssFeeds(object sender, ExecutedRoutedEventArgs e)
-        {
-            var manager = new RssFeedManager(SettingsManager.RssFeeds);
-            manager.ShowDialog();
-            SettingsManager.RssFeeds = new List<RssFeed>(manager.RssFeeds);
-            SettingsManager.Save();
-            ReloadRssTimer();
-        }
     }
 }
