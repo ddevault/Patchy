@@ -202,7 +202,9 @@ namespace Patchy
                 foreach (var torrent in Client.Torrents)
                 {
                     torrent.Torrent.Stop();
-                    while (torrent.Torrent.State != TorrentState.Stopped && torrent.Torrent.State != TorrentState.Error)
+                    var start = DateTime.Now;
+                    while (torrent.Torrent.State != TorrentState.Stopped && torrent.Torrent.State != TorrentState.Error &&
+                        (DateTime.Now - start).TotalSeconds < 2) // Time limit for trying to let it stop on its own
                         Thread.Sleep(100);
                     // TODO: Notify users on error? The application is shutting down here, it wouldn't be particualry
                     // easy to get information to the user
