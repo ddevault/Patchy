@@ -75,6 +75,7 @@
     <Compile Include="Converters\TorrentCreationDateConverter.cs" />
     <Compile Include="Converters\TorrentETADateTimeConverter.cs" />
     <Compile Include="Converters\TorrentProgressConverter.cs" />
+    <Compile Include="DoubleClickAction.cs" />
     <Compile Include="IPC\SingletonService.cs" />
     <Compile Include="MainWindow.Commands.cs" />
     <Compile Include="MainWindow.Logic.cs" />

@@ -19,6 +19,7 @@ using System.Net;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MonoTorrent.Client.Encryption;
 
 namespace Patchy
 {
@@ -37,6 +38,14 @@ namespace Patchy
             licenseText.Text = reader.ReadToEnd();
             Settings = manager;
             DataContext = Settings;
+            if (Settings.EncryptionSettings == EncryptionTypes.PlainText)
+                encryptionSettingsComboBox.SelectedIndex = 0;
+            else if (Settings.EncryptionSettings == EncryptionTypes.All)
+                encryptionSettingsComboBox.SelectedIndex = 1;
+            else
+                encryptionSettingsComboBox.SelectedIndex = 2;
+            seedingTorrentDoubleClickComboBox.SelectedIndex = (int)Settings.DoubleClickSeeding;
+            downloadingTorrentDoubleClickComboBox.SelectedIndex = (int)Settings.DoubleClickDownloading;
         }
 
         private void InitializeRegistryBoundItems()
@@ -165,6 +174,27 @@ namespace Patchy
             Application.Current.MainWindow.Close();
             Process.Start(info);
             Application.Current.Shutdown();
+        }
+
+        private void EncryptionSettingsChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (encryptionSettingsComboBox.SelectedIndex == 0)
+                Settings.EncryptionSettings = EncryptionTypes.PlainText;
+            else if (encryptionSettingsComboBox.SelectedIndex == 1)
+                Settings.EncryptionSettings = EncryptionTypes.All;
+            else
+                Settings.EncryptionSettings = EncryptionTypes.RC4Full | EncryptionTypes.RC4Header;
+        }
+
+        private void seedingTorrentDoubleClickComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // NOTE: This can probably be data bound, investigate
+            Settings.DoubleClickSeeding= (DoubleClickAction)seedingTorrentDoubleClickComboBox.SelectedIndex;
+        }
+
+        private void downloadingTorrentDoubleClickComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Settings.DoubleClickDownloading = (DoubleClickAction)downloadingTorrentDoubleClickComboBox.SelectedIndex;
         }
 
         #region RSS Manager

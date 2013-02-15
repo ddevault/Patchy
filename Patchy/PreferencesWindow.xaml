@@ -42,18 +42,18 @@
                         <TextBlock FontWeight="Bold">Privacy</TextBlock>
                         <Button Click="clearTorrentCacheClick">Clear torrent cache</Button>
                         <CheckBox IsChecked="{Binding SaveSession}">Save session</CheckBox>
-                        <CheckBox>Check for updates automatically</CheckBox>
+                        <CheckBox IsChecked="{Binding AutoUpdate}">Check for updates automatically</CheckBox>
                     </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Downloads">
                 <StackPanel Margin="3">
                     <TextBlock FontWeight="Bold">Default download location:</TextBlock>
-                    <TextBox Text="{Binding DefaultDownloadLocation, Mode=TwoWay}"></TextBox>
+                    <TextBox Text="{Binding DefaultDownloadLocation}"></TextBox>
                     <TextBlock FontWeight="Bold">Move completed to:</TextBlock>
-                    <TextBox></TextBox>
+                    <TextBox Text="{Binding PostCompletionDestination}"></TextBox>
                     <TextBlock FontWeight="Bold">Automatically add .torrents from:</TextBlock>
-                    <TextBox></TextBox>
+                    <TextBox Text="{Binding AutomaticAddDirectory}"></TextBox>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Connections">
@@ -66,11 +66,11 @@
                         <TextBlock FontWeight="Bold">Listener Settings</TextBlock>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Margin="0 0 5 0">Incoming port:</TextBlock>
-                            <TextBox Width="100" Margin="0 0 5 0"></TextBox>
+                            <TextBox Width="100" Margin="0 0 5 0" Text="{Binding IncomingPort}"></TextBox>
                             <Button>Randomize</Button>
                         </StackPanel>
-                        <CheckBox>Randomize on startup</CheckBox>
-                        <CheckBox>Map with UPnP</CheckBox>
+                        <CheckBox IsChecked="{Binding UseRandomPort}">Randomize on startup</CheckBox>
+                        <CheckBox IsChecked="{Binding MapWithUPnP}">Map with UPnP</CheckBox>
                     </StackPanel>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
@@ -87,50 +87,50 @@
                         </Grid.RowDefinitions>
                         <TextBlock FontWeight="Bold">Bandwidth Settings</TextBlock>
                         <TextBlock Grid.Row="1">Max Upload Speed (kB/s) [0 for unlimited]</TextBlock>
-                        <TextBox Grid.Row="1" Grid.Column="1"></TextBox>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MaxUploadSpeed}"></TextBox>
                         <TextBlock Grid.Row="2">Max Download Speed (kB/s) [0 for unlimited]</TextBlock>
-                        <TextBox Grid.Row="2" Grid.Column="1"></TextBox>
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding MaxDownloadSpeed}"></TextBox>
                         <TextBlock Grid.Row="3">Global Max Connections</TextBlock>
-                        <TextBox Grid.Row="3" Grid.Column="1"></TextBox>
+                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MaxConnections}"></TextBox>
                         <TextBlock Grid.Row="4">Max Connections per Torrent</TextBlock>
-                        <TextBox Grid.Row="4" Grid.Column="1"></TextBox>
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding MaxConnectionsPerTorrent}"></TextBox>
                         <TextBlock Grid.Row="5">Upload Slots per Torrent</TextBlock>
-                        <TextBox Grid.Row="5" Grid.Column="1"></TextBox>
+                        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding UploadSlotsPerTorrent}"></TextBox>
                     </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="BitTorrent">
                 <StackPanel>
                     <TextBlock FontWeight="Bold">General BitTorrent Settings</TextBlock>
-                    <CheckBox>Enable DHT</CheckBox>
+                    <CheckBox IsChecked="{Binding EnableDHT}">Enable DHT</CheckBox>
                     <TextBlock FontWeight="Bold">Encryption</TextBlock>
-                    <ComboBox SelectedIndex="0">
+                    <ComboBox x:Name="encryptionSettingsComboBox" SelectionChanged="EncryptionSettingsChanged">
                         <ComboBoxItem>Disabled</ComboBoxItem>
                         <ComboBoxItem>Enabled</ComboBoxItem>
                         <ComboBoxItem>Forced</ComboBoxItem>
                     </ComboBox>
                     <TextBlock FontWeight="Bold">Seeding</TextBlock>
                     <TextBlock>Stop seeding after (hours): [0 to never stop seeding]</TextBlock>
-                    <TextBox></TextBox>
+                    <TextBox Text="{Binding HoursToSeed}"></TextBox>
                     <TextBlock>Stop seeding after reaching a certain ratio: [0 to never stop seeding]</TextBlock>
-                    <TextBox></TextBox>
+                    <TextBox Text="{Binding TargetSeedRatio}"></TextBox>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Interface">
                 <StackPanel>
                     <GroupBox Header="Tray Options">
                         <StackPanel>
-                            <CheckBox x:Name="showTrayIconCheckBox">Show tray icon</CheckBox>
-                            <CheckBox IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Close to system tray</CheckBox>
-                            <CheckBox IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Minimize to system tray</CheckBox>
-                            <CheckBox IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Show notification on torrent completion</CheckBox>
+                            <CheckBox IsChecked="{Binding ShowTrayIcon}" x:Name="showTrayIconCheckBox">Show tray icon</CheckBox>
+                            <CheckBox IsChecked="{Binding CloseToStystemTray}" IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Close to system tray</CheckBox>
+                            <CheckBox IsChecked="{Binding MinimizeToSystemTray}" IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Minimize to system tray</CheckBox>
+                            <CheckBox IsChecked="{Binding ShowNotificationOnCompletion}" IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Show notification on torrent completion</CheckBox>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Header="Confirmations">
                         <StackPanel>
-                            <CheckBox>Confirm exit if there are active torrents</CheckBox>
-                            <CheckBox>Confirm torrent removal</CheckBox>
-                            <CheckBox>Start torrents immediately when added</CheckBox>
+                            <CheckBox IsChecked="{Binding ConfirmExtiWhenActive}">Confirm exit if there are active torrents</CheckBox>
+                            <CheckBox IsChecked="{Binding ConfirmTorrentRemoval}">Confirm torrent removal</CheckBox>
+                            <CheckBox IsChecked="{Binding StartTorrentsImmediately}">Start torrents immediately when added</CheckBox>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Header="Double Click">
@@ -145,12 +145,12 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Row="0" VerticalAlignment="Center" Margin="0 0 5 0">Seeding torrents:</TextBlock>
                             <TextBlock Grid.Row="1" VerticalAlignment="Center" Margin="0 0 5 0">Downloading torrents:</TextBlock>
-                            <ComboBox Grid.Row="0" Grid.Column="1" SelectedIndex="0">
+                            <ComboBox Grid.Row="0" Grid.Column="1" x:Name="seedingTorrentDoubleClickComboBox" SelectionChanged="seedingTorrentDoubleClickComboBoxSelectionChanged">
                                 <ComboBoxItem>Open folder</ComboBoxItem>
                                 <ComboBoxItem>Open largest file</ComboBoxItem>
                                 <ComboBoxItem>Start/stop</ComboBoxItem>
                             </ComboBox>
-                            <ComboBox Grid.Row="1" Grid.Column="1" SelectedIndex="0">
+                            <ComboBox Grid.Row="1" Grid.Column="1" SelectedIndex="0" x:Name="downloadingTorrentDoubleClickComboBox" SelectionChanged="downloadingTorrentDoubleClickComboBoxSelectionChanged">
                                 <ComboBoxItem>Open folder</ComboBoxItem>
                                 <ComboBoxItem>Open largest file</ComboBoxItem>
                                 <ComboBoxItem>Start/stop</ComboBoxItem>
@@ -159,7 +159,7 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Queueing">
+            <!--<TabItem Header="Queueing">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -174,7 +174,7 @@
                     <TextBlock Margin="0 0 5 0" Grid.Row="1">Maximum active downloads</TextBlock>
                     <TextBox Grid.Row="1" Grid.Column="1" Width="100"></TextBox>
                 </Grid>
-            </TabItem>
+            </TabItem>--><!--TODO: Consider implementing this-->
             <TabItem Header="Completion">
                 <StackPanel>
                     <TextBlock>When torrents finish downloading, run the following command:</TextBlock>
