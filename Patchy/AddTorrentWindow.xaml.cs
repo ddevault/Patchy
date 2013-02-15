@@ -23,6 +23,8 @@ namespace Patchy
     /// </summary>
     public partial class AddTorrentWindow : Window
     {
+        private SettingsManager Settings { get; set; }
+
         public string DefaultLocation { get; set; }
 
         public bool IsMagnet { get { return magnetLinkRadioButton.IsChecked.Value; } }
@@ -50,11 +52,16 @@ namespace Patchy
             }
         }
 
-        public AddTorrentWindow(string defaultLocation)
+        public AddTorrentWindow(SettingsManager settingsManager)
         {
+            Settings = settingsManager;
             InitializeComponent();
+            foreach (var path in settingsManager.RecentDownloadLocations)
+                recentItemsComboBox.Items.Add(new FolderBrowserItem(path, false));
+            if (recentItemsComboBox.Items.Count != 0)
+                recentItemsComboBox.SelectedIndex = 0;
 
-            DefaultLocation = defaultLocation;
+            DefaultLocation = settingsManager.DefaultDownloadLocation;
             defaultDestinationRadioButton.Content = Path.GetFileName(DefaultLocation) + " (default)";
             // Check for auto-population of magnet link
             if (Clipboard.ContainsText())
@@ -131,12 +138,14 @@ namespace Patchy
                     DestinationPath = DefaultLocation;
                 else if (recentRadioButton.IsChecked.Value)
                 {
-                    // TODO
-                    MessageBox.Show("Recent locations is not yet implemented.");
-                    return;
+                    var recent = recentItemsComboBox.SelectedItem as FolderBrowserItem;
+                    DestinationPath = recent.FullPath;
                 }
                 else
                     DestinationPath = customDestinationTextBox.Text;
+
+                if (otherRadioButton.IsChecked.Value)
+                    Settings.RecentDownloadLocations = Settings.RecentDownloadLocations.Concat(new[] { DestinationPath }).ToArray();
 
                 DestinationPath = Path.Combine(DestinationPath, ClientManager.CleanFileName(name));
             }

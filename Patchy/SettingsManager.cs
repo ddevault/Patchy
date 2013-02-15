@@ -12,6 +12,11 @@ namespace Patchy
 {
     public class SettingsManager : INotifyPropertyChanged
     {
+        public SettingsManager()
+        {
+            SetToDefaults();
+        }
+
         public static string SettingsPath
         {
             get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".patchy"); }
@@ -92,9 +97,12 @@ namespace Patchy
             RssFeeds = new RssFeed[0];
             MinutesBetweenRssUpdates = 5;
 
+            // Other
+            RecentDownloadLocations = new string[0];
         }
 
         public RssFeed[] RssFeeds { get; set; }
+        public string[] RecentDownloadLocations { get; set; }
 
         private int _MinutesBetweenRssUpdates;
         public int MinutesBetweenRssUpdates

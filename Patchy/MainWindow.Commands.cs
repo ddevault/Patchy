@@ -10,7 +10,7 @@ namespace Patchy
     {
         private void ExecuteNew(object sender, ExecutedRoutedEventArgs e)
         {
-            var window = new AddTorrentWindow(SettingsManager.DefaultDownloadLocation);
+            var window = new AddTorrentWindow(SettingsManager);
             if (window.ShowDialog().GetValueOrDefault(false))
             {
                 if (window.IsMagnet)
@@ -23,6 +23,7 @@ namespace Patchy
                     Visibility = Visibility.Visible;
                     Focus();
                 }
+                SaveSettings();
             }
         }
 
