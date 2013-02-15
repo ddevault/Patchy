@@ -54,29 +54,32 @@ namespace Patchy
             {
                 registryBoundPreferences.IsEnabled = false;
                 elevatePermissionsPanel.Visibility = Visibility.Visible;
-                return;
             }
-            var torrent = new FileAssociationInfo(".torrent");
-            if (torrent.Exists)
-                torrentAssociationCheckBox.IsChecked = torrent.ProgID == "Patchy";
-            else
-                torrentAssociationCheckBox.IsChecked = false;
-            // Check magnet link association
-            var value = Registry.GetValue(@"HKEY_CLASSES_ROOT\\Magnet", null, null);
-            if (value == null)
-                magnetAssociationCheckBox.IsChecked = false;
-            else
+            try // We know we don't have write access, but we might have read access
             {
-                var shell = (string)Registry.GetValue(@"HKEY_CLASSES_ROOT\Magnet\shell\open\command", null, null);
-                magnetAssociationCheckBox.IsChecked = shell == string.Format("\"{0}\" \"%1\"", Assembly.GetEntryAssembly().Location);
+                var torrent = new FileAssociationInfo(".torrent");
+                if (torrent.Exists)
+                    torrentAssociationCheckBox.IsChecked = torrent.ProgID == "Patchy";
+                else
+                    torrentAssociationCheckBox.IsChecked = false;
+                // Check magnet link association
+                var value = Registry.GetValue(@"HKEY_CLASSES_ROOT\\Magnet", null, null);
+                if (value == null)
+                    magnetAssociationCheckBox.IsChecked = false;
+                else
+                {
+                    var shell = (string)Registry.GetValue(@"HKEY_CLASSES_ROOT\Magnet\shell\open\command", null, null);
+                    magnetAssociationCheckBox.IsChecked = shell == string.Format("\"{0}\" \"%1\"", Assembly.GetEntryAssembly().Location);
+                }
+                var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                var startup = key.GetValue("Patchy", null) as string;
+                startOnWindowsStartupCheckBox.IsChecked = startup != null;
+                if (startup == null)
+                    startMinimizedCheckBox.IsChecked = false;
+                else
+                    startMinimizedCheckBox.IsChecked = startup.EndsWith("--minimized");
             }
-            var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            var startup = key.GetValue("Patchy", null) as string;
-            startOnWindowsStartupCheckBox.IsChecked = startup != null;
-            if (startup == null)
-                startMinimizedCheckBox.IsChecked = false;
-            else
-                startMinimizedCheckBox.IsChecked = startup.EndsWith("--minimized");
+            catch { }
         }
 
         private void clearTorrentCacheClick(object sender, RoutedEventArgs e)
