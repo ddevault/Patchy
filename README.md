@@ -8,7 +8,7 @@ Patchy is powered by [MonoTorrent](https://github.com/mono/monotorrent).
 
 Beta begins on Friday, February 22nd.
 
-[![Screenshot](http://i.imgur.com/LbAlCZU.png)](http://i.imgur.com/LbAlCZU.png "Click to enlarge")
+[![Screenshot](http://i.imgur.com/PCMRBZn.png)](http://i.imgur.com/PCMRBZn.png "Click to enlarge")
 
 ## Features
 
