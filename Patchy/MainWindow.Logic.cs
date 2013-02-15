@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using MonoTorrent.Client.Tracker;
 
 namespace Patchy
 {

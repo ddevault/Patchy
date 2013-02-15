@@ -100,7 +100,10 @@ namespace Patchy
             }
             UpdateFileBrower("C:\\");
             if (torrentPath != null)
+            {
                 torrentFileRadioButton.IsChecked = true;
+                torrentFileTextBox.Text = torrentPath;
+            }
         }
 
         private void UpdateFileBrower(string path)
