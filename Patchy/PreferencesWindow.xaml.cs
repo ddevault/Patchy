@@ -189,11 +189,13 @@ namespace Patchy
         private void seedingTorrentDoubleClickComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // NOTE: This can probably be data bound, investigate
-            Settings.DoubleClickSeeding= (DoubleClickAction)seedingTorrentDoubleClickComboBox.SelectedIndex;
+            if (Settings == null) return;
+            Settings.DoubleClickSeeding = (DoubleClickAction)seedingTorrentDoubleClickComboBox.SelectedIndex;
         }
 
         private void downloadingTorrentDoubleClickComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (Settings == null) return;
             Settings.DoubleClickDownloading = (DoubleClickAction)downloadingTorrentDoubleClickComboBox.SelectedIndex;
         }
 
@@ -222,7 +224,8 @@ namespace Patchy
                     var rss = new RssFeed(address);
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        Settings.RssFeeds.Add(rss);
+                        Settings.RssFeeds = Settings.RssFeeds.Concat(new[] { rss }).ToArray();
+                        Settings.OnPropertyChanged("RssFeeds");
                         addNewFeedButton.IsEnabled = newFeedUrlTextBox.IsEnabled = true;
                         newFeedUrlTextBox.Text = string.Empty;
                         feedListView.SelectedItem = rss;
@@ -273,7 +276,7 @@ namespace Patchy
         {
             var feeds = new List<RssFeed>(feedListView.SelectedItems.Cast<RssFeed>());
             foreach (var feed in feeds)
-                Settings.RssFeeds.Remove(feed);
+                Settings.RssFeeds = Settings.RssFeeds.Where(f => f != feed).ToArray();
         }
 
         #endregion

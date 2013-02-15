@@ -27,6 +27,7 @@ namespace Patchy
             // Runs outside UI thread
             var entries = new List<RssFeedEntry>();
             var newTorrents = new List<RssFeedEntry>();
+            if (SettingsManager.RssFeeds == null) return;
             foreach (var feed in SettingsManager.RssFeeds)
             {
                 try

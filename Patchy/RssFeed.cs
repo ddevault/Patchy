@@ -5,6 +5,8 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.Xml.Linq;
 using System.Net;
+using Newtonsoft.Json;
+using System.Web;
 
 namespace Patchy
 {
@@ -30,6 +32,7 @@ namespace Patchy
 
         public string Address { get; set; }
         public ObservableCollection<RssTorrentRule> TorrentRules { get; set; }
+        [JsonIgnore]
         public List<RssFeedEntry> Entries { get; set; }
 
         /// <summary>
@@ -50,7 +53,7 @@ namespace Patchy
                 {
                     Entries.Add(new RssFeedEntry
                     {
-                        Title = item.Element("title").Value,
+                        Title = HttpUtility.HtmlDecode(item.Element("title").Value),
                         Creator = item.Element(dc + "creator").Value,
                         Link = item.Element("link").Value,
                         PublishTime = DateTime.Parse(item.Element("pubDate").Value)

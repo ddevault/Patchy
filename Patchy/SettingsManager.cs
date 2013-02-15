@@ -12,19 +12,14 @@ namespace Patchy
 {
     public class SettingsManager : INotifyPropertyChanged
     {
-        public SettingsManager()
-        {
-            // Default settings
-            DefaultDownloadLocation = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                "Downloads");
-            RssFeeds = new ObservableCollection<RssFeed>();
-            MinutesBetweenRssUpdates = 5;
-        }
-
         public static string SettingsPath
         {
             get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".patchy"); }
+        }
+
+        public static string SettingsFile
+        {
+            get { return Path.Combine(SettingsPath, "settings"); }
         }
 
         public static string FastResumePath
@@ -42,7 +37,7 @@ namespace Patchy
             get { return Path.Combine(SettingsPath, "dhtcache"); }
         }
 
-        public void Initialize()
+        public static void Initialize()
         {
             if (!Directory.Exists(SettingsPath))
                 Directory.CreateDirectory(SettingsPath);
@@ -50,12 +45,56 @@ namespace Patchy
                 Directory.CreateDirectory(TorrentCachePath);
         }
 
-        public void Save()
+        public void SetToDefaults()
         {
-            // TODO
+            // General
+            SaveSession = true;
+            AutoUpdate = true;
+
+            // Downloads
+            DefaultDownloadLocation = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                "Downloads");
+            PostCompletionDestination = string.Empty;
+            AutomaticAddDirectory = string.Empty;
+
+            // Connection
+            IncomingPort = 22239;
+            UseRandomPort = false;
+            MapWithUPnP = false;
+            MaxUploadSpeed = 0;
+            MaxDownloadSpeed = 0;
+            MaxConnections = 250;
+            MaxConnectionsPerTorrent = 50;
+            UploadSlotsPerTorrent = 4;
+
+            // BitTorrent
+            EnableDHT = true;
+            EncryptionSettings = EncryptionTypes.RC4Header | EncryptionTypes.RC4Full;
+            HoursToSeed = 0;
+            TargetSeedRatio = 0;
+            
+            // Interface
+            ShowTrayIcon = true;
+            CloseToSystemTray = true;
+            MinimizeToSystemTray = false;
+            ShowNotificationOnCompletion = true;
+            ConfirmExitWhenActive = true;
+            ConfirmTorrentRemoval = true;
+            StartTorrentsImmediately = true;
+            DoubleClickSeeding = DoubleClickAction.OpenFolder;
+            DoubleClickDownloading = DoubleClickAction.OpenFolder;
+
+            // Completion
+            TorrentCompletionCommand = string.Empty;
+
+            // RSS
+            RssFeeds = new RssFeed[0];
+            MinutesBetweenRssUpdates = 5;
+
         }
 
-        public ObservableCollection<RssFeed> RssFeeds { get; set; }
+        public RssFeed[] RssFeeds { get; set; }
 
         private int _MinutesBetweenRssUpdates;
         public int MinutesBetweenRssUpdates

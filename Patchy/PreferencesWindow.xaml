@@ -121,14 +121,14 @@
                     <GroupBox Header="Tray Options">
                         <StackPanel>
                             <CheckBox IsChecked="{Binding ShowTrayIcon}" x:Name="showTrayIconCheckBox">Show tray icon</CheckBox>
-                            <CheckBox IsChecked="{Binding CloseToStystemTray}" IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Close to system tray</CheckBox>
+                            <CheckBox IsChecked="{Binding CloseToSystemTray}" IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Close to system tray</CheckBox>
                             <CheckBox IsChecked="{Binding MinimizeToSystemTray}" IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Minimize to system tray</CheckBox>
                             <CheckBox IsChecked="{Binding ShowNotificationOnCompletion}" IsEnabled="{Binding ElementName=showTrayIconCheckBox, Path=IsChecked}">Show notification on torrent completion</CheckBox>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Header="Confirmations">
                         <StackPanel>
-                            <CheckBox IsChecked="{Binding ConfirmExtiWhenActive}">Confirm exit if there are active torrents</CheckBox>
+                            <CheckBox IsChecked="{Binding ConfirmExitWhenActive}">Confirm exit if there are active torrents</CheckBox>
                             <CheckBox IsChecked="{Binding ConfirmTorrentRemoval}">Confirm torrent removal</CheckBox>
                             <CheckBox IsChecked="{Binding StartTorrentsImmediately}">Start torrents immediately when added</CheckBox>
                         </StackPanel>

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using MonoTorrent.Client;
+using Newtonsoft.Json;
 
 namespace Patchy
 {
@@ -36,6 +37,30 @@ namespace Patchy
         {
             var window = new PreferencesWindow(SettingsManager);
             window.ShowDialog();
+            SaveSettings();
+            UpdateRss();
+        }
+
+        private void LoadSettings()
+        {
+            if (!File.Exists(SettingsManager.SettingsFile))
+            {
+                SettingsManager.SetToDefaults();
+                SaveSettings();
+            }
+            else
+            {
+                var serializer = new JsonSerializer();
+                using (var reader = new StreamReader(SettingsManager.SettingsFile))
+                    SettingsManager = serializer.Deserialize<SettingsManager>(new JsonTextReader(reader));
+            }
+        }
+
+        private void SaveSettings()
+        {
+            var serializer = new JsonSerializer();
+            using (var writer = new StreamWriter(SettingsManager.SettingsFile))
+                serializer.Serialize(writer, SettingsManager);
         }
     }
 
