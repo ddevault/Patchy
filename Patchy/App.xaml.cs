@@ -70,7 +70,7 @@ namespace Patchy
             if (SingletonServcieHost != null)
                 SingletonServcieHost.Close();
             if (ClearCacheOnExit)
-                Directory.Delete(SettingsManager.SettingsPath, true);
+                Directory.Delete(SettingsManager.TorrentCachePath, true);
             try
             {
                 Singleton.ReleaseMutex();

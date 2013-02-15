@@ -80,7 +80,18 @@ namespace Patchy
 
         void SettingsManager_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            
+            switch (e.PropertyName)
+            {
+                case "SaveSession":
+                    App.ClearCacheOnExit = !SettingsManager.SaveSession;
+                    break;
+                case "ShowTrayIcon":
+                    NotifyIcon.Visible = SettingsManager.ShowTrayIcon;
+                    break;
+                case "MinutesBetweenRssUpdates":
+                    ReloadRssTimer();
+                    break;
+            }
         }
     }
 
