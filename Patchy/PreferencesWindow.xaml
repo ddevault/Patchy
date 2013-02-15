@@ -206,7 +206,7 @@
             <TabItem Header="Completion">
                 <StackPanel>
                     <TextBlock>When torrents finish downloading, run the following command:</TextBlock>
-                    <TextBox></TextBox>
+                    <TextBox Text="{Binding TorrentCompletionCommand}"></TextBox>
                     <TextBlock>You may use the following variables in your command:</TextBlock>
                     <TextBlock>%F: Name of file in torrents with one file</TextBlock>
                     <TextBlock>%D: Torrent download directory</TextBlock>

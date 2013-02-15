@@ -13,6 +13,7 @@ using MonoTorrent.Common;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Patchy
 {
@@ -142,11 +143,70 @@ namespace Patchy
                                 var cache = Path.Combine(SettingsManager.TorrentCachePath, Path.GetFileName(oldPath));
                                 File.WriteAllText(Path.Combine(Path.GetDirectoryName(cache),
                                     Path.GetFileNameWithoutExtension(cache)) + ".info", path);
+                                if (!string.IsNullOrEmpty(SettingsManager.TorrentCompletionCommand))
+                                {
+                                    var command = SettingsManager.TorrentCompletionCommand;
+                                    // Do torrent-specific replacements
+                                    if (torrent.Files.Length == 1)
+                                        command = command.Replace("%F", torrent.Files[0].File.FullPath);
+                                    command = command.Replace("%D", torrent.Torrent.SavePath)
+                                        .Replace("%N", torrent.Torrent.Name)
+                                        .Replace("%I", torrent.Torrent.InfoHash.ToHex());
+                                    if (torrent.Torrent.TrackerManager.CurrentTracker != null)
+                                        command = command.Replace("%T", torrent.Torrent.TrackerManager.CurrentTracker.Uri.ToString());
+                                    ExecuteCommand(command);
+                                }
                             });
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(SettingsManager.TorrentCompletionCommand))
+                        {
+                            var command = SettingsManager.TorrentCompletionCommand;
+                            // Do torrent-specific replacements
+                            if (torrent.Files.Length == 1)
+                                command = command.Replace("%F", torrent.Files[0].File.FullPath);
+                            command = command.Replace("%D", torrent.Torrent.SavePath)
+                                .Replace("%N", torrent.Torrent.Name)
+                                .Replace("%I", torrent.Torrent.InfoHash.ToHex());
+                            if (torrent.Torrent.TrackerManager.CurrentTracker != null)
+                                command = command.Replace("%T", torrent.Torrent.TrackerManager.CurrentTracker.Uri.ToString());
+                            ExecuteCommand(command);
+                        }
                     }
                 }
             }
             UpdateNotifyIcon();
+        }
+
+        private void ExecuteCommand(string command)
+        {
+            try
+            {
+                string path = command;
+                string args = null;
+                if (command.StartsWith("\""))
+                {
+                    path = command.Remove(path.IndexOf('\"', 1)).Substring(1);
+                    args = command.Substring(path.IndexOf('\"', 1) + 1);
+                }
+                else
+                {
+                    if (command.Contains(' '))
+                    {
+                        path = command.Remove(path.IndexOf(' '));
+                        args = command.Substring(path.IndexOf(' ') + 1);
+                    }
+                }
+                var info = new ProcessStartInfo(path);
+                if (args != null)
+                    info.Arguments = args;
+                Process.Start(info);
+            }
+            catch
+            {
+                // TODO: Notify users?
+            }
         }
 
         private void CheckMagnetLinks()
