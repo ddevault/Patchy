@@ -51,8 +51,9 @@ namespace Patchy
             else
             {
                 var serializer = new JsonSerializer();
+                serializer.MissingMemberHandling = MissingMemberHandling.Ignore;
                 using (var reader = new StreamReader(SettingsManager.SettingsFile))
-                    SettingsManager = serializer.Deserialize<SettingsManager>(new JsonTextReader(reader));
+                    serializer.Populate(reader, SettingsManager);
             }
         }
 
