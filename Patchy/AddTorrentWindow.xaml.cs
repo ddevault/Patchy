@@ -145,7 +145,7 @@ namespace Patchy
                     DestinationPath = customDestinationTextBox.Text;
 
                 if (otherRadioButton.IsChecked.Value)
-                    Settings.RecentDownloadLocations = Settings.RecentDownloadLocations.Concat(new[] { DestinationPath }).ToArray();
+                    Settings.RecentDownloadLocations = new[] { DestinationPath }.Concat(Settings.RecentDownloadLocations).Take(5).ToArray();
 
                 DestinationPath = Path.Combine(DestinationPath, ClientManager.CleanFileName(name));
             }
