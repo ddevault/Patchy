@@ -113,7 +113,6 @@ namespace Patchy
             menu.MenuItems.Add("Add Torrent", (s, e) => ExecuteNew(null, null));
             menu.MenuItems.Add("Exit", (s, e) =>
             {
-                NotifyIcon.Dispose();
                 AllowClose = true;
                 Close();
             });
@@ -214,6 +213,8 @@ namespace Patchy
                 File.WriteAllBytes(SettingsManager.FastResumePath, resume.Encode());
             }
             Client.Shutdown();
+            NotifyIcon.Visible = false;
+            NotifyIcon.Dispose();
         }
 
         private void TorrentGridSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -281,7 +282,10 @@ namespace Patchy
                 if (open)
                 {
                     var torrent = torrentGrid.SelectedItem as PeriodicTorrent;
-                    Process.Start(Path.Combine(torrent.Torrent.SavePath, item.File.Path));
+                    if (File.Exists(item.File.FullPath))
+                        Process.Start(item.File.FullPath);
+                    else
+                        MessageBox.Show("This file has not been started yet, and cannot be opened.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -412,7 +416,10 @@ namespace Patchy
             if (open)
             {
                 var torrent = torrentGrid.SelectedItem as PeriodicTorrent;
-                Process.Start(Path.Combine(torrent.Torrent.SavePath, item.File.Path));
+                if (File.Exists(item.File.FullPath))
+                    Process.Start(item.File.FullPath);
+                else
+                    MessageBox.Show("This file has not been started yet, and cannot be opened.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
