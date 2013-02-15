@@ -136,6 +136,22 @@ namespace Patchy
 
         public ObservableCollection<PeerId> PeerList { get; set; }
 
+        private int index;
+        public int Index
+        {
+            get
+            {
+                return index;
+            }
+            set
+            {
+                var fire = index != value;
+                index = value;
+                if (fire && PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("Index"));
+            }
+        }
+
         private TorrentState state;
         public TorrentState State 
         {

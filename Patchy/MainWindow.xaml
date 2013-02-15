@@ -209,7 +209,7 @@
                     <!--It would be nice if we could assign these elsewhere-->
                     <DataGridTextColumn Header="#">
                         <DataGridTextColumn.Binding>
-                            <Binding Path="Torrent.Index"></Binding>
+                            <Binding Path="Index"></Binding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Name" Width="300">

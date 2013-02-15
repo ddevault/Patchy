@@ -12,6 +12,7 @@ using MonoTorrent.Client;
 using MonoTorrent.Common;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using System.Threading.Tasks;
 
 namespace Patchy
 {
@@ -33,7 +34,7 @@ namespace Patchy
             if (File.Exists(SettingsManager.FastResumePath))
             {
                 // Load on another thread because it takes some time
-                new Thread(() =>
+                Task.Factory.StartNew(() =>
                     {
                         var resume = BEncodedValue.Decode<BEncodedDictionary>(
                             File.ReadAllBytes(SettingsManager.FastResumePath));
@@ -45,21 +46,18 @@ namespace Patchy
                                                         + ".info");
                             var wrapper = new TorrentWrapper(Torrent.Load(torrent), path, new TorrentSettings());
                             PeriodicTorrent periodicTorrent;
-                            Dispatcher.BeginInvoke(new Action(() =>
-                                {
-                                    if (resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
-                                    {
-                                        periodicTorrent = Client.LoadFastResume(
-                                            new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
-                                    }
-                                    else
-                                    {
-                                        periodicTorrent = Client.AddTorrent(wrapper);
-                                    }
-                                    periodicTorrent.CacheFilePath = torrent;
-                                }));
+                            if (resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
+                            {
+                                periodicTorrent = Client.LoadFastResume(
+                                    new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
+                            }
+                            else
+                            {
+                                periodicTorrent = Client.AddTorrent(wrapper);
+                            }
+                            periodicTorrent.CacheFilePath = torrent;
                         }
-                    }).Start();
+                    });
             }
             Timer = new Timer(o => Dispatcher.Invoke(new Action(PeriodicUpdate)),
                 null, 1000, 1000);

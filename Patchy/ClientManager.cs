@@ -24,6 +24,7 @@ namespace Patchy
         public void Initialize()
         {
             Torrents = new ObservableCollection<PeriodicTorrent>();
+            Torrents.CollectionChanged += Torrents_CollectionChanged;
 
             // TODO: Customize most of these settings
             var settings = new EngineSettings(Path.Combine(
@@ -42,30 +43,34 @@ namespace Patchy
                 dht.Start();
         }
 
+        void Torrents_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            for (int i = 0; i < Torrents.Count; i++)
+                Torrents[i].Index = i + 1;
+        }
+
         public PeriodicTorrent AddTorrent(TorrentWrapper torrent)
         {
             var periodicTorrent = new PeriodicTorrent(torrent);
-            Torrents.Add(periodicTorrent);
-            torrent.Index = Torrents.Count;
             Task.Factory.StartNew(() =>
                 {
                     Client.Register(torrent);
                     torrent.Start();
                 });
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Add(periodicTorrent)));
             return periodicTorrent;
         }
 
         public PeriodicTorrent LoadFastResume(FastResume resume, TorrentWrapper torrent)
         {
             var periodicTorrent = new PeriodicTorrent(torrent);
-            Torrents.Add(periodicTorrent);
-            torrent.Index = Torrents.Count;
             Task.Factory.StartNew(() =>
                 {
                     torrent.LoadFastResume(resume);
                     Client.Register(torrent);
                     torrent.Start();
                 });
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Add(periodicTorrent)));
             return periodicTorrent;
         }
 
@@ -75,7 +80,12 @@ namespace Patchy
                 {
                     if (e.NewState == TorrentState.Stopped)
                     {
-                        Client.Unregister(torrent.Torrent);
+                        torrent.Torrent.Stop();
+                        try
+                        {
+                            Client.Unregister(torrent.Torrent);
+                        }
+                        catch { } // TODO: See if we need to do more
                         // Delete cache
                         if (File.Exists(torrent.CacheFilePath))
                             File.Delete(torrent.CacheFilePath);
@@ -144,7 +154,6 @@ namespace Patchy
     {
         public string Name { get; private set; }
         public long Size { get; private set; }
-        public int Index { get; set; }
         public bool IsMagnet { get; set; }
 
         public TorrentWrapper(Torrent torrent, string savePath, TorrentSettings settings)
