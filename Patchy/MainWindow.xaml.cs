@@ -314,20 +314,6 @@ namespace Patchy
             }
         }
 
-        private void torrentGridContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            e.Handled = torrentGrid.SelectedItems.Count == 0;
-            torrentGridToggleStreamingMenuItem.IsEnabled = torrentGrid.SelectedItems.Count == 1;
-            torrentGridToggleStreamingMenuItem.IsChecked = false;
-            if (torrentGrid.SelectedItems.Count == 1)
-            {
-                var torrent = torrentGrid.SelectedItem as PeriodicTorrent;
-                torrentGridToggleStreamingMenuItem.Checked -= torrentGridToggleStreaming;
-                torrentGridToggleStreamingMenuItem.IsChecked = torrent.PiecePicker is SlidingWindowPicker;
-                torrentGridToggleStreamingMenuItem.Checked += torrentGridToggleStreaming;
-            }
-        }
-
         private void torrentGridOpenFolder(object sender, RoutedEventArgs e)
         {
             foreach (PeriodicTorrent torrent in torrentGrid.SelectedItems)
@@ -438,6 +424,73 @@ namespace Patchy
         private void ElevatedGridDismissClicked(object sender, RoutedEventArgs e)
         {
             elevatedPermissionsGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void torrentGridContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            e.Handled = torrentGrid.SelectedItems.Count == 0;
+            torrentGridToggleStreamingMenuItem.IsEnabled = torrentGrid.SelectedItems.Count == 1;
+            torrentGridToggleStreamingMenuItem.IsChecked = false;
+            if (torrentGrid.SelectedItems.Count == 1)
+            {
+                var torrent = torrentGrid.SelectedItem as PeriodicTorrent;
+                torrentGridToggleStreamingMenuItem.Checked -= torrentGridToggleStreaming;
+                torrentGridToggleStreamingMenuItem.IsChecked = torrent.PiecePicker is SlidingWindowPicker;
+                torrentGridToggleStreamingMenuItem.Checked += torrentGridToggleStreaming;
+            }
+            // Get paused/running info
+            int paused = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Paused);
+            int running = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State != TorrentState.Paused);
+            if (paused != 0 && running != 0)
+            {
+                torrentGridContextMenuPauseResume.Header = "Pause";
+                torrentGridContextMenuResumeHidden.Visibility = Visibility.Visible;
+            }
+            else if (paused != 0)
+            {
+                torrentGridContextMenuPauseResume.Header = "Resume";
+                torrentGridContextMenuResumeHidden.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                torrentGridContextMenuPauseResume.Header = "Pause";
+                torrentGridContextMenuResumeHidden.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void TorrentGridResumeHiddenClick(object sender, RoutedEventArgs e)
+        {
+            foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
+            {
+                if (t.Torrent.State == TorrentState.Paused)
+                    t.Torrent.Start();
+            }
+        }
+
+        private void TorrentGridContextMenuPauseResumeClick(object sender, RoutedEventArgs e)
+        {
+            // Get paused/running info
+            int paused = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Paused);
+            int running = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State != TorrentState.Paused);
+            if (paused != 0 && running != 0)
+            {
+                // Pause all
+                foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
+                {
+                    if (t.Torrent.State != TorrentState.Paused)
+                        t.Torrent.Pause();
+                }
+            }
+            else if (paused != 0)
+            {
+                foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
+                    t.Torrent.Start();
+            }
+            else
+            {
+                foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
+                    t.Torrent.Pause();
+            }
         }
     }
 }

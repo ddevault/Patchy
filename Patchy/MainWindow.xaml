@@ -195,7 +195,11 @@
                         <Separator></Separator>
                         <MenuItem Header="Download for streaming" IsCheckable="True" Checked="torrentGridToggleStreaming"
                                   x:Name="torrentGridToggleStreamingMenuItem"></MenuItem>
-                        <MenuItem x:Name="torrentGridContextMenuPauseResume" Header="Pause"></MenuItem>
+                        <MenuItem x:Name="torrentGridContextMenuPauseResume" Header="Pause"
+                                  Click="TorrentGridContextMenuPauseResumeClick"></MenuItem>
+                        <!--Shown when there are several torrents selected and they are not all in the same state-->
+                        <MenuItem x:Name="torrentGridContextMenuResumeHidden" Header="Resume" Visibility="Collapsed"
+                                  Click="TorrentGridResumeHiddenClick"></MenuItem>
                         <MenuItem Header="Remove">
                             <MenuItem Header="Torrent only" Click="torrentGridRemoveTorrent"></MenuItem>
                             <MenuItem Header="Torrent and data" Click="torrentGridRemoveTorrentAndData"></MenuItem>
