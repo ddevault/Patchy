@@ -18,6 +18,7 @@
             <c:TimeSpanConverter x:Key="timeSpanConverter"></c:TimeSpanConverter>
             <c:TorrentETADateTimeConverter x:Key="torrentEtaDateTimeConverter"></c:TorrentETADateTimeConverter>
             <c:TorrentCreationDateConverter x:Key="torrentCreationDateConverter"></c:TorrentCreationDateConverter>
+            <c:PriorityToIndexConverter x:Key="priorityToIndexConverter"></c:PriorityToIndexConverter>
             <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"></BooleanToVisibilityConverter>
             <ObjectDataProvider x:Key="priorityDataProvider" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
                 <ObjectDataProvider.MethodParameters>
@@ -404,9 +405,15 @@
                             <DataGridTemplateColumn Header="Priority" Width="100" SortMemberPath="Priority">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ComboBox Tag="{Binding}"
-                                            ItemsSource="{Binding Source={StaticResource ResourceKey=priorityDataProvider}}"
-                                            SelectedItem="{Binding Priority, Mode=TwoWay}">
+                                        <ComboBox Tag="{Binding}" SelectedIndex="{Binding Priority, Converter={StaticResource priorityToIndexConverter}}"
+                                                  SelectionChanged="FilePriorityBoxChanged">
+                                            <ComboBoxItem>Do not download</ComboBoxItem>
+                                            <ComboBoxItem>Lowest</ComboBoxItem>
+                                            <ComboBoxItem>Low</ComboBoxItem>
+                                            <ComboBoxItem>Normal</ComboBoxItem>
+                                            <ComboBoxItem>High</ComboBoxItem>
+                                            <ComboBoxItem>Highest</ComboBoxItem>
+                                            <ComboBoxItem>Immediate</ComboBoxItem>
                                         </ComboBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

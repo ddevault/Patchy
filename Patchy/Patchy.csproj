@@ -75,6 +75,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\NullToBooleanConverter.cs" />
     <Compile Include="Converters\PeerClientConverter.cs" />
+    <Compile Include="Converters\PriorityToIndexConverter.cs" />
     <Compile Include="Converters\TimeSpanConverter.cs" />
     <Compile Include="Converters\TorrentCreationDateConverter.cs" />
     <Compile Include="Converters\TorrentETADateTimeConverter.cs" />

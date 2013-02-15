@@ -16,6 +16,7 @@ using MonoTorrent.BEncoding;
 using MonoTorrent.Client;
 using MonoTorrent.Common;
 using System.Windows.Media;
+using Patchy.Converters;
 
 namespace Patchy
 {
@@ -260,7 +261,7 @@ namespace Patchy
         {
             var source = sender as ComboBox;
             var file = source.Tag as PeriodicFile;
-            file.Priority = (Priority)source.SelectedIndex;
+            file.Priority = (Priority)new PriorityToIndexConverter().ConvertBack(source.SelectedIndex, typeof(Priority), null, null);
         }
 
         private void FileListGridMouseDoubleClick(object sender, MouseButtonEventArgs e)
