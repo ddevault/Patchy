@@ -41,7 +41,7 @@
                     <StackPanel Grid.Column="1" Grid.RowSpan="2">
                         <TextBlock FontWeight="Bold">Privacy</TextBlock>
                         <Button Click="clearTorrentCacheClick">Clear torrent cache</Button>
-                        <CheckBox>Save session</CheckBox>
+                        <CheckBox IsChecked="{Binding SaveSession}">Save session</CheckBox>
                         <CheckBox>Check for updates automatically</CheckBox>
                     </StackPanel>
                 </Grid>

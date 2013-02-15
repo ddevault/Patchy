@@ -123,6 +123,12 @@ namespace Patchy
             PiecePicker = piecePicker;
         }
 
+        protected internal virtual void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private PeriodicFile[] files;
@@ -136,259 +142,227 @@ namespace Patchy
 
         public ObservableCollection<PeerId> PeerList { get; set; }
 
-        private int index;
+        private int _Index;
         public int Index
         {
             get
             {
-                return index;
+                return _Index;
             }
             set
             {
-                var fire = index != value;
-                index = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Index"));
+                _Index = value;
+                OnPropertyChanged("Index");
             }
         }
 
-        private TorrentState state;
+        private TorrentState _State;
         public TorrentState State 
         {
             get
             {
-                return state;
+                return _State;
             }
             private set
             {
-                var fire = state != value;
-                state = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("State"));
+                _State = value;
+                OnPropertyChanged("State");
             }
         }
 
-        private TimeSpan elapsedTime;
+        private TimeSpan _ElapsedTime;
         public TimeSpan ElapsedTime
         {
             get
             {
-                return elapsedTime;
+                return _ElapsedTime;
             }
             private set
             {
-                var fire = elapsedTime != value;
-                elapsedTime = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("ElapsedTime"));
+                _ElapsedTime = value;
+                OnPropertyChanged("ElapsedTime");
             }
         }
 
-        private double progress;
+        private double _Progress;
         public double Progress
         {
             get
             {
-                return progress;
+                return _Progress;
             }
             private set
             {
-                var fire = progress != value;
-                progress = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Progress"));
+                _Progress = value;
+                OnPropertyChanged("Progress");
             }
         }
 
-        private int downloadSpeed;
+        private int _DownloadSpeed;
         public int DownloadSpeed
         {
             get
             {
-                return downloadSpeed;
+                return _DownloadSpeed;
             }
             private set
             {
-                var fire = downloadSpeed != value;
-                downloadSpeed = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("DownloadSpeed"));
+                _DownloadSpeed = value;
+                OnPropertyChanged("DownloadSpeed");
             }
         }
 
-        private int uploadSpeed;
+        private int _UploadSpeed;
         public int UploadSpeed
         {
             get
             {
-                return uploadSpeed;
+                return _UploadSpeed;
             }
             private set
             {
-                var fire = uploadSpeed != value;
-                uploadSpeed = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("UploadSpeed"));
+                _UploadSpeed = value;
+                OnPropertyChanged("UploadSpeed");
             }
         }
 
-        private TimeSpan estimatedTime;
+        private TimeSpan _EstimatedTime;
         public TimeSpan EstimatedTime
         {
             get
             {
-                return estimatedTime;
+                return _EstimatedTime;
             }
             private set
             {
-                var fire = estimatedTime != value;
-                estimatedTime = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("EstimatedTime"));
+                _EstimatedTime = value;
+                OnPropertyChanged("EstimatedTime");
             }
         }
 
-        private long totalDownloaded;
+        private long _TotalDownloaded;
         public long TotalDownloaded
         {
             get
             {
-                return totalDownloaded;
+                return _TotalDownloaded;
             }
             private set
             {
-                var fire = totalDownloaded != value;
-                totalDownloaded = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("TotalDownloaded"));
+                _TotalDownloaded = value;
+                OnPropertyChanged("TotalDownloaded");
             }
         }
 
-        private long totalUploaded;
+        private long _TotalUploaded;
         public long TotalUploaded
         {
             get
             {
-                return totalUploaded;
+                return _TotalUploaded;
             }
             private set
             {
-                var fire = totalUploaded != value;
-                totalUploaded = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("TotalUploaded"));
+                _TotalUploaded = value;
+                OnPropertyChanged("TotalUploaded");
             }
         }
 
-        private double ratio;
+        private double _Ratio;
         public double Ratio
         {
             get
             {
-                return ratio;
+                return _Ratio;
             }
             private set
             {
-                var fire = ratio != value;
-                ratio = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Ratio"));
+                _Ratio = value;
+                OnPropertyChanged("Ratio");
             }
         }
 
-        private bool complete;
+        private bool _Complete;
         public bool Complete
         {
             get
             {
-                return complete;
+                return _Complete;
             }
             private set
             {
-                var fire = complete != value;
-                complete = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Complete"));
+                _Complete = value;
+                OnPropertyChanged("Complete");
             }
         }
 
-        private long size;
+        private long _Size;
         public long Size
         {
             get
             {
-                return size;
+                return _Size;
             }
             private set
             {
-                var fire = size != value;
-                size = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Size"));
+                _Size = value;
+                OnPropertyChanged("Size");
             }
         }
 
-        private string name;
+        private string _Name;
         public string Name
         {
             get
             {
-                return name;
+                return _Name;
             }
             private set
             {
-                var fire = name != value;
-                name = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Name"));
+                _Name = value;
+                OnPropertyChanged("Name");
             }
         }
 
-        public int peers;
+        public int _Peers;
         public int Peers
         {
             get
             {
-                return peers;
+                return _Peers;
             }
             private set
             {
-                var fire = peers != value;
-                peers = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Peers"));
+                _Peers = value;
+                OnPropertyChanged("Peers");
             }
         }
 
-        public int seeders;
+        public int _Seeders;
         public int Seeders
         {
             get
             {
-                return seeders;
+                return _Seeders;
             }
             private set
             {
-                var fire = seeders != value;
-                seeders = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Seeders"));
+                _Seeders = value;
+                OnPropertyChanged("Seeders");
             }
         }
 
-        public int leechers;
+        public int _Leechers;
         public int Leechers
         {
             get
             {
-                return leechers;
+                return _Leechers;
             }
             private set
             {
-                var fire = leechers != value;
-                leechers = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Leechers"));
+                _Leechers = value;
+                OnPropertyChanged("Leechers");
             }
         }
     }

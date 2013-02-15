@@ -279,7 +279,7 @@
         <!--Torrent detail grid-->
         <Grid Grid.Row="4" Grid.Column="2" x:Name="lowerGrid"
               Visibility="{Binding ElementName=viewTorrentDetailsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}">
-            <TabControl VerticalAlignment="Stretch">
+            <TabControl VerticalAlignment="Stretch" MinHeight="220">
                 <TabItem Header="Information" IsSelected="True">
                     <Grid>
                         <Grid.RowDefinitions>

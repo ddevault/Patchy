@@ -55,24 +55,24 @@ namespace Patchy
         }
 
         public ObservableCollection<RssFeed> RssFeeds { get; set; }
-        private string defaultDownloadLocation;
+        private string _DefaultDownloadLocation;
         public string DefaultDownloadLocation 
         {
-            get { return defaultDownloadLocation; }
+            get { return _DefaultDownloadLocation; }
             set
             {
-                defaultDownloadLocation = value;
+                _DefaultDownloadLocation = value;
                 OnPropertyChanged("DefaultDownloadLocation");
             }
         }
 
-        private int minutesBetweenRssUpdates;
+        private int _MinutesBetweenRssUpdates;
         public int MinutesBetweenRssUpdates
         {
-            get { return minutesBetweenRssUpdates; }
+            get { return _MinutesBetweenRssUpdates; }
             set
             {
-                minutesBetweenRssUpdates = value;
+                _MinutesBetweenRssUpdates = value;
                 OnPropertyChanged("MinutesBetweenRssUpdates");
             }
         }

@@ -30,69 +30,67 @@ namespace Patchy
             Updating = false;
         }
 
+        protected internal virtual void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private string name;
+        private string _Name;
         public string Name
         {
             get
             {
-                return name;
+                return _Name;
             }
             private set
             {
-                var fire = name != value;
-                name = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Name"));
+                _Name = value;
+                OnPropertyChanged("Name");
             }
         }
 
-        private long length;
+        private long _Length;
         public long Length
         {
             get
             {
-                return length;
+                return _Length;
             }
             private set
             {
-                var fire = length != value;
-                length = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Length"));
+                _Length = value;
+                OnPropertyChanged("Length");
             }
         }
 
-        private double progress;
+        private double _Progress;
         public double Progress
         {
             get
             {
-                return progress;
+                return _Progress;
             }
             private set
             {
-                var fire = progress != value;
-                progress = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Progress"));
+                _Progress = value;
+                OnPropertyChanged("Progress");
             }
         }
 
-        private Priority priority;
+        private Priority _Priority;
         public Priority Priority
         {
             get
             {
-                return priority;
+                return _Priority;
             }
             set
             {
-                var fire = priority != value;
-                priority = value;
-                if (fire && PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("Priority"));
+                _Priority = value;
+                OnPropertyChanged("Priority");
                 if (!Updating)
                     File.Priority = value;
             }
