@@ -4,12 +4,25 @@ Patchy is an open source bittorrent client for Windows.
 
 Patchy is powered by [MonoTorrent](https://github.com/mono/monotorrent).
 
+**Current Status**: Pre-alpha
+
+Alpha begins on Friday, February 15th. Beta begins on Friday, February 22nd.
+
 [![Screenshot](http://i.imgur.com/LbAlCZU.png)](http://i.imgur.com/LbAlCZU.png "Click to enlarge")
 
-## Why should I use it?
+## Features
 
-*Note: Patchy is currently a work in progress, and to use it now would be silly. Treat this section as
-"why should I use it when it's done"*
+* Downloads torrents (from torrent files and magnet links)
+* Inline file priority adjustment
+* Configurable speed settings (global and per-torrent)
+* Encrypted torrenting
+* Prioritize torrents for streaming
+* Seeding goals
+* RSS feed support
+  * Match feeds with regex and automatically download
+  * Browse feeds from the application and add torrents directly
+
+## Why should I use it?
 
 Patchy is free and open source. Most Windows clients these days have become adware with premium versions
 and other similar saddening things. Patchy will never be like this - no ads, no extra software in the
