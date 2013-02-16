@@ -129,6 +129,7 @@ h3:hover > a {
     position: absolute;
     top: 280px;
     transition: opacity .25s ease-in-out;
+    -webkit-transition: opacity .25s ease-in-out;
 }
 
 .navleft {
