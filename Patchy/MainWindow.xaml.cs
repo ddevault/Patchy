@@ -98,6 +98,7 @@ namespace Patchy
                 Visibility = Visibility.Hidden;
         }
 
+        private System.Windows.Forms.MenuItem pauseResumeAllTorrentsMenuItem;
         private void InitializeNotifyIcon()
         {
             NotifyIcon = new System.Windows.Forms.NotifyIcon 
@@ -111,6 +112,24 @@ namespace Patchy
             NotifyIcon.BalloonTipClicked += NotifyIconBalloonTipClicked;
             var menu = new System.Windows.Forms.ContextMenu();
             menu.MenuItems.Add("Add Torrent", (s, e) => ExecuteNew(null, null));
+            menu.MenuItems.Add("Create Torrent", (s, e) => {}); // TODO
+            menu.MenuItems.Add("-");
+            pauseResumeAllTorrentsMenuItem = new System.Windows.Forms.MenuItem("Pause all torrents");
+            menu.MenuItems.Add(pauseResumeAllTorrentsMenuItem);
+            pauseResumeAllTorrentsMenuItem.Click += (s, e) =>
+                {
+                    if (Client.Torrents.Any(t => t.State != TorrentState.Paused))
+                    {
+                        foreach (var torrent in Client.Torrents)
+                            torrent.Torrent.Pause();
+                    }
+                    else
+                    {
+                        foreach (var torrent in Client.Torrents)
+                            torrent.Torrent.Start();
+                    }
+                };
+            menu.MenuItems.Add("-");
             menu.MenuItems.Add("Exit", (s, e) =>
             {
                 AllowClose = true;
@@ -153,6 +172,10 @@ namespace Patchy
                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Error;
                 TaskbarItemInfo.ProgressValue = 1;
             }
+            if (Client.Torrents.Any(t => t.State != TorrentState.Paused))
+                pauseResumeAllTorrentsMenuItem.Text = "Pause all torrents";
+            else
+                pauseResumeAllTorrentsMenuItem.Text = "Resume all torrents";
         }
 
         private void NotifyIconClick(object sender, EventArgs e)
