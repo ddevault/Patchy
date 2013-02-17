@@ -46,6 +46,11 @@ namespace Patchy
             UpdateRss();
         }
 
+        private void CanExecuteTorrentSpecificCommand(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = torrentGrid.SelectedItems.Count != 0;
+        }
+
         private void ExecuteDeleteTorrent(object sender, ExecutedRoutedEventArgs e)
         {
             if (torrentGrid.SelectedItems.Count != 0)

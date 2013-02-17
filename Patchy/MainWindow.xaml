@@ -31,11 +31,11 @@
         <CommandBinding Command="Open" Executed="ExecuteNew"></CommandBinding>
         <CommandBinding Command="Close" Executed="ExecuteExit"></CommandBinding>
         <CommandBinding Command="pt:Commands.EditPreferences" Executed="ExecuteEditPreferences"></CommandBinding>
-        <CommandBinding Command="pt:Commands.DeleteTorrent" Executed="ExecuteDeleteTorrent"></CommandBinding>
-        <CommandBinding Command="pt:Commands.RemoveTorrent" Executed="ExecuteRemoveTorrent"></CommandBinding>
-        <CommandBinding Command="pt:Commands.RemoveTorrentWithFiles" Executed="ExecuteRemoveTorrentWithFiles"></CommandBinding>
-        <CommandBinding Command="pt:Commands.PauseOrResumeTorrent" Executed="ExecutePauseOrResumeTorrent"></CommandBinding>
-        <CommandBinding Command="pt:Commands.ResumeTorrent" Executed="ExecuteResumeTorrent"></CommandBinding>
+        <CommandBinding Command="pt:Commands.DeleteTorrent" Executed="ExecuteDeleteTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
+        <CommandBinding Command="pt:Commands.RemoveTorrent" Executed="ExecuteRemoveTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
+        <CommandBinding Command="pt:Commands.RemoveTorrentWithFiles" Executed="ExecuteRemoveTorrentWithFiles" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
+        <CommandBinding Command="pt:Commands.PauseOrResumeTorrent" Executed="ExecutePauseOrResumeTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
+        <CommandBinding Command="pt:Commands.ResumeTorrent" Executed="ExecuteResumeTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="Open" Key="O" Modifiers="Control"></KeyBinding>
