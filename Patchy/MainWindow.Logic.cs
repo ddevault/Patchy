@@ -111,6 +111,8 @@ namespace Patchy
             File.WriteAllText(Path.Combine(Path.GetDirectoryName(cache),
                 Path.GetFileNameWithoutExtension(cache)) + ".info", path);
             periodic.CacheFilePath = cache;
+            if (SettingsManager.DeleteTorrentsAfterAdd)
+                File.Delete(torrent.TorrentPath);
         }
 
         private void PeriodicUpdate()

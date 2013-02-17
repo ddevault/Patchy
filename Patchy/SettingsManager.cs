@@ -56,6 +56,7 @@ namespace Patchy
             SaveSession = true;
             AutoUpdate = true;
             PromptForSaveOnShellLinks = true;
+            DeleteTorrentsAfterAdd = false;
 
             // Downloads
             DefaultDownloadLocation = Path.Combine(
@@ -158,6 +159,17 @@ namespace Patchy
             {
                 _PromptForSaveOnShellLinks = value;
                 OnPropertyChanged("PromptForSaveOnShellLinks");
+            }
+        }
+
+        private bool _DeleteTorrentsAfterAdd;
+        public bool DeleteTorrentsAfterAdd
+        {
+            get { return _DeleteTorrentsAfterAdd; }
+            set
+            {
+                _DeleteTorrentsAfterAdd = value;
+                OnPropertyChanged("DeleteTorrentsAfterAdd");
             }
         }
 

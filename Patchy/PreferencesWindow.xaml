@@ -46,6 +46,7 @@
                         <CheckBox IsChecked="{Binding AutoUpdate}">Check for updates automatically</CheckBox>
                         <TextBlock FontWeight="Bold">General</TextBlock>
                         <CheckBox IsChecked="{Binding PromptForSaveOnShellLinks}">Prompt on magnet links/torrent files</CheckBox>
+                        <CheckBox IsChecked="{Binding DeleteTorrentsAfterAdd}">Delete .torrents after adding them</CheckBox>
                     </StackPanel>
                 </Grid>
             </TabItem>
