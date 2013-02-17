@@ -325,34 +325,6 @@ namespace Patchy
                 Process.Start("explorer", "\"" + torrent.Torrent.SavePath + "\"");
         }
 
-        private void torrentGridRemoveTorrent(object sender, RoutedEventArgs e)
-        {
-            foreach (PeriodicTorrent torrent in torrentGrid.SelectedItems)
-            {
-                if (torrent.State == TorrentState.Downloading)
-                {
-                    if (MessageBox.Show(torrent.Name + " is not complete. Are you sure you want to remove it?",
-                        "Confirm Removal", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
-                        continue;
-                }
-                Client.RemoveTorrent(torrent);
-            }
-        }
-
-        private void torrentGridRemoveTorrentAndData(object sender, RoutedEventArgs e)
-        {
-            foreach (PeriodicTorrent torrent in torrentGrid.SelectedItems)
-            {
-                if (torrent.State == TorrentState.Downloading)
-                {
-                    if (MessageBox.Show(torrent.Name + " is not complete. Are you sure you want to remove it?",
-                        "Confirm Removal", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
-                        continue;
-                }
-                Client.RemoveTorrentAndFiles(torrent);
-            }
-        }
-
         private void torrentGridCopyMagnentLink(object sender, RoutedEventArgs e)
         {
             var torrent = torrentGrid.SelectedItem as PeriodicTorrent;
@@ -483,38 +455,30 @@ namespace Patchy
             }
         }
 
-        private void TorrentGridResumeHiddenClick(object sender, RoutedEventArgs e)
+        private void torrentGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
-            {
-                if (t.Torrent.State == TorrentState.Paused)
-                    t.Torrent.Start();
-            }
+            if (e.Key == Key.Delete)
+                Commands.DeleteTorrent.Execute(null, this);
         }
 
-        private void TorrentGridContextMenuPauseResumeClick(object sender, RoutedEventArgs e)
+        private void torrentMenuItemSubmenuOpened(object sender, RoutedEventArgs e)
         {
-            // Get paused/running info
             int paused = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Paused);
             int running = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State != TorrentState.Paused);
             if (paused != 0 && running != 0)
             {
-                // Pause all
-                foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
-                {
-                    if (t.Torrent.State != TorrentState.Paused)
-                        t.Torrent.Pause();
-                }
+                pauseOrResumeTorrentMenuItem.Header = "Pause";
+                hiddenResumeTorrentMenuItem.Visibility = Visibility.Visible;
             }
             else if (paused != 0)
             {
-                foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
-                    t.Torrent.Start();
+                pauseOrResumeTorrentMenuItem.Header = "Resume";
+                hiddenResumeTorrentMenuItem.Visibility = Visibility.Collapsed;
             }
             else
             {
-                foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
-                    t.Torrent.Pause();
+                pauseOrResumeTorrentMenuItem.Header = "Pause";
+                hiddenResumeTorrentMenuItem.Visibility = Visibility.Collapsed;
             }
         }
     }

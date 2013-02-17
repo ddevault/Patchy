@@ -154,7 +154,8 @@ namespace Patchy
                                 Path.GetFileNameWithoutExtension(torrent.CacheFilePath) + ".info"));
                         }
                         torrent.Torrent.Dispose();
-                        Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Remove(torrent)));
+                        // We need to delay this until we're out of the handler for some reason
+                        Task.Factory.StartNew(() => Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Remove(torrent))));
                     }
                 };
             Task.Factory.StartNew(() => torrent.Torrent.Stop());
