@@ -211,12 +211,12 @@ namespace Patchy
                     e.Cancel = MessageBox.Show("You still have active torrents! Are you sure you want to exit?",
                         "Confirm Exit", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No;
                 }
+                NotifyIcon.Visible = false;
+                NotifyIcon.Dispose();
                 return;
             }
             e.Cancel = true;
             Visibility = Visibility.Hidden;
-            NotifyIcon.Visible = false;
-            NotifyIcon.Dispose();
         }
 
         private void WindowClosed(object sender, EventArgs e)
