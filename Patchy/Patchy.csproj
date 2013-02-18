@@ -80,6 +80,9 @@
     <Compile Include="Converters\TorrentCreationDateConverter.cs" />
     <Compile Include="Converters\TorrentETADateTimeConverter.cs" />
     <Compile Include="Converters\TorrentProgressConverter.cs" />
+    <Compile Include="CreateTorrentWindow.xaml.cs">
+      <DependentUpon>CreateTorrentWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DoubleClickAction.cs" />
     <Compile Include="IPC\SingletonService.cs" />
     <Compile Include="MainWindow.Commands.cs" />
@@ -100,6 +103,10 @@
     <Compile Include="UACHelper.cs" />
     <Compile Include="Validators\ValidDirectoryValidationRule.cs" />
     <Page Include="AddTorrentWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CreateTorrentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

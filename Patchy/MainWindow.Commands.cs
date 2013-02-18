@@ -14,6 +14,12 @@ namespace Patchy
     {
         private void ExecuteNew(object sender, ExecutedRoutedEventArgs e)
         {
+            var window = new CreateTorrentWindow();
+            window.ShowDialog();
+        }
+
+        private void ExecuteOpen(object sender, ExecutedRoutedEventArgs e)
+        {
             var window = new AddTorrentWindow(SettingsManager);
             if (window.ShowDialog().Value)
             {

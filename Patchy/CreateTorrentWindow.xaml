@@ -1,0 +1,80 @@
+﻿<Window x:Class="Patchy.CreateTorrentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Create Torrent" Height="350" Width="350"
+        Icon="Images/patchy.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <!--Upper block, "Add Torrent"-->
+        <Grid Grid.Row="0" Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock FontWeight="Bold">Add Torrent</TextBlock>
+            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox Margin="3"></TextBox>
+                <Button Grid.Column="1" Width="20" Margin="3">...</Button>
+            </Grid>
+            <RadioButton Grid.Row="2" IsChecked="True">Single File</RadioButton>
+            <RadioButton Grid.Row="2" Grid.Column="1">Entire Folder</RadioButton>
+        </Grid>
+        <!--Tracker block-->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock FontWeight="Bold">Trackers</TextBlock>
+            <TextBox Margin="3" Grid.Row="1"></TextBox>
+            <Button Margin="3" Grid.Column="1" Grid.Row="1">Add</Button>
+            <ListBox Margin="3" Grid.Row="2" Grid.RowSpan="2"></ListBox>
+            <Button Margin="3" Grid.Column="1" Grid.Row="2">Remove</Button>
+        </Grid>
+        <!--Options block-->
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock FontWeight="Bold">Options</TextBlock>
+            <CheckBox Margin="3" Grid.Row="1">Private torrent</CheckBox>
+            <CheckBox Margin="3" Grid.Row="1" Grid.Column="1" IsChecked="True">Start seeding</CheckBox>
+        </Grid>
+        <!--Lower block, with buttons and progress bar-->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="50"></ColumnDefinition>
+                <ColumnDefinition Width="50"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ProgressBar Margin="3"></ProgressBar>
+            <Button Margin="3" IsCancel="True" Grid.Column="1">Cancel</Button>
+            <Button Margin="3" IsDefault="True" Grid.Column="2">Create</Button>
+        </Grid>
+    </Grid>
+</Window>

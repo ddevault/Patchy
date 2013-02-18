@@ -28,7 +28,8 @@
         </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
-        <CommandBinding Command="Open" Executed="ExecuteNew"></CommandBinding>
+        <CommandBinding Command="New" Executed="ExecuteNew"></CommandBinding>
+        <CommandBinding Command="Open" Executed="ExecuteOpen"></CommandBinding>
         <CommandBinding Command="Close" Executed="ExecuteExit"></CommandBinding>
         <CommandBinding Command="pt:Commands.EditPreferences" Executed="ExecuteEditPreferences"></CommandBinding>
         <CommandBinding Command="pt:Commands.DeleteTorrent" Executed="ExecuteDeleteTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
@@ -39,6 +40,7 @@
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="Open" Key="O" Modifiers="Control"></KeyBinding>
+        <KeyBinding Command="New" Key="N" Modifiers="Control"></KeyBinding>
     </Window.InputBindings>
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo></TaskbarItemInfo>

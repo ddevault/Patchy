@@ -33,35 +33,34 @@ namespace Patchy
             SettingsManager = new SettingsManager();
             LoadSettings();
             Client.Initialize(SettingsManager);
-            // Load prior session
-            if (File.Exists(SettingsManager.FastResumePath))
-            {
-                // Load on another thread because it takes some time
-                Task.Factory.StartNew(() =>
+            // Load prior session on another thread because it takes some time
+            Task.Factory.StartNew(() =>
+                {
+                    BEncodedDictionary resume = null;
+                    if (File.Exists(SettingsManager.FastResumePath))
                     {
-                        var resume = BEncodedValue.Decode<BEncodedDictionary>(
+                        resume = BEncodedValue.Decode<BEncodedDictionary>(
                             File.ReadAllBytes(SettingsManager.FastResumePath));
-                        var torrents = Directory.GetFiles(SettingsManager.TorrentCachePath, "*.torrent");
-                        foreach (var torrent in torrents)
+                        File.Delete(SettingsManager.FastResumePath);
+                    }
+                    var torrents = Directory.GetFiles(SettingsManager.TorrentCachePath, "*.torrent");
+                    foreach (var torrent in torrents)
+                    {
+                        var path = File.ReadAllText(Path.Combine(
+                            SettingsManager.TorrentCachePath, Path.GetFileNameWithoutExtension(torrent))
+                                                    + ".info");
+                        var wrapper = new TorrentWrapper(Torrent.Load(torrent), path, new TorrentSettings());
+                        PeriodicTorrent periodicTorrent;
+                        if (resume != null && resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
                         {
-                            var path = File.ReadAllText(Path.Combine(
-                                SettingsManager.TorrentCachePath, Path.GetFileNameWithoutExtension(torrent))
-                                                        + ".info");
-                            var wrapper = new TorrentWrapper(Torrent.Load(torrent), path, new TorrentSettings());
-                            PeriodicTorrent periodicTorrent;
-                            if (resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
-                            {
-                                periodicTorrent = Client.LoadFastResume(
-                                    new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
-                            }
-                            else
-                            {
-                                periodicTorrent = Client.AddTorrent(wrapper);
-                            }
-                            periodicTorrent.CacheFilePath = torrent;
+                            periodicTorrent = Client.LoadFastResume(
+                                new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
                         }
-                    });
-            }
+                        else
+                            periodicTorrent = Client.AddTorrent(wrapper);
+                        periodicTorrent.CacheFilePath = torrent;
+                    }
+                });
             Timer = new Timer(o => Dispatcher.Invoke(new Action(PeriodicUpdate)),
                 null, 1000, 1000);
         }
