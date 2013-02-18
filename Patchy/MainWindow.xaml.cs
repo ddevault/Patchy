@@ -215,6 +215,8 @@ namespace Patchy
             }
             e.Cancel = true;
             Visibility = Visibility.Hidden;
+            NotifyIcon.Visible = false;
+            NotifyIcon.Dispose();
         }
 
         private void WindowClosed(object sender, EventArgs e)
@@ -236,8 +238,6 @@ namespace Patchy
                 File.WriteAllBytes(SettingsManager.FastResumePath, resume.Encode());
             }
             Client.Shutdown();
-            NotifyIcon.Visible = false;
-            NotifyIcon.Dispose();
         }
 
         private void TorrentGridSelectionChanged(object sender, SelectionChangedEventArgs e)
