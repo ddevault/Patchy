@@ -111,7 +111,7 @@ namespace Patchy
             NotifyIcon.DoubleClick += NotifyIconClick;
             NotifyIcon.BalloonTipClicked += NotifyIconBalloonTipClicked;
             var menu = new System.Windows.Forms.ContextMenu();
-            menu.MenuItems.Add("Add Torrent", (s, e) => ExecuteNew(null, null));
+            menu.MenuItems.Add("Add Torrent", (s, e) => ExecuteOpen(null, null));
             menu.MenuItems.Add("Create Torrent", (s, e) => {}); // TODO
             menu.MenuItems.Add("-");
             pauseResumeAllTorrentsMenuItem = new System.Windows.Forms.MenuItem("Pause all torrents");
@@ -278,7 +278,7 @@ namespace Patchy
         {
             IgnoredClipboardValue = Clipboard.GetText();
             CheckMagnetLinks();
-            ExecuteNew(sender, null);
+            ExecuteOpen(sender, null);
         }
 
         private void FilePriorityBoxChanged(object sender, SelectionChangedEventArgs e)

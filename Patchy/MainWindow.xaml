@@ -37,6 +37,7 @@
         <CommandBinding Command="pt:Commands.RemoveTorrentWithFiles" Executed="ExecuteRemoveTorrentWithFiles" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.PauseOrResumeTorrent" Executed="ExecutePauseOrResumeTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.ResumeTorrent" Executed="ExecuteResumeTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
+        <CommandBinding Command="pt:Commands.MoveTorrent" Executed="ExecuteMoveTorrent" CanExecute="CanExecuteSingleTorrentCommand"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="Open" Key="O" Modifiers="Control"></KeyBinding>
@@ -79,6 +80,7 @@
                     <MenuItem Header="Torrent" Command="pt:Commands.RemoveTorrent"></MenuItem>
                     <MenuItem Header="Torrent+files" Command="pt:Commands.RemoveTorrentWithFiles"></MenuItem>
                 </MenuItem>
+                <MenuItem Header="Move" Command="pt:Commands.MoveTorrent"></MenuItem>
             </MenuItem>
             <MenuItem Header="Options">
                 <MenuItem Header="Preferences" Command="pt:Commands.EditPreferences"></MenuItem>
@@ -216,6 +218,7 @@
                             <MenuItem Command="pt:Commands.RemoveTorrent" Header="Torrent only"></MenuItem>
                             <MenuItem Command="pt:Commands.RemoveTorrentWithFiles" Header="Torrent and data" ></MenuItem>
                         </MenuItem>
+                        <MenuItem Header="Move" Command="pt:Commands.MoveTorrent"></MenuItem>
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 <DataGrid.Columns>

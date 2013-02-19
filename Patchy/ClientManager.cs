@@ -202,6 +202,25 @@ namespace Patchy
             return Torrents.FirstOrDefault(t => t.Torrent.Torrent == torrent);
         }
 
+        public void MoveTorrent(TorrentWrapper torrent, string path)
+        {
+            Task.Factory.StartNew(() =>
+                {
+                    path = Path.Combine(path, Path.GetFileName(torrent.SavePath));
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+                    var oldPath = torrent.SavePath;
+                    torrent.Stop();
+                    while (torrent.State != TorrentState.Stopped) ;
+                    torrent.MoveFiles(path, true);
+                    torrent.Start();
+                    Directory.Delete(oldPath, true);
+                    var cache = Path.Combine(SettingsManager.TorrentCachePath, Path.GetFileName(oldPath));
+                    File.WriteAllText(Path.Combine(Path.GetDirectoryName(cache),
+                        Path.GetFileNameWithoutExtension(cache)) + ".info", path);
+                });
+        }
+
         public ObservableCollection<PeriodicTorrent> Torrents { get; set; }
 
         private static ClientEngine Client { get; set; }

@@ -15,6 +15,8 @@ using System.Windows.Interop;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using MonoTorrent.Client.Tracker;
+using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace Patchy
 {
@@ -134,19 +136,7 @@ namespace Patchy
                     {
                         Task.Factory.StartNew(() =>
                             {
-                                torrent.Torrent.Stop();
-                                while (torrent.Torrent.State != TorrentState.Stopped) ;
-                                var oldPath = torrent.Torrent.SavePath;
-                                var path = Path.Combine(SettingsManager.PostCompletionDestination,
-                                    Path.GetFileName(torrent.Torrent.SavePath));
-                                if (!Directory.Exists(path))
-                                    Directory.CreateDirectory(path);
-                                torrent.Torrent.MoveFiles(path, true);
-                                torrent.Torrent.Start();
-                                Directory.Delete(oldPath, true);
-                                var cache = Path.Combine(SettingsManager.TorrentCachePath, Path.GetFileName(oldPath));
-                                File.WriteAllText(Path.Combine(Path.GetDirectoryName(cache),
-                                    Path.GetFileNameWithoutExtension(cache)) + ".info", path);
+                                Client.MoveTorrent(torrent.Torrent, SettingsManager.PostCompletionDestination);
                                 if (!string.IsNullOrEmpty(SettingsManager.TorrentCompletionCommand))
                                 {
                                     var command = SettingsManager.TorrentCompletionCommand;
@@ -331,6 +321,67 @@ namespace Patchy
                         catch { }
                     }
                 }));
+        }
+
+        private void LoadSettings()
+        {
+            SettingsManager.PropertyChanged += SettingsManager_PropertyChanged;
+            if (!File.Exists(SettingsManager.SettingsFile))
+            {
+                SettingsManager.SetToDefaults();
+                SaveSettings();
+            }
+            else
+            {
+                var serializer = new JsonSerializer();
+                serializer.MissingMemberHandling = MissingMemberHandling.Ignore;
+                try
+                {
+                    using (var reader = new StreamReader(SettingsManager.SettingsFile))
+                        serializer.Populate(reader, SettingsManager);
+                }
+                catch
+                {
+                    MessageBox.Show("Your settings are corrupted. They have been reset to the defaults.",
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    SettingsManager.SetToDefaults();
+                    SaveSettings();
+                }
+            }
+        }
+
+        private void SaveSettings()
+        {
+            var serializer = new JsonSerializer();
+            using (var writer = new StreamWriter(SettingsManager.SettingsFile))
+                serializer.Serialize(writer, SettingsManager);
+        }
+
+        void SettingsManager_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "SaveSession":
+                    App.ClearCacheOnExit = !SettingsManager.SaveSession;
+                    break;
+                case "ShowTrayIcon":
+                    NotifyIcon.Visible = SettingsManager.ShowTrayIcon;
+                    break;
+                case "MinutesBetweenRssUpdates":
+                    ReloadRssTimer();
+                    break;
+                case "AutomaticAddDirectory":
+                    if (AutoWatcher == null)
+                        break;
+                    if (string.IsNullOrEmpty(SettingsManager.AutomaticAddDirectory))
+                        AutoWatcher.EnableRaisingEvents = false;
+                    else
+                    {
+                        AutoWatcher.Path = SettingsManager.AutomaticAddDirectory;
+                        AutoWatcher.EnableRaisingEvents = true;
+                    }
+                    break;
+            }
         }
     }
 }

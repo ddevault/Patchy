@@ -7,11 +7,23 @@ using System.Windows.Input;
 using MonoTorrent.Client;
 using MonoTorrent.Common;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
+using Microsoft.Win32;
 
 namespace Patchy
 {
     public partial class MainWindow
     {
+        private void CanExecuteTorrentSpecificCommand(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = torrentGrid.SelectedItems.Count != 0;
+        }
+
+        private void CanExecuteSingleTorrentCommand(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = torrentGrid.SelectedItems.Count == 1;
+        }
+
         private void ExecuteNew(object sender, ExecutedRoutedEventArgs e)
         {
             var window = new CreateTorrentWindow();
@@ -50,11 +62,6 @@ namespace Patchy
             window.ShowDialog();
             SaveSettings();
             UpdateRss();
-        }
-
-        private void CanExecuteTorrentSpecificCommand(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = torrentGrid.SelectedItems.Count != 0;
         }
 
         private void ExecuteDeleteTorrent(object sender, ExecutedRoutedEventArgs e)
@@ -137,65 +144,14 @@ namespace Patchy
             }
         }
 
-        private void LoadSettings()
+        private void ExecuteMoveTorrent(object sender, ExecutedRoutedEventArgs e)
         {
-            SettingsManager.PropertyChanged += SettingsManager_PropertyChanged;
-            if (!File.Exists(SettingsManager.SettingsFile))
-            {
-                SettingsManager.SetToDefaults();
-                SaveSettings();
-            }
-            else
-            {
-                var serializer = new JsonSerializer();
-                serializer.MissingMemberHandling = MissingMemberHandling.Ignore;
-                try
-                {
-                    using (var reader = new StreamReader(SettingsManager.SettingsFile))
-                        serializer.Populate(reader, SettingsManager);
-                }
-                catch
-                {
-                    MessageBox.Show("Your settings are corrupted. They have been reset to the defaults.",
-                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    SettingsManager.SetToDefaults();
-                    SaveSettings();
-                }
-            }
-        }
-
-        private void SaveSettings()
-        {
-            var serializer = new JsonSerializer();
-            using (var writer = new StreamWriter(SettingsManager.SettingsFile))
-                serializer.Serialize(writer, SettingsManager);
-        }
-
-        void SettingsManager_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case "SaveSession":
-                    App.ClearCacheOnExit = !SettingsManager.SaveSession;
-                    break;
-                case "ShowTrayIcon":
-                    NotifyIcon.Visible = SettingsManager.ShowTrayIcon;
-                    break;
-                case "MinutesBetweenRssUpdates":
-                    ReloadRssTimer();
-                    break;
-                case "AutomaticAddDirectory":
-                    if (AutoWatcher == null)
-                        break;
-                    if (string.IsNullOrEmpty(SettingsManager.AutomaticAddDirectory))
-                        AutoWatcher.EnableRaisingEvents = false;
-                    else
-                    {
-                        AutoWatcher.Path = SettingsManager.AutomaticAddDirectory;
-                        AutoWatcher.EnableRaisingEvents = true;
-                    }
-                    break;
-            }
+            var torrent = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().FirstOrDefault();
+            if (torrent == null)
+                return;
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                Client.MoveTorrent(torrent.Torrent, dialog.SelectedPath);
         }
     }
 
@@ -207,5 +163,6 @@ namespace Patchy
         public static readonly RoutedUICommand RemoveTorrentWithFiles = new RoutedUICommand("Remove Torrent and Files", "RemoveTorrentWithFiles", typeof(MainWindow));
         public static readonly RoutedUICommand PauseOrResumeTorrent = new RoutedUICommand("Pause or resume torrent", "PauseOrResumeTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand ResumeTorrent = new RoutedUICommand("Resume Torrent", "ResumeTorrent", typeof(MainWindow));
+        public static readonly RoutedUICommand MoveTorrent = new RoutedUICommand("Move Torrent", "MoveTorrent", typeof(MainWindow));
     }
 }
