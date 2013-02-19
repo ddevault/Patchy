@@ -217,7 +217,7 @@ namespace Patchy
                     Directory.Delete(oldPath, true);
                     var cache = Path.Combine(SettingsManager.TorrentCachePath, Path.GetFileName(oldPath));
                     File.WriteAllText(Path.Combine(Path.GetDirectoryName(cache),
-                        Path.GetFileNameWithoutExtension(cache)) + ".info", path);
+                        Path.GetFileName(cache)) + ".info", path);
                 });
         }
 
