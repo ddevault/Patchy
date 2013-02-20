@@ -52,7 +52,6 @@ namespace Patchy
         private void ExecuteExit(object sender, ExecutedRoutedEventArgs e)
         {
             AllowClose = true;
-            NotifyIcon.Dispose();
             Close();
         }
 

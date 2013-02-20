@@ -29,7 +29,6 @@ namespace Patchy
         private System.Windows.Forms.NotifyIcon NotifyIcon { get; set; }
         private PeriodicTorrent BalloonTorrent { get; set; }
         private string IgnoredClipboardValue { get; set; }
-        private FileSystemWatcher AutoWatcher { get; set; }
         internal bool AllowClose { get; set; }
 
         public MainWindow()
@@ -59,14 +58,6 @@ namespace Patchy
             Client = new ClientManager();
 
             Initialize();
-            if (string.IsNullOrEmpty(SettingsManager.AutomaticAddDirectory))
-                AutoWatcher = new FileSystemWatcher();
-            else
-                AutoWatcher = new FileSystemWatcher(SettingsManager.AutomaticAddDirectory);
-            AutoWatcher.Filter = "*.torrent";
-            if (!string.IsNullOrEmpty(SettingsManager.AutomaticAddDirectory))
-                AutoWatcher.EnableRaisingEvents = true;
-            AutoWatcher.Created += AutoWatcher_Created;
 
             torrentGrid.ItemsSource = Client.Torrents;
 
@@ -88,18 +79,6 @@ namespace Patchy
                     WindowState = WindowState.Normal;
                 }
             }
-        }
-
-        void AutoWatcher_Created(object sender, FileSystemEventArgs e)
-        {
-            try
-            {
-                var torrent = Torrent.Load(e.FullPath);
-                AddTorrent(torrent, SettingsManager.DefaultDownloadLocation, true);
-                BalloonTorrent = null;
-                NotifyIcon.ShowBalloonTip(5000, "Added torrent from torrent path", torrent.Name, System.Windows.Forms.ToolTipIcon.Info);
-            }
-            catch { }
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)

@@ -51,9 +51,18 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Downloads">
-                <StackPanel Margin="3">
+                <Grid Margin="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
                     <TextBlock FontWeight="Bold">Default download location:</TextBlock>
-                    <TextBox>
+                    <TextBox Grid.Column="1">
                         <TextBox.Text>
                             <Binding Path="DefaultDownloadLocation">
                                 <Binding.ValidationRules>
@@ -62,8 +71,8 @@
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
-                    <TextBlock FontWeight="Bold">Move completed to:</TextBlock>
-                    <TextBox>
+                    <TextBlock Grid.Row="1" FontWeight="Bold">Move completed to:</TextBlock>
+                    <TextBox Grid.Row="1" Grid.Column="1">
                         <TextBox.Text>
                             <Binding Path="PostCompletionDestination">
                                 <Binding.ValidationRules>
@@ -72,17 +81,27 @@
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
-                    <TextBlock FontWeight="Bold">Automatically add .torrents from:</TextBlock>
-                    <TextBox>
-                        <TextBox.Text>
-                            <Binding Path="AutomaticAddDirectory">
-                                <Binding.ValidationRules>
-                                    <v:ValidDirectoryValidationRule></v:ValidDirectoryValidationRule>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
-                </StackPanel>
+                    <Grid Grid.Row="2" Grid.ColumnSpan="2" Height="200" VerticalAlignment="Top">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock FontWeight="Bold" Grid.ColumnSpan="2" Margin="3">Automatically add torrents from:</TextBlock>
+                        <ListBox Grid.Row="1" Grid.RowSpan="4" Margin="3" ItemsSource="{Binding AutomaticAddDirectories}" 
+                                 x:Name="automaticAddDirectoryListBox"></ListBox>
+                        <TextBox Grid.Row="1" Grid.Column="1" Width="200" x:Name="automaticAddTextBox"></TextBox>
+                        <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Width="50" Margin="3"
+                                Click="automaticAddButtonClicked">Add</Button>
+                        <Button Grid.Row="4" Grid.Column="1" Click="removeSelectedAutomaticDirectoriesClicked">Remove Selected</Button>
+                    </Grid>
+                </Grid>
             </TabItem>
             <TabItem Header="Connections">
                 <Grid Margin="3">
