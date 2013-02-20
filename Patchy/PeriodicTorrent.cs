@@ -67,7 +67,7 @@ namespace Patchy
 
         internal void Update()
         {
-            if (Torrent.State == TorrentState.Seeding && State == TorrentState.Stopped)
+            if (Torrent.State == TorrentState.Seeding && (State == TorrentState.Stopped || State == TorrentState.Hashing))
                 CompletedOnAdd = true;
             State = Torrent.State;
             if (Torrent.Progress == 100 && Progress != 100)
