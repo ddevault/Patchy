@@ -66,7 +66,9 @@ namespace Patchy
                 return;
             }
             double width = ActualWidth / pieces.Length;
-            for (int i = 0; i < pieces.Length; i++)
+            int increment = (int)(1 / width);
+            if (increment == 0) increment = 1;
+            for (int i = 0; i < pieces.Length; i += increment)
             {
                 if (pieces[i])
                 {
