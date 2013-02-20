@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Web;
 using System.Windows;
+using System.Windows.Forms;
 using MonoTorrent;
 using MonoTorrent.BEncoding;
 using MonoTorrent.Client;
@@ -17,6 +17,9 @@ using System.Diagnostics;
 using MonoTorrent.Client.Tracker;
 using System.ComponentModel;
 using Newtonsoft.Json;
+using Clipboard = System.Windows.Clipboard;
+using MessageBox = System.Windows.MessageBox;
+using Timer = System.Threading.Timer;
 
 namespace Patchy
 {
@@ -25,12 +28,14 @@ namespace Patchy
         private ClientManager Client { get; set; }
         private Timer Timer { get; set; }
         private SettingsManager SettingsManager { get; set; }
-
+        private List<FileSystemWatcher> AutoWatchers { get; set; }
+            
         [DllImport("user32.dll")]
         static extern bool FlashWindow(IntPtr hwnd, bool bInvert);
 
         private void Initialize()
         {
+            AutoWatchers = new List<FileSystemWatcher>();
             SettingsManager.Initialize();
             SettingsManager = new SettingsManager();
             LoadSettings();
@@ -370,10 +375,35 @@ namespace Patchy
                 case "MinutesBetweenRssUpdates":
                     ReloadRssTimer();
                     break;
-                case "AutomaticAddDirectory":
-                    // TODO
+                case "AutomaticAddDirectories":
+                    foreach (var watcher in AutoWatchers)
+                        watcher.Dispose();
+                    AutoWatchers.Clear();
+                    foreach (var item in SettingsManager.AutomaticAddDirectories)
+                    {
+                        var watcher = new FileSystemWatcher(item, "*.torrent");
+                        watcher.EnableRaisingEvents = true;
+                        watcher.Created += WatcherOnCreated;
+                        AutoWatchers.Add(watcher);
+                    }
                     break;
             }
+        }
+
+        private void WatcherOnCreated(object sender, FileSystemEventArgs fileSystemEventArgs)
+        {
+            Dispatcher.Invoke(new Action(() =>
+                {
+                    try
+                    {
+                        var torrent = Torrent.Load(fileSystemEventArgs.FullPath);
+                        AddTorrent(torrent, SettingsManager.DefaultDownloadLocation, true);
+                        BalloonTorrent = null;
+                        NotifyIcon.ShowBalloonTip(5000, "Automatically added torrent",
+                            "Automatically added " + torrent.Name, ToolTipIcon.Info);
+                    }
+                    catch { }
+                }));
         }
     }
 }
