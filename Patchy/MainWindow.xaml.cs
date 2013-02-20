@@ -35,15 +35,24 @@ namespace Patchy
         {
             InitializeComponent();
             InitializeNotifyIcon();
+            torrentGrid.ContextMenu = null;
+            fileListGrid.ContextMenu = null;
             torrentGrid.LoadingRow += (s, e) =>
                 {
-                    e.Row.MouseDoubleClick -= TorrentGridMouseDoubleClick; // Rumoured to be called again sometimes when rows are sorted
+                    // Rumoured to be called again sometimes when rows are sorted, so we unregister event handlers first
+                    e.Row.MouseDoubleClick -= TorrentGridMouseDoubleClick;
                     e.Row.MouseDoubleClick += TorrentGridMouseDoubleClick;
+                    e.Row.ContextMenu = torrentGridContextMenu;
+                    e.Row.ContextMenuOpening -= torrentGridContextMenuOpening;
+                    e.Row.ContextMenuOpening += torrentGridContextMenuOpening;
                 };
             fileListGrid.LoadingRow += (s, e) =>
             {
                 e.Row.MouseDoubleClick -= FileListGridMouseDoubleClick;
                 e.Row.MouseDoubleClick += FileListGridMouseDoubleClick;
+                e.Row.ContextMenu = fileListGridContextMenu;
+                e.Row.ContextMenuOpening -= fileListGridContextMenuOpening;
+                e.Row.ContextMenuOpening += fileListGridContextMenuOpening;
             };
             
             Client = new ClientManager();
@@ -211,8 +220,11 @@ namespace Patchy
                     e.Cancel = MessageBox.Show("You still have active torrents! Are you sure you want to exit?",
                         "Confirm Exit", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No;
                 }
-                NotifyIcon.Visible = false;
-                NotifyIcon.Dispose();
+                if (!e.Cancel)
+                {
+                    NotifyIcon.Visible = false;
+                    NotifyIcon.Dispose();
+                }
                 return;
             }
             e.Cancel = true;

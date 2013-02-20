@@ -375,7 +375,7 @@
                         GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="fileListGrid" IsReadOnly="True"
                         ContextMenuOpening="fileListGridContextMenuOpening">
                         <DataGrid.ContextMenu>
-                            <ContextMenu>
+                            <ContextMenu x:Name="fileListGridContextMenu">
                                 <MenuItem Header="Open" Click="fileListGridOpenFile"></MenuItem>
                                 <MenuItem Header="Open containing folder" Click="fileListGridOpenFolder"></MenuItem>
                                 <Separator></Separator>
