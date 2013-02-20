@@ -23,7 +23,7 @@ namespace Patchy
         internal void Update()
         {
             Updating = true;
-            Name = Path.GetFileName(File.FullPath);
+            Name = System.IO.Path.GetFileName(File.FullPath);
             Length = File.Length;
             Progress = ((double)File.BytesDownloaded / (double)File.Length) * 100;
             Priority = File.Priority;
@@ -94,6 +94,16 @@ namespace Patchy
                 if (!Updating)
                     File.Priority = value;
             }
+        }
+
+        public string Path
+        {
+            get { return File.Path; }
+        }
+
+        public string FolderPath
+        {
+            get { return "/" + System.IO.Path.GetDirectoryName(File.Path); }
         }
     }
 }

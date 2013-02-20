@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using MonoTorrent.Client;
 using MonoTorrent.Common;
+using System.Windows.Data;
 
 namespace Patchy
 {
@@ -98,6 +99,10 @@ namespace Patchy
                     files[i] = new PeriodicFile(Torrent.Torrent.Files[i]);
                 if (PropertyChanged != null)
                     PropertyChanged(this, new PropertyChangedEventArgs("Files"));
+                filesView = new ListCollectionView(files);
+                if (PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("FilesView"));
+                ConfigureFileView();
             }
             if (Torrent.IsMagnet && (Torrent.State == TorrentState.Downloading || Torrent.State == TorrentState.Seeding) && Torrent.Size == -1)
                 Size = Torrent.Torrent.Files.Select(f => f.Length).Aggregate((a, b) => a + b);
@@ -122,6 +127,12 @@ namespace Patchy
             }
         }
 
+        private void ConfigureFileView()
+        {
+            // Set up grouping
+            filesView.GroupDescriptions.Add(new PropertyGroupDescription("Path"));
+        }
+
         public void ChangePicker(PiecePicker piecePicker)
         {
             Torrent.ChangePicker(piecePicker);
@@ -139,10 +150,13 @@ namespace Patchy
         private PeriodicFile[] files;
         public PeriodicFile[] Files
         {
-            get
-            {
-                return files;
-            }
+            get { return files; }
+        }
+
+        private ListCollectionView filesView;
+        public ListCollectionView FilesView
+        {
+            get { return filesView; }
         }
 
         public ObservableCollection<PeerId> PeerList { get; set; }

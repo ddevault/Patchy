@@ -17,6 +17,7 @@ using MonoTorrent.Client;
 using MonoTorrent.Common;
 using System.Windows.Media;
 using Patchy.Converters;
+using System.Windows.Data;
 
 namespace Patchy
 {
@@ -69,7 +70,7 @@ namespace Patchy
 
             torrentGrid.ItemsSource = Client.Torrents;
 
-            Loaded += new RoutedEventHandler(MainWindow_Loaded);
+            Loaded += MainWindow_Loaded;
             ReloadRssTimer();
 
             if (UacHelper.IsProcessElevated && SettingsManager.WarnWhenRunningAsAdministrator)

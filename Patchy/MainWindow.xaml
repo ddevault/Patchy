@@ -373,7 +373,35 @@
                 <TabItem Header="Files">
                     <DataGrid ItemsSource="{Binding Files}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False"
                         GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="fileListGrid" IsReadOnly="True"
+                        EnableRowVirtualization="True" VerticalScrollBarVisibility="Auto"
                         ContextMenuOpening="fileListGridContextMenuOpening">
+                        <!--<DataGrid.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="Foo" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                                <GroupStyle.ContainerStyle>
+                                    <Style TargetType="{x:Type GroupItem}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                    <Expander IsExpanded="True">
+                                                        <Expander.Header>
+                                                            <TextBlock Text="Bar" />
+                                                        </Expander.Header>
+                                                        <ItemsPresenter />
+                                                    </Expander>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </GroupStyle.ContainerStyle>
+                            </GroupStyle>
+                        </DataGrid.GroupStyle>-->
                         <DataGrid.ContextMenu>
                             <ContextMenu x:Name="fileListGridContextMenu">
                                 <MenuItem Header="Open" Click="fileListGridOpenFile"></MenuItem>
@@ -396,9 +424,9 @@
                             </Style>
                         </DataGrid.CellStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Width="300">
+                            <DataGridTextColumn Header="Path" Width="300">
                                 <DataGridTextColumn.Binding>
-                                    <Binding Path="Name"></Binding>
+                                    <Binding Path="Path"></Binding>
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
                             <DataGridTextColumn Header="Size" Width="80">

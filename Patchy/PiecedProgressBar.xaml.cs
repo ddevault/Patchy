@@ -31,7 +31,7 @@ namespace Patchy
 
         void PiecedProgressBar_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            Dispatcher.Invoke(new Action(() => this.InvalidateVisual()));
+            Dispatcher.Invoke(new Action(InvalidateVisual));
             var torrent = DataContext as PeriodicTorrent;
             if (torrent != null)
             {
@@ -48,7 +48,7 @@ namespace Patchy
                 return;
             LastUpdate = DateTime.Now;
             if (e.PropertyName == "RecievedPieces")
-                Dispatcher.Invoke(new Action(() => this.InvalidateVisual()));
+                Dispatcher.Invoke(new Action(InvalidateVisual));
         }
 
         protected override void OnRender(DrawingContext drawingContext)
