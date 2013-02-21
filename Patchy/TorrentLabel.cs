@@ -7,8 +7,12 @@ using Newtonsoft.Json;
 
 namespace Patchy
 {
-    public class TorrentLabel
+    public class TorrentLabel : IComparable
     {
+        public TorrentLabel()
+        {
+        }
+
         public TorrentLabel(string name, string color)
         {
             Name = name;
@@ -74,5 +78,10 @@ namespace Patchy
 
         public string Color { get; set; }
         public string Name { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            return Name.CompareTo((obj as TorrentLabel).Name);
+        }
     }
 }

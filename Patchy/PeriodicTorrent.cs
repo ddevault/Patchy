@@ -9,6 +9,8 @@ using System.Windows.Threading;
 using MonoTorrent.Client;
 using MonoTorrent.Common;
 using System.Windows.Data;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace Patchy
 {
@@ -25,9 +27,11 @@ namespace Patchy
         public string CacheFilePath { get; set; }
         public PiecePicker PiecePicker { get; set; }
         public DateTime CompletionTime { get; set; }
+        public TorrentInfo TorrentInfo { get; set; }
 
         public PeriodicTorrent(TorrentWrapper wrapper)
         {
+            TorrentInfo = new TorrentInfo();
             Torrent = wrapper;
             PeerList = new ObservableCollection<PeerId>();
             Update();
@@ -38,6 +42,7 @@ namespace Patchy
             PiecePicker = new RandomisedPicker(new StandardPicker());
             wrapper.PieceManager.BlockReceived += PieceManager_BlockReceived;
             wrapper.PieceHashed += wrapper_PieceHashed;
+            TorrentInfo.Path = Torrent.SavePath;
         }
 
         void wrapper_PieceHashed(object sender, PieceHashedEventArgs e)
@@ -99,10 +104,6 @@ namespace Patchy
                     files[i] = new PeriodicFile(Torrent.Torrent.Files[i]);
                 if (PropertyChanged != null)
                     PropertyChanged(this, new PropertyChangedEventArgs("Files"));
-                filesView = new ListCollectionView(files);
-                if (PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("FilesView"));
-                ConfigureFileView();
             }
             if (Torrent.IsMagnet && (Torrent.State == TorrentState.Downloading || Torrent.State == TorrentState.Seeding) && Torrent.Size == -1)
                 Size = Torrent.Torrent.Files.Select(f => f.Length).Aggregate((a, b) => a + b);
@@ -127,16 +128,29 @@ namespace Patchy
             }
         }
 
-        private void ConfigureFileView()
-        {
-            // Set up grouping
-            filesView.GroupDescriptions.Add(new PropertyGroupDescription("Path"));
-        }
-
         public void ChangePicker(PiecePicker piecePicker)
         {
             Torrent.ChangePicker(piecePicker);
             PiecePicker = piecePicker;
+        }
+
+        /// <summary>
+        /// Intended to be called upon shutdown. Updates PeriodicTorrent.TorrentInfo
+        /// with the changes during this session.
+        /// </summary>
+        public void UpdateInfo()
+        {
+            TorrentInfo.ElapsedTime = ElapsedTime;
+            TorrentInfo.Label = Label;
+            TorrentInfo.Path = Directory.GetParent(Torrent.SavePath).FullName;
+            TorrentInfo.TotalDownloaded = TotalDownloaded;
+            TorrentInfo.TotalUploaded = TotalUploaded;
+        }
+
+        public void LoadInfo(TorrentInfo info)
+        {
+            TorrentInfo = info;
+            Label = TorrentInfo.Label;
         }
 
         protected internal virtual void OnPropertyChanged(string name)
@@ -162,12 +176,6 @@ namespace Patchy
         public PeriodicFile[] Files
         {
             get { return files; }
-        }
-
-        private ListCollectionView filesView;
-        public ListCollectionView FilesView
-        {
-            get { return filesView; }
         }
 
         public ObservableCollection<PeerId> PeerList { get; set; }
@@ -205,7 +213,7 @@ namespace Patchy
         {
             get
             {
-                return _ElapsedTime;
+                return _ElapsedTime + TorrentInfo.ElapsedTime;
             }
             private set
             {
@@ -275,7 +283,7 @@ namespace Patchy
         {
             get
             {
-                return _TotalDownloaded;
+                return _TotalDownloaded + TorrentInfo.TotalDownloaded;
             }
             private set
             {
@@ -289,7 +297,7 @@ namespace Patchy
         {
             get
             {
-                return _TotalUploaded;
+                return _TotalUploaded + TorrentInfo.TotalUploaded;
             }
             private set
             {

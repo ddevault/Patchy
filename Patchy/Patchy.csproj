@@ -103,6 +103,7 @@
     <Compile Include="RssFeedEntry.cs" />
     <Compile Include="RssTorrentRule.cs" />
     <Compile Include="SettingsManager.cs" />
+    <Compile Include="TorrentInfo.cs" />
     <Compile Include="TorrentLabel.cs" />
     <Compile Include="TorrentLabelWindow.xaml.cs">
       <DependentUpon>TorrentLabelWindow.xaml</DependentUpon>
@@ -172,6 +173,7 @@
     <EmbeddedResource Include="..\LICENSE">
       <Link>LICENSE</Link>
     </EmbeddedResource>
+    <Compile Include="MainWindow.Interop.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

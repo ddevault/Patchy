@@ -248,9 +248,9 @@
                     <DataGridTemplateColumn Header="Label" Width="50" SortMemberPath="Label">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding Path=Label.Brush}">
-                                    <TextBlock Foreground="{Binding Path=Label.ForegroundBrush}"  Text="{Binding Path=Label.Name}"></TextBlock>
-                                </Grid>
+                                <Border Background="{Binding Path=Label.Brush}" BorderThickness="0" CornerRadius="5">
+                                    <TextBlock Foreground="{Binding Path=Label.ForegroundBrush}"  Text="{Binding Path=Label.Name}" TextAlignment="Center"></TextBlock>
+                                </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

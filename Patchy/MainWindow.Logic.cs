@@ -21,6 +21,7 @@ using Newtonsoft.Json;
 using Clipboard = System.Windows.Clipboard;
 using MessageBox = System.Windows.MessageBox;
 using Timer = System.Threading.Timer;
+using System.Threading;
 
 namespace Patchy
 {
@@ -30,9 +31,7 @@ namespace Patchy
         private Timer Timer { get; set; }
         private SettingsManager SettingsManager { get; set; }
         private List<FileSystemWatcher> AutoWatchers { get; set; }
-            
-        [DllImport("user32.dll")]
-        static extern bool FlashWindow(IntPtr hwnd, bool bInvert);
+        private DateTime LastIdleEvent { get; set; }
 
         private void Initialize()
         {
@@ -54,25 +53,51 @@ namespace Patchy
                         File.Delete(SettingsManager.FastResumePath);
                     }
                     var torrents = Directory.GetFiles(SettingsManager.TorrentCachePath, "*.torrent");
+                    var serializer = new JsonSerializer();
                     foreach (var torrent in torrents)
                     {
-                        var path = File.ReadAllText(Path.Combine(
-                            SettingsManager.TorrentCachePath, Path.GetFileNameWithoutExtension(torrent))
-                                                    + ".info");
-                        var wrapper = new TorrentWrapper(Torrent.Load(torrent), path, new TorrentSettings());
-                        PeriodicTorrent periodicTorrent;
-                        if (resume != null && resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
+                        var path = Path.Combine(SettingsManager.TorrentCachePath, Path.GetFileNameWithoutExtension(torrent)) + ".info";
+                        try
                         {
-                            periodicTorrent = Client.LoadFastResume(
-                                new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
+                            TorrentInfo info;
+                            using (var reader = new StreamReader(path))
+                                info = serializer.Deserialize<TorrentInfo>(new JsonTextReader(reader));
+                            var wrapper = new TorrentWrapper(Torrent.Load(torrent), info.Path, new TorrentSettings());
+                            PeriodicTorrent periodicTorrent;
+                            if (resume != null && resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
+                            {
+                                periodicTorrent = Client.LoadFastResume(
+                                    new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
+                            }
+                            else
+                                periodicTorrent = Client.AddTorrent(wrapper);
+                            periodicTorrent.LoadInfo(info);
+                            periodicTorrent.CacheFilePath = torrent;
                         }
-                        else
-                            periodicTorrent = Client.AddTorrent(wrapper);
-                        periodicTorrent.CacheFilePath = torrent;
+                        catch { }
                     }
                 });
             Timer = new Timer(o => Dispatcher.Invoke(new Action(PeriodicUpdate)),
                 null, 1000, 1000);
+            InitializeIdleMonitor();
+        }
+
+        private HookProc KeyboardHook, MouseHook;
+        private void InitializeIdleMonitor()
+        {
+            LastIdleEvent = DateTime.Now;
+            KeyboardHook = (code, wParam, lParam) =>
+                {
+                    LastIdleEvent = DateTime.Now;
+                    return CallNextHookEx(IntPtr.Zero, code, wParam, lParam);
+                };
+            MouseHook = (code, wParam, lParam) =>
+                {
+                    LastIdleEvent = DateTime.Now;
+                    return CallNextHookEx(IntPtr.Zero, code, wParam, lParam);
+                };
+            SetWindowsHookEx(HookType.WH_KEYBOARD, KeyboardHook, IntPtr.Zero, Thread.CurrentThread.ManagedThreadId);
+            SetWindowsHookEx(HookType.WH_MOUSE, MouseHook, IntPtr.Zero, Thread.CurrentThread.ManagedThreadId);
         }
 
         public void AddTorrent(MagnetLink link, string path, bool suppressMessages = false)
@@ -93,11 +118,12 @@ namespace Patchy
                 return;
             }
             var periodic = Client.AddTorrent(wrapper);
-            File.WriteAllText(Path.Combine(
-                    SettingsManager.TorrentCachePath,
-                    ClientManager.CleanFileName(name) + ".info"),
-                    path);
             periodic.CacheFilePath = cache;
+            periodic.UpdateInfo();
+            var serializer = new JsonSerializer();
+            using (var writer = new StreamWriter(Path.Combine(SettingsManager.TorrentCachePath,
+                Path.GetFileNameWithoutExtension(periodic.CacheFilePath) + ".info")))
+                serializer.Serialize(new JsonTextWriter(writer), periodic.TorrentInfo);
         }
 
         public void AddTorrent(Torrent torrent, string path, bool suppressMessages = false)
@@ -117,9 +143,13 @@ namespace Patchy
             if (File.Exists(cache))
                 File.Delete(cache);
             File.Copy(torrent.TorrentPath, cache);
-            File.WriteAllText(Path.Combine(Path.GetDirectoryName(cache),
-                Path.GetFileNameWithoutExtension(cache)) + ".info", path);
             periodic.CacheFilePath = cache;
+            periodic.UpdateInfo();
+            var serializer = new JsonSerializer();
+            using (var writer = new StreamWriter(Path.Combine(SettingsManager.TorrentCachePath,
+                Path.GetFileNameWithoutExtension(periodic.CacheFilePath) + ".info")))
+                serializer.Serialize(new JsonTextWriter(writer), periodic.TorrentInfo);
+
             if (SettingsManager.DeleteTorrentsAfterAdd)
                 File.Delete(torrent.TorrentPath);
         }

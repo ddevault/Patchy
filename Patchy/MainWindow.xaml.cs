@@ -18,6 +18,7 @@ using MonoTorrent.Common;
 using System.Windows.Media;
 using Patchy.Converters;
 using System.Windows.Data;
+using Newtonsoft.Json;
 
 namespace Patchy
 {
@@ -216,6 +217,7 @@ namespace Patchy
             if (SettingsManager.SaveSession)
             {
                 var resume = new BEncodedDictionary();
+                var serializer = new JsonSerializer();
                 foreach (var torrent in Client.Torrents)
                 {
                     torrent.Torrent.Stop();
@@ -223,6 +225,10 @@ namespace Patchy
                     while (torrent.Torrent.State != TorrentState.Stopped && torrent.Torrent.State != TorrentState.Error &&
                         (DateTime.Now - start).TotalSeconds < 2) // Time limit for trying to let it stop on its own
                         Thread.Sleep(100);
+                    torrent.UpdateInfo();
+                    using (var writer = new StreamWriter(Path.Combine(SettingsManager.TorrentCachePath,
+                        Path.GetFileNameWithoutExtension(torrent.CacheFilePath) + ".info")))
+                        serializer.Serialize(new JsonTextWriter(writer), torrent.TorrentInfo);
                     // TODO: Notify users on error? The application is shutting down here, it wouldn't be particualry
                     // easy to get information to the user
                     resume.Add(torrent.Torrent.InfoHash.ToHex(), torrent.Torrent.SaveFastResume().Encode());
