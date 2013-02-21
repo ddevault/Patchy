@@ -101,7 +101,11 @@ namespace Patchy
             {
                 files = new PeriodicFile[Torrent.Torrent.Files.Length];
                 for (int i = 0; i < files.Length; i++)
+                {
+                    if (TorrentInfo.FilePriority != null && i < TorrentInfo.FilePriority.Length)
+                        Torrent.Torrent.Files[i].Priority = TorrentInfo.FilePriority[i];
                     files[i] = new PeriodicFile(Torrent.Torrent.Files[i]);
+                }
                 if (PropertyChanged != null)
                     PropertyChanged(this, new PropertyChangedEventArgs("Files"));
             }
@@ -145,6 +149,9 @@ namespace Patchy
             TorrentInfo.Path = Directory.GetParent(Torrent.SavePath).FullName;
             TorrentInfo.TotalDownloaded = TotalDownloaded;
             TorrentInfo.TotalUploaded = TotalUploaded;
+            TorrentInfo.FilePriority = new Priority[Torrent.Torrent.Files.Length];
+            for (int i = 0; i < TorrentInfo.FilePriority.Length; i++)
+                TorrentInfo.FilePriority[i] = Torrent.Torrent.Files[i].Priority;
         }
 
         public void LoadInfo(TorrentInfo info)

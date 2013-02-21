@@ -18,5 +18,6 @@ namespace Patchy
         public long TotalDownloaded { get; set; }
         public long TotalUploaded { get; set; }
         public string Path { get; set; }
+        public Priority[] FilePriority { get; set; }
     }
 }
