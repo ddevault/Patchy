@@ -103,6 +103,7 @@ namespace Patchy
 
             // Other
             RecentDownloadLocations = new string[0];
+            Labels = new TorrentLabel[0];
         }
 
         public void ForcePropertyUpdate()
@@ -111,20 +112,6 @@ namespace Patchy
             var properties = GetType().GetProperties();
             foreach (var property in properties)
                 OnPropertyChanged(property.Name);
-        }
-
-        public RssFeed[] RssFeeds { get; set; }
-        public string[] RecentDownloadLocations { get; set; }
-
-        private int _MinutesBetweenRssUpdates;
-        public int MinutesBetweenRssUpdates
-        {
-            get { return _MinutesBetweenRssUpdates; }
-            set
-            {
-                _MinutesBetweenRssUpdates = value;
-                OnPropertyChanged("MinutesBetweenRssUpdates");
-            }
         }
 
         #region General
@@ -489,6 +476,27 @@ namespace Patchy
                 OnPropertyChanged("TorrentCompletionCommand");
             }
         }
+
+        #endregion
+
+        // Settings that are edited outside of the preferences window
+        #region Non-preferences
+
+        public RssFeed[] RssFeeds { get; set; }
+        public string[] RecentDownloadLocations { get; set; }
+
+        private int _MinutesBetweenRssUpdates;
+        public int MinutesBetweenRssUpdates
+        {
+            get { return _MinutesBetweenRssUpdates; }
+            set
+            {
+                _MinutesBetweenRssUpdates = value;
+                OnPropertyChanged("MinutesBetweenRssUpdates");
+            }
+        }
+
+        public TorrentLabel[] Labels { get; set; }
 
         #endregion
 

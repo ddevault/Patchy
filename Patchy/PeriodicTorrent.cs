@@ -25,6 +25,7 @@ namespace Patchy
         public string CacheFilePath { get; set; }
         public PiecePicker PiecePicker { get; set; }
         public DateTime CompletionTime { get; set; }
+        public TorrentLabel Label { get; set; }
 
         public PeriodicTorrent(TorrentWrapper wrapper)
         {

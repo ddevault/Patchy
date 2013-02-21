@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using MonoTorrent;
 using MonoTorrent.BEncoding;

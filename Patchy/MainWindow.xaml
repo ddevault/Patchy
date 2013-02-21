@@ -91,7 +91,8 @@
                 <MenuItem Header="Source Code" Click="menuSourceCodeClicked"></MenuItem>
             </MenuItem>
         </Menu>
-        <ComboBox Grid.Row="0" Grid.ColumnSpan="3" Width="200" HorizontalAlignment="Right" SelectedIndex="0">
+        <ComboBox Grid.Row="0" Grid.ColumnSpan="3" Width="200" HorizontalAlignment="Right"
+                  SelectedIndex="0" SelectionChanged="labelListSelectionChanged" x:Name="labelList">
             <ComboBoxItem>All Torrents</ComboBoxItem>
             <ComboBoxItem>Downloading</ComboBoxItem>
             <ComboBoxItem>Seeding</ComboBoxItem>

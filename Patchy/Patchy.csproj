@@ -67,6 +67,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\lib\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -100,6 +103,10 @@
     <Compile Include="RssFeedEntry.cs" />
     <Compile Include="RssTorrentRule.cs" />
     <Compile Include="SettingsManager.cs" />
+    <Compile Include="TorrentLabel.cs" />
+    <Compile Include="TorrentLabelWindow.xaml.cs">
+      <DependentUpon>TorrentLabelWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UACHelper.cs" />
     <Compile Include="Validators\ValidDirectoryValidationRule.cs" />
     <Page Include="AddTorrentWindow.xaml">
@@ -135,6 +142,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PreferencesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TorrentLabelWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
