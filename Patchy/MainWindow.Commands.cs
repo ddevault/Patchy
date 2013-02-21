@@ -29,7 +29,23 @@ namespace Patchy
         private void ExecuteNew(object sender, ExecutedRoutedEventArgs e)
         {
             var window = new CreateTorrentWindow();
-            window.ShowDialog();
+            if (window.ShowDialog().Value)
+            {
+                var torrent = window.Torrent;
+                var wrapper = new TorrentWrapper(torrent, window.FilePath, new TorrentSettings());
+                var periodic = Client.AddTorrent(wrapper);
+                // Save torrent to cache
+                var cache = Path.Combine(SettingsManager.TorrentCachePath, torrent.TorrentPath);
+                if (File.Exists(cache))
+                    File.Delete(cache);
+                File.Copy(torrent.TorrentPath, cache);
+                periodic.CacheFilePath = cache;
+                periodic.UpdateInfo();
+                var serializer = new JsonSerializer();
+                using (var writer = new StreamWriter(Path.Combine(SettingsManager.TorrentCachePath,
+                    Path.GetFileNameWithoutExtension(periodic.CacheFilePath) + ".info")))
+                    serializer.Serialize(new JsonTextWriter(writer), periodic.TorrentInfo);
+            }
         }
 
         private void ExecuteOpen(object sender, ExecutedRoutedEventArgs e)

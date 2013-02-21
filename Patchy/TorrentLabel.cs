@@ -35,7 +35,6 @@ namespace Patchy
         {
             double hue, saturation, value;
             ColorToHSV(color, out hue, out saturation, out value);
-            Console.WriteLine(value);
             if (value <= 0.5)
                 return Colors.White;
             return Colors.Black;

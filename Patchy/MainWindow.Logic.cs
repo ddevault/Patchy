@@ -79,25 +79,6 @@ namespace Patchy
                 });
             Timer = new Timer(o => Dispatcher.Invoke(new Action(PeriodicUpdate)),
                 null, 1000, 1000);
-            InitializeIdleMonitor();
-        }
-
-        private HookProc KeyboardHook, MouseHook;
-        private void InitializeIdleMonitor()
-        {
-            LastIdleEvent = DateTime.Now;
-            KeyboardHook = (code, wParam, lParam) =>
-                {
-                    LastIdleEvent = DateTime.Now;
-                    return CallNextHookEx(IntPtr.Zero, code, wParam, lParam);
-                };
-            MouseHook = (code, wParam, lParam) =>
-                {
-                    LastIdleEvent = DateTime.Now;
-                    return CallNextHookEx(IntPtr.Zero, code, wParam, lParam);
-                };
-            SetWindowsHookEx(HookType.WH_KEYBOARD, KeyboardHook, IntPtr.Zero, Thread.CurrentThread.ManagedThreadId);
-            SetWindowsHookEx(HookType.WH_MOUSE, MouseHook, IntPtr.Zero, Thread.CurrentThread.ManagedThreadId);
         }
 
         public void AddTorrent(MagnetLink link, string path, bool suppressMessages = false)
