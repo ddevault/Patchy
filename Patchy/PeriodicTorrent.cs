@@ -25,7 +25,6 @@ namespace Patchy
         public string CacheFilePath { get; set; }
         public PiecePicker PiecePicker { get; set; }
         public DateTime CompletionTime { get; set; }
-        public TorrentLabel Label { get; set; }
 
         public PeriodicTorrent(TorrentWrapper wrapper)
         {
@@ -147,6 +146,17 @@ namespace Patchy
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private TorrentLabel _Label;
+        public TorrentLabel Label
+        {
+            get { return _Label; }
+            set
+            {
+                _Label = value;
+                OnPropertyChanged("Label");
+            }
+        }
 
         private PeriodicFile[] files;
         public PeriodicFile[] Files

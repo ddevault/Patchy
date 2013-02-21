@@ -3,7 +3,9 @@ using System.Linq;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using MonoTorrent.Client;
 using MonoTorrent.Common;
 using Newtonsoft.Json;
@@ -152,6 +154,55 @@ namespace Patchy
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 Client.MoveTorrent(torrent.Torrent, dialog.SelectedPath);
         }
+
+        private void ExecuteCreateLabel(object sender, ExecutedRoutedEventArgs e)
+        {
+            var window = new TorrentLabelWindow();
+            if (window.ShowDialog().Value)
+            {
+                var label = window.Label;
+                SettingsManager.Labels = SettingsManager.Labels.Concat(new[] { label }).ToArray();
+                SaveSettings();
+                AddLabel(label);
+            }
+        }
+
+        private void AddLabel(TorrentLabel label)
+        {
+            var comboItem = new ComboBoxItem
+            {
+                Content = label.Name,
+                Background = label.Brush,
+                Foreground = label.ForegroundBrush,
+                Tag = label
+            };
+            labelList.Items.Insert(labelList.Items.Count - 2, comboItem);
+            var menuItem = new MenuItem
+            {
+                Header = label.Name,
+                Background = label.Brush,
+                Foreground = label.ForegroundBrush,
+                Tag = label
+            };
+            menuItem.Click += setLabelOnTorrentClicked;
+            torrentGridContextMenuSetLabelMenu.Items.Insert(0, menuItem);
+            menuItem = new MenuItem
+            {
+                Header = label.Name,
+                Background = label.Brush,
+                Foreground = label.ForegroundBrush,
+                Tag = label
+            };
+            menuItem.Click += setLabelOnTorrentClicked;
+            menuSetLabelMenu.Items.Insert(0, menuItem);
+        }
+
+        private void setLabelOnTorrentClicked(object sender, RoutedEventArgs routedEventArgs)
+        {
+            var label = (TorrentLabel)(sender as MenuItem).Tag;
+            foreach (PeriodicTorrent torrent in torrentGrid.SelectedItems)
+                torrent.Label = label;
+        }
     }
 
     public static class Commands
@@ -163,5 +214,6 @@ namespace Patchy
         public static readonly RoutedUICommand PauseOrResumeTorrent = new RoutedUICommand("Pause or resume torrent", "PauseOrResumeTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand ResumeTorrent = new RoutedUICommand("Resume Torrent", "ResumeTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand MoveTorrent = new RoutedUICommand("Move Torrent", "MoveTorrent", typeof(MainWindow));
+        public static readonly RoutedUICommand CreateLabel = new RoutedUICommand("Create Label", "CreateLabel", typeof(MainWindow));
     }
 }

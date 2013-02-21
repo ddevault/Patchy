@@ -38,6 +38,7 @@
         <CommandBinding Command="pt:Commands.PauseOrResumeTorrent" Executed="ExecutePauseOrResumeTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.ResumeTorrent" Executed="ExecuteResumeTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.MoveTorrent" Executed="ExecuteMoveTorrent" CanExecute="CanExecuteSingleTorrentCommand"></CommandBinding>
+        <CommandBinding Command="pt:Commands.CreateLabel" Executed="ExecuteCreateLabel"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="Open" Key="O" Modifiers="Control"></KeyBinding>
@@ -81,6 +82,11 @@
                     <MenuItem Header="Torrent+files" Command="pt:Commands.RemoveTorrentWithFiles"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="Move" Command="pt:Commands.MoveTorrent"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="Set label" x:Name="menuSetLabelMenu">
+                    <Separator></Separator>
+                    <MenuItem Header="Create new label" Command="pt:Commands.CreateLabel"></MenuItem>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Options">
                 <MenuItem Header="Preferences" Command="pt:Commands.EditPreferences"></MenuItem>
@@ -97,7 +103,7 @@
             <ComboBoxItem>Downloading</ComboBoxItem>
             <ComboBoxItem>Seeding</ComboBoxItem>
             <Separator></Separator>
-            <ComboBoxItem>Add label...</ComboBoxItem>
+            <ComboBoxItem>Create new label</ComboBoxItem>
         </ComboBox>
         <!--Quick add-->
         <Grid Grid.Row="1" Grid.ColumnSpan="3" x:Name="quickAddGrid" Visibility="Collapsed" Background="#FFEC9B">
@@ -220,6 +226,11 @@
                             <MenuItem Command="pt:Commands.RemoveTorrentWithFiles" Header="Torrent and data" ></MenuItem>
                         </MenuItem>
                         <MenuItem Header="Move" Command="pt:Commands.MoveTorrent"></MenuItem>
+                        <Separator></Separator>
+                        <MenuItem Header="Set label" x:Name="torrentGridContextMenuSetLabelMenu">
+                            <Separator></Separator>
+                            <MenuItem Header="Create new label" Command="pt:Commands.CreateLabel"></MenuItem>
+                        </MenuItem>
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 <DataGrid.Columns>
@@ -229,11 +240,20 @@
                             <Binding Path="Index"></Binding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Name" Width="300">
+                    <DataGridTextColumn Header="Name" Width="250">
                         <DataGridTextColumn.Binding>
                             <Binding Path="Name"></Binding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Label" Width="50" SortMemberPath="Label">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding Path=Label.Brush}">
+                                    <TextBlock Foreground="{Binding Path=Label.ForegroundBrush}"  Text="{Binding Path=Label.Name}"></TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Size" Width="80">
                         <DataGridTextColumn.Binding>
                             <Binding Path="Size" Converter="{StaticResource ResourceKey=torrentSizeConverter}"></Binding>
