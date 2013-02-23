@@ -250,7 +250,7 @@ namespace Patchy
                 lowerFill.Visibility = Visibility.Collapsed;
                 lowerGrid.DataContext = torrentGrid.SelectedItem;
             }
-            clearLabelGlobalMenu.Visibility = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Any(t => t.Label != null) 
+            clearLabelGlobalMenu.Visibility = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Any(t => t.Label != null)
                 ? Visibility.Visible : Visibility.Collapsed;
             clearLabelGridMenu.Visibility = clearLabelGlobalMenu.Visibility;
         }

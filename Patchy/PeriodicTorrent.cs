@@ -28,6 +28,7 @@ namespace Patchy
         public PiecePicker PiecePicker { get; set; }
         public DateTime CompletionTime { get; set; }
         public TorrentInfo TorrentInfo { get; set; }
+        public bool PausedFromSeeding { get; set; }
 
         public PeriodicTorrent(TorrentWrapper wrapper)
         {
@@ -43,6 +44,7 @@ namespace Patchy
             wrapper.PieceManager.BlockReceived += PieceManager_BlockReceived;
             wrapper.PieceHashed += wrapper_PieceHashed;
             TorrentInfo.Path = Torrent.SavePath;
+            PausedFromSeeding = false;
         }
 
         void wrapper_PieceHashed(object sender, PieceHashedEventArgs e)
@@ -136,6 +138,17 @@ namespace Patchy
         {
             Torrent.ChangePicker(piecePicker);
             PiecePicker = piecePicker;
+        }
+
+        public void Pause()
+        {
+            PausedFromSeeding = State == TorrentState.Seeding;
+            Torrent.Pause();
+        }
+
+        public void Resume()
+        {
+            Torrent.Start();
         }
 
         /// <summary>

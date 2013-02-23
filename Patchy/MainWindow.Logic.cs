@@ -79,6 +79,7 @@ namespace Patchy
                 });
             Timer = new Timer(o => Dispatcher.Invoke(new Action(PeriodicUpdate)),
                 null, 1000, 1000);
+            IsIdle = false;
         }
 
         public void AddTorrent(MagnetLink link, string path, bool suppressMessages = false)
@@ -191,6 +192,41 @@ namespace Patchy
             }
             labelColumn.Visibility = Client.Torrents.Any(t => t.Label != null) ? Visibility.Visible : Visibility.Collapsed;
             UpdateNotifyIcon();
+            CheckIdleTime();
+        }
+
+        public static bool IsIdle { get; set; }
+        private void CheckIdleTime()
+        {
+            const int idleMilliseconds = 1000 * 60 * 5; // 5 minutes
+            if (SettingsManager.SeedOnlyWhenIdle)
+            {
+                LASTINPUTINFO info = new LASTINPUTINFO();
+                info.cbSize = (uint)Marshal.SizeOf(info);
+                info.dwTime = 0;
+                if (GetLastInputInfo(ref info))
+                {
+                    long idleTime = Environment.TickCount - info.dwTime;
+                    if (idleTime < idleMilliseconds)
+                    {
+                        foreach (var torrent in Client.Torrents)
+                        {
+                            if (torrent.State == TorrentState.Seeding)
+                                torrent.Pause();
+                        }
+                        IsIdle = false;
+                    }
+                    else if (idleTime > idleMilliseconds)
+                    {
+                        foreach (var torrent in Client.Torrents)
+                        {
+                            if (torrent.PausedFromSeeding)
+                                torrent.Resume();
+                        }
+                        IsIdle = true;
+                    }
+                }
+            }
         }
 
         private void ExecuteCommand(string command)
@@ -400,6 +436,16 @@ namespace Patchy
                         watcher.EnableRaisingEvents = true;
                         watcher.Created += WatcherOnCreated;
                         AutoWatchers.Add(watcher);
+                    }
+                    break;
+                case "SeedOnlyWhenIdle":
+                    if (!IsIdle && Client != null && Client.Torrents != null)
+                    {
+                        foreach (var torrent in Client.Torrents)
+                        {
+                            if (torrent.PausedFromSeeding)
+                                torrent.Resume();
+                        }
                     }
                     break;
             }

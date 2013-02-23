@@ -57,6 +57,7 @@ namespace Patchy
             AutoUpdate = true;
             PromptForSaveOnShellLinks = true;
             DeleteTorrentsAfterAdd = false;
+            SeedOnlyWhenIdle = false;
 
             // Downloads
             DefaultDownloadLocation = Path.Combine(
@@ -157,6 +158,17 @@ namespace Patchy
             {
                 _DeleteTorrentsAfterAdd = value;
                 OnPropertyChanged("DeleteTorrentsAfterAdd");
+            }
+        }
+
+        private bool _SeedOnlyWhenIdle;
+        public bool SeedOnlyWhenIdle
+        {
+            get { return _SeedOnlyWhenIdle; }
+            set
+            {
+                _SeedOnlyWhenIdle = value;
+                OnPropertyChanged("SeedOnlyWhenIdle");
             }
         }
 

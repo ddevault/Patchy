@@ -47,6 +47,7 @@
                         <TextBlock FontWeight="Bold">General</TextBlock>
                         <CheckBox IsChecked="{Binding PromptForSaveOnShellLinks}">Prompt on magnet links/torrent files</CheckBox>
                         <CheckBox IsChecked="{Binding DeleteTorrentsAfterAdd}">Delete .torrents after adding them</CheckBox>
+                        <CheckBox IsChecked="{Binding SeedOnlyWhenIdle}">Seed torrents only while idle</CheckBox>
                     </StackPanel>
                 </Grid>
             </TabItem>
