@@ -159,7 +159,7 @@ namespace Patchy
         {
             TorrentInfo.ElapsedTime = ElapsedTime;
             TorrentInfo.Label = Label;
-            TorrentInfo.Path = Directory.GetParent(Torrent.SavePath).FullName;
+            TorrentInfo.Path = Torrent.SavePath;
             TorrentInfo.TotalDownloaded = TotalDownloaded;
             TorrentInfo.TotalUploaded = TotalUploaded;
             TorrentInfo.FilePriority = new Priority[Torrent.Torrent.Files.Length];
