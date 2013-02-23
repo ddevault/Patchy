@@ -40,12 +40,18 @@ namespace Patchy
                             if (rule.Type == RssTorrentRule.RuleType.Title)
                             {
                                 if (rule.Regex.IsMatch(item.Title))
+                                {
+                                    item.MatchingRule = rule;
                                     newTorrents.Add(item);
+                                }
                             }
                             else if (rule.Type == RssTorrentRule.RuleType.CreatedBy)
                             {
                                 if (rule.Regex.IsMatch(item.Creator))
+                                {
+                                    item.MatchingRule = rule;
                                     newTorrents.Add(item);
+                                }
                             }
                         }
                     }
@@ -66,7 +72,9 @@ namespace Patchy
                         {
                             BalloonTorrent = null;
                             NotifyIcon.ShowBalloonTip(5000, "Added torrent from feed", torrentEntry.Title, System.Windows.Forms.ToolTipIcon.Info);
-                            AddTorrent(magnetLink, SettingsManager.DefaultDownloadLocation, true);
+                            var torrent = AddTorrent(magnetLink, torrentEntry.MatchingRule.DownloadPath, true);
+                            if (torrent != null)
+                                torrent.Label = torrentEntry.MatchingRule.Label;
                         }));
                 }
                 catch { }

@@ -88,7 +88,7 @@ namespace Patchy
             IsIdle = false;
         }
 
-        public void AddTorrent(MagnetLink link, string path, bool suppressMessages = false)
+        public PeriodicTorrent AddTorrent(MagnetLink link, string path, bool suppressMessages = false)
         {
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
@@ -103,7 +103,7 @@ namespace Patchy
             {
                 if (!suppressMessages)
                     MessageBox.Show(name + " has already been added.", "Error");
-                return;
+                return null;
             }
             var periodic = Client.AddTorrent(wrapper);
             periodic.CacheFilePath = cache;
@@ -112,9 +112,10 @@ namespace Patchy
             using (var writer = new StreamWriter(Path.Combine(SettingsManager.TorrentCachePath,
                 Path.GetFileNameWithoutExtension(periodic.CacheFilePath) + ".info")))
                 serializer.Serialize(new JsonTextWriter(writer), periodic.TorrentInfo);
+            return periodic;
         }
 
-        public void AddTorrent(Torrent torrent, string path, bool suppressMessages = false)
+        public PeriodicTorrent AddTorrent(Torrent torrent, string path, bool suppressMessages = false)
         {
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
@@ -123,7 +124,7 @@ namespace Patchy
             {
                 if (!suppressMessages)
                     MessageBox.Show(torrent.Name + " has already been added.", "Error");
-                return;
+                return null;
             }
             var periodic = Client.AddTorrent(wrapper);
             // Save torrent to cache
@@ -140,6 +141,7 @@ namespace Patchy
 
             if (SettingsManager.DeleteTorrentsAfterAdd)
                 File.Delete(torrent.TorrentPath);
+            return periodic;
         }
 
         private void PeriodicUpdate()

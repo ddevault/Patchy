@@ -105,6 +105,7 @@ namespace Patchy
             // Other
             RecentDownloadLocations = new string[0];
             Labels = new TorrentLabel[0];
+            TotalBytesDownloaded = TotalBytesUploaded = 0;
         }
 
         public void ForcePropertyUpdate()
@@ -509,6 +510,9 @@ namespace Patchy
         }
 
         public TorrentLabel[] Labels { get; set; }
+
+        public long TotalBytesUploaded { get; set; }
+        public long TotalBytesDownloaded { get; set; }
 
         #endregion
 

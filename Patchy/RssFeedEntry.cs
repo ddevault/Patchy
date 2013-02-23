@@ -11,5 +11,6 @@ namespace Patchy
         public DateTime PublishTime { get; set; }
         public string Link { get; set; }
         public string Creator { get; set; }
+        public RssTorrentRule MatchingRule { get; set; }
     }
 }
