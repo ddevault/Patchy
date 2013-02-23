@@ -53,10 +53,13 @@ namespace Patchy
                         File.Delete(SettingsManager.FastResumePath);
                     }
                     var torrents = Directory.GetFiles(SettingsManager.TorrentCachePath, "*.torrent");
+                    var toRemove = new List<string>(Directory.GetFiles(SettingsManager.TorrentCachePath, "*.info"));
                     var serializer = new JsonSerializer();
                     foreach (var torrent in torrents)
                     {
                         var path = Path.Combine(SettingsManager.TorrentCachePath, Path.GetFileNameWithoutExtension(torrent)) + ".info";
+                        if (toRemove.Contains(path))
+                            toRemove.Remove(path);
                         try
                         {
                             TorrentInfo info;
@@ -76,6 +79,9 @@ namespace Patchy
                         }
                         catch { }
                     }
+                    // Clean up abandoned .info files
+                    foreach (var file in toRemove)
+                        File.Delete(file);
                 });
             Timer = new Timer(o => Dispatcher.Invoke(new Action(PeriodicUpdate)),
                 null, 1000, 1000);
