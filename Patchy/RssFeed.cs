@@ -51,10 +51,13 @@ namespace Patchy
                 Entries = new List<RssFeedEntry>();
                 foreach (var item in channel.Elements("item"))
                 {
+                    string creator = null;
+                    if (item.Element(dc + "creator") != null)
+                        creator = item.Element(dc + "creator").Value;
                     Entries.Add(new RssFeedEntry
                     {
                         Title = HttpUtility.HtmlDecode(item.Element("title").Value),
-                        Creator = item.Element(dc + "creator").Value,
+                        Creator = creator,
                         Link = item.Element("link").Value,
                         PublishTime = DateTime.Parse(item.Element("pubDate").Value)
                     });
@@ -88,8 +91,6 @@ namespace Patchy
                 if (item.Element("link") == null)
                     return false;
                 if (item.Element("pubDate") == null)
-                    return false;
-                if (item.Element(dc + "creator") == null)
                     return false;
             }
             return true;

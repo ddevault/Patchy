@@ -27,5 +27,6 @@ namespace Patchy
 
         public RuleType Type { get; set; }
         public Regex Regex { get; set; }
+        public TorrentLabel Label { get; set; }
     }
 }
