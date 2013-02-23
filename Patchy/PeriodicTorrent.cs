@@ -39,11 +39,12 @@ namespace Patchy
             Name = Torrent.Name;
             Size = Torrent.Size;
             CompletedOnAdd = Torrent.Complete;
+            CompletionTime = DateTime.MinValue;
             NotifiedComplete = false;
             PiecePicker = new RandomisedPicker(new StandardPicker());
             wrapper.PieceManager.BlockReceived += PieceManager_BlockReceived;
             wrapper.PieceHashed += wrapper_PieceHashed;
-            TorrentInfo.Path = Torrent.SavePath;
+            TorrentInfo.Path = Torrent.Path;
             PausedFromSeeding = false;
         }
 
@@ -85,8 +86,6 @@ namespace Patchy
             UploadSpeed = Torrent.Monitor.UploadSpeed;
             if (Torrent.StartTime != DateTime.MinValue)
                 ElapsedTime = DateTime.Now - Torrent.StartTime;
-            else
-                ElapsedTime = TimeSpan.MinValue;
             if (Torrent.Complete)
                 EstimatedTime = CompletionTime - DateTime.Now;
             else
@@ -159,10 +158,11 @@ namespace Patchy
         {
             TorrentInfo.ElapsedTime = ElapsedTime;
             TorrentInfo.Label = Label;
-            TorrentInfo.Path = Torrent.SavePath;
+            TorrentInfo.Path = Torrent.Path;
             TorrentInfo.TotalDownloaded = TotalDownloaded;
             TorrentInfo.TotalUploaded = TotalUploaded;
             TorrentInfo.FilePriority = new Priority[Torrent.Torrent.Files.Length];
+            TorrentInfo.CompletionTime = CompletionTime;
             for (int i = 0; i < TorrentInfo.FilePriority.Length; i++)
                 TorrentInfo.FilePriority[i] = Torrent.Torrent.Files[i].Priority;
         }
@@ -171,6 +171,7 @@ namespace Patchy
         {
             TorrentInfo = info;
             Label = TorrentInfo.Label;
+            CompletionTime = TorrentInfo.CompletionTime;
         }
 
         protected internal virtual void OnPropertyChanged(string name)

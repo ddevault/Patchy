@@ -104,6 +104,12 @@ namespace Patchy
                 torrentFileRadioButton.IsChecked = true;
                 torrentFileTextBox.Text = torrentPath;
             }
+            Loaded += AddTorrentWindow_Loaded;
+        }
+
+        void AddTorrentWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Activate();
         }
 
         private void UpdateFileBrower(string path)

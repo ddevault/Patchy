@@ -169,7 +169,7 @@ namespace Patchy
                                     // Do torrent-specific replacements
                                     if (torrent.Files.Length == 1)
                                         command = command.Replace("%F", torrent.Files[0].File.FullPath);
-                                    command = command.Replace("%D", torrent.Torrent.SavePath)
+                                    command = command.Replace("%D", torrent.Torrent.Path)
                                         .Replace("%N", torrent.Torrent.Name)
                                         .Replace("%I", torrent.Torrent.InfoHash.ToHex());
                                     if (torrent.Torrent.TrackerManager.CurrentTracker != null)
@@ -186,7 +186,7 @@ namespace Patchy
                             // Do torrent-specific replacements
                             if (torrent.Files.Length == 1)
                                 command = command.Replace("%F", torrent.Files[0].File.FullPath);
-                            command = command.Replace("%D", torrent.Torrent.SavePath)
+                            command = command.Replace("%D", torrent.Torrent.Path)
                                 .Replace("%N", torrent.Torrent.Name)
                                 .Replace("%I", torrent.Torrent.InfoHash.ToHex());
                             if (torrent.Torrent.TrackerManager.CurrentTracker != null)

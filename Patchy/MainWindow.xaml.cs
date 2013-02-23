@@ -189,7 +189,7 @@ namespace Patchy
 
         private void NotifyIconBalloonTipClicked(object sender, EventArgs e)
         {
-            Process.Start("explorer", "\"" + BalloonTorrent.Torrent.SavePath + "\"");
+            Process.Start("explorer", "\"" + BalloonTorrent.Torrent.Path + "\"");
         }
 
         private void WindowClosing(object sender, CancelEventArgs e)
@@ -326,7 +326,7 @@ namespace Patchy
                 switch (action)
                 {
                     case DoubleClickAction.OpenFolder:
-                        Process.Start("explorer", "\"" + item.Torrent.SavePath + "\"");
+                        Process.Start("explorer", "\"" + item.Torrent.Path + "\"");
                         break;
                     case DoubleClickAction.OpenLargestFile:
                         var largest = item.Torrent.Torrent.Files.OrderByDescending(f => f.Length).FirstOrDefault();
@@ -346,7 +346,7 @@ namespace Patchy
         private void torrentGridOpenFolder(object sender, RoutedEventArgs e)
         {
             foreach (PeriodicTorrent torrent in torrentGrid.SelectedItems)
-                Process.Start("explorer", "\"" + torrent.Torrent.SavePath + "\"");
+                Process.Start("explorer", "\"" + torrent.Torrent.Path + "\"");
         }
 
         private void torrentGridCopyMagnentLink(object sender, RoutedEventArgs e)

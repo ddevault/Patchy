@@ -178,7 +178,7 @@ namespace Patchy
                             Path.GetFileNameWithoutExtension(torrent.CacheFilePath) + ".info"));
                     }
                     // Delete files
-                    Directory.Delete(torrent.Torrent.SavePath, true);
+                    Directory.Delete(torrent.Torrent.Path, true);
 
                     torrent.Torrent.Dispose();
                     Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Remove(torrent)));
@@ -206,10 +206,10 @@ namespace Patchy
         {
             Task.Factory.StartNew(() =>
                 {
-                    path = Path.Combine(path, Path.GetFileName(torrent.SavePath));
+                    path = Path.Combine(path, Path.GetFileName(torrent.Path));
                     if (!Directory.Exists(path))
                         Directory.CreateDirectory(path);
-                    var oldPath = torrent.SavePath;
+                    var oldPath = torrent.Path;
                     torrent.Stop();
                     while (torrent.State != TorrentState.Stopped) ;
                     torrent.MoveFiles(path, true);
@@ -236,6 +236,7 @@ namespace Patchy
         public string Name { get; private set; }
         public long Size { get; private set; }
         public bool IsMagnet { get; set; }
+        public string Path { get; set; }
 
         public TorrentWrapper(Torrent torrent, string savePath, TorrentSettings settings)
             : base(torrent, savePath, settings)
@@ -243,6 +244,7 @@ namespace Patchy
             Name = torrent.Name;
             Size = torrent.Size;
             IsMagnet = false;
+            Path = savePath;
         }
 
         public TorrentWrapper(MagnetLink magnetLink, string savePath, TorrentSettings settings, string torrentSave)

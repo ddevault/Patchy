@@ -387,7 +387,7 @@
                             <TextBlock Grid.Column="4" Grid.Row="1" Text="Name: "></TextBlock>
                             <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding Path=Name}"></TextBlock>
                             <TextBlock Grid.Column="4" Grid.Row="2" Text="Save path: "></TextBlock>
-                            <TextBlock Grid.Column="5" Grid.Row="2" Text="{Binding Path=Torrent.SavePath}"></TextBlock>
+                            <TextBlock Grid.Column="5" Grid.Row="2" Text="{Binding Path=Torrent.Path}"></TextBlock>
                             <TextBlock Grid.Column="4" Grid.Row="3" Text="Size: "></TextBlock>
                             <TextBlock Grid.Column="5" Grid.Row="3" Text="{Binding Size, Converter={StaticResource ResourceKey=torrentSizeConverter}}"></TextBlock>
                             <TextBlock Grid.Column="4" Grid.Row="4" Text="Creation Date: "></TextBlock>
