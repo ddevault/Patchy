@@ -39,6 +39,7 @@
         <CommandBinding Command="pt:Commands.ResumeTorrent" Executed="ExecuteResumeTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.MoveTorrent" Executed="ExecuteMoveTorrent" CanExecute="CanExecuteSingleTorrentCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.CreateLabel" Executed="ExecuteCreateLabel"></CommandBinding>
+        <CommandBinding Command="pt:Commands.ClearLabel" Executed="ExecuteClearLabel"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="Open" Key="O" Modifiers="Control"></KeyBinding>
@@ -86,6 +87,8 @@
                 <MenuItem Header="Set label" x:Name="menuSetLabelMenu">
                     <Separator></Separator>
                     <MenuItem Header="Create new label" Command="pt:Commands.CreateLabel"></MenuItem>
+                    <MenuItem Header="Clear label" x:Name="clearLabelGlobalMenu" Command="pt:Commands.ClearLabel"
+                              Visibility="Collapsed"></MenuItem>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Options">
@@ -230,11 +233,22 @@
                         <MenuItem Header="Set label" x:Name="torrentGridContextMenuSetLabelMenu">
                             <Separator></Separator>
                             <MenuItem Header="Create new label" Command="pt:Commands.CreateLabel"></MenuItem>
+                            <MenuItem Header="Clear label" Command="pt:Commands.ClearLabel" x:Name="clearLabelGridMenu"></MenuItem>
                         </MenuItem>
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <!--It would be nice if we could assign these elsewhere-->
+                    <DataGridTemplateColumn Header="Label" Width="Auto" SortMemberPath="Label" x:Name="labelColumn"
+                                            Visibility="Collapsed">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding Path=Label.Brush}" BorderThickness="0" CornerRadius="5" Width="50">
+                                    <TextBlock Foreground="{Binding Path=Label.ForegroundBrush}"  Text="{Binding Path=Label.Name}" TextAlignment="Center"></TextBlock>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="#">
                         <DataGridTextColumn.Binding>
                             <Binding Path="Index"></Binding>
@@ -245,15 +259,6 @@
                             <Binding Path="Name"></Binding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn Header="Label" Width="50" SortMemberPath="Label">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Border Background="{Binding Path=Label.Brush}" BorderThickness="0" CornerRadius="5">
-                                    <TextBlock Foreground="{Binding Path=Label.ForegroundBrush}"  Text="{Binding Path=Label.Name}" TextAlignment="Center"></TextBlock>
-                                </Border>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Size" Width="80">
                         <DataGridTextColumn.Binding>
                             <Binding Path="Size" Converter="{StaticResource ResourceKey=torrentSizeConverter}"></Binding>

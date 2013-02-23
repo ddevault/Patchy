@@ -189,6 +189,7 @@ namespace Patchy
                     }
                 }
             }
+            labelColumn.Visibility = Client.Torrents.Any(t => t.Label != null) ? Visibility.Visible : Visibility.Collapsed;
             UpdateNotifyIcon();
         }
 

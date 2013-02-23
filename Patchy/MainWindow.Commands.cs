@@ -183,6 +183,12 @@ namespace Patchy
             }
         }
 
+        private void ExecuteClearLabel(object sender, ExecutedRoutedEventArgs e)
+        {
+            foreach (PeriodicTorrent torrent in torrentGrid.SelectedItems)
+                torrent.Label = null;
+        }
+
         private void AddLabel(TorrentLabel label)
         {
             var comboItem = new ComboBoxItem
@@ -231,5 +237,6 @@ namespace Patchy
         public static readonly RoutedUICommand ResumeTorrent = new RoutedUICommand("Resume Torrent", "ResumeTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand MoveTorrent = new RoutedUICommand("Move Torrent", "MoveTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand CreateLabel = new RoutedUICommand("Create Label", "CreateLabel", typeof(MainWindow));
+        public static readonly RoutedUICommand ClearLabel = new RoutedUICommand("Clear Label", "ClearLabel", typeof(MainWindow));
     }
 }
