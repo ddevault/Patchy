@@ -174,7 +174,6 @@
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"></RowDefinition>
                                             <RowDefinition Height="Auto"></RowDefinition>
-                                            <RowDefinition Height="Auto"></RowDefinition>
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="{Binding Title}" FontSize="14" HorizontalAlignment="Stretch"
                                                    TextTrimming="CharacterEllipsis" MaxWidth="250">
@@ -186,7 +185,16 @@
                                             <TextBlock Text="By "></TextBlock>
                                             <TextBlock Text="{Binding Creator}"></TextBlock>
                                         </StackPanel>
-                                        <Button Click="rssEntryAddClicked" Grid.Row="2" Tag="{Binding}">Add Torrent</Button>
+                                        <Button Click="rssEntryAddClicked" Grid.Row="2" Tag="{Binding}"
+                                                OverridesDefaultStyle="True" HorizontalAlignment="Right"
+                                                VerticalAlignment="Top" Width="16" Height="16"
+                                                Content="Add Torrent" Grid.ColumnSpan="2">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <Image Source="Images/add.png" Cursor="Hand" Width="16" Height="16"></Image>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

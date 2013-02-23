@@ -62,3 +62,5 @@ Patchy uses the permissive [MIT license](http://www.opensource.org/licenses/mit-
 * You are not restricted on usage of Patchy; commercial, private, etc, all fine.
 * The developers are not liable for what you do with it.
 * Patchy is provided "as is" with no warranty.
+
+Some icons used in the Patchy UI are provided by http://pixel-mixer.com.

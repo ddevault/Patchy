@@ -78,7 +78,15 @@ namespace Patchy
             var button = (sender as Button);
             var entry = (RssFeedEntry)button.Tag;
             var magnetLink = new MagnetLink(entry.Link);
-            AddTorrent(magnetLink, SettingsManager.DefaultDownloadLocation);
+            if (!SettingsManager.PromptForSaveOnShellLinks)
+                AddTorrent(magnetLink, SettingsManager.DefaultDownloadLocation);
+            else
+            {
+                var window = new AddTorrentWindow(SettingsManager);
+                window.MagnetLink = magnetLink;
+                if (window.ShowDialog().Value)
+                    AddTorrent(window.MagnetLink, window.DestinationPath);
+            }
         }
     }
 }

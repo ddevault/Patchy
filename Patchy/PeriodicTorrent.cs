@@ -97,7 +97,7 @@ namespace Patchy
             }
             TotalDownloaded = Torrent.Monitor.DataBytesDownloaded;
             TotalUploaded = Torrent.Monitor.DataBytesUploaded;
-            Ratio = (double)Torrent.Monitor.DataBytesUploaded / Torrent.Monitor.DataBytesDownloaded;
+            Ratio = (double)TotalDownloaded / TotalUploaded;
             if ((Torrent.State == TorrentState.Downloading || Torrent.State == TorrentState.Seeding) && files == null)
             {
                 files = new PeriodicFile[Torrent.Torrent.Files.Length];
@@ -161,10 +161,13 @@ namespace Patchy
             TorrentInfo.Path = Torrent.Path;
             TorrentInfo.TotalDownloaded = TotalDownloaded;
             TorrentInfo.TotalUploaded = TotalUploaded;
-            TorrentInfo.FilePriority = new Priority[Torrent.Torrent.Files.Length];
             TorrentInfo.CompletionTime = CompletionTime;
-            for (int i = 0; i < TorrentInfo.FilePriority.Length; i++)
-                TorrentInfo.FilePriority[i] = Torrent.Torrent.Files[i].Priority;
+            if (Torrent.Torrent != null && Torrent.Torrent.Files != null)
+            {
+                TorrentInfo.FilePriority = new Priority[Torrent.Torrent.Files.Length];
+                for (int i = 0; i < TorrentInfo.FilePriority.Length; i++)
+                    TorrentInfo.FilePriority[i] = Torrent.Torrent.Files[i].Priority;
+            }
         }
 
         public void LoadInfo(TorrentInfo info)
