@@ -19,6 +19,7 @@
             <c:TorrentETADateTimeConverter x:Key="torrentEtaDateTimeConverter"></c:TorrentETADateTimeConverter>
             <c:TorrentCreationDateConverter x:Key="torrentCreationDateConverter"></c:TorrentCreationDateConverter>
             <c:PriorityToIndexConverter x:Key="priorityToIndexConverter"></c:PriorityToIndexConverter>
+            <c:NetworkSpeedConverter x:Key="networkSpeedConverter"></c:NetworkSpeedConverter>
             <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"></BooleanToVisibilityConverter>
             <ObjectDataProvider x:Key="priorityDataProvider" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
                 <ObjectDataProvider.MethodParameters>
@@ -401,33 +402,6 @@
                         GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="fileListGrid" IsReadOnly="True"
                         EnableRowVirtualization="True" VerticalScrollBarVisibility="Auto"
                         ContextMenuOpening="fileListGridContextMenuOpening">
-                        <!--<DataGrid.GroupStyle>
-                            <GroupStyle>
-                                <GroupStyle.HeaderTemplate>
-                                    <DataTemplate>
-                                        <StackPanel>
-                                            <TextBlock Text="Foo" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </GroupStyle.HeaderTemplate>
-                                <GroupStyle.ContainerStyle>
-                                    <Style TargetType="{x:Type GroupItem}">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                    <Expander IsExpanded="True">
-                                                        <Expander.Header>
-                                                            <TextBlock Text="Bar" />
-                                                        </Expander.Header>
-                                                        <ItemsPresenter />
-                                                    </Expander>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </GroupStyle.ContainerStyle>
-                            </GroupStyle>
-                        </DataGrid.GroupStyle>-->
                         <DataGrid.ContextMenu>
                             <ContextMenu x:Name="fileListGridContextMenu">
                                 <MenuItem Header="Open" Click="fileListGridOpenFile"></MenuItem>
@@ -523,7 +497,28 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
-                <TabItem Header="Options"></TabItem>
+                <TabItem Header="Options" DataContext="{Binding Path=Torrent.Settings}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Margin="3" Grid.Column="0">
+                            <TextBlock FontWeight="Bold" Text="Max Connections"></TextBlock>
+                            <TextBox Text="{Binding MaxConnections}"></TextBox>
+                            <TextBlock FontWeight="Bold" Text="Max Download Speed (Kb/s)"></TextBlock>
+                            <TextBox Text="{Binding MaxDownloadSpeed, Converter={StaticResource networkSpeedConverter}}"></TextBox>
+                            <TextBlock FontWeight="Bold" Text="Max Upload Speed (Kb/s)"></TextBlock>
+                            <TextBox Text="{Binding MaxUploadSpeed, Converter={StaticResource networkSpeedConverter}}"></TextBox>
+                        </StackPanel>
+                        <StackPanel Margin="3" Grid.Column="1">
+                            <TextBlock FontWeight="Bold" Text="Upload slots"></TextBlock>
+                            <TextBox Text="{Binding UploadSlots}"></TextBox>
+                            <CheckBox IsChecked="{Binding UseDht}">Enable DHT</CheckBox>
+                            <CheckBox IsChecked="{Binding EnablePeerExchange}">Enable Peer Exchange</CheckBox>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
             </TabControl>
             <Rectangle Fill="LightGray" Opacity="0.5" x:Name="lowerFill"></Rectangle>
         </Grid>
