@@ -195,10 +195,30 @@ namespace Patchy
                         }
                     }
                 }
+                CheckTorrentSeedingGuideliens(torrent);
             }
             labelColumn.Visibility = Client.Torrents.Any(t => t.Label != null) ? Visibility.Visible : Visibility.Collapsed;
             UpdateNotifyIcon();
             CheckIdleTime();
+        }
+
+        private void CheckTorrentSeedingGuideliens(PeriodicTorrent torrent)
+        {
+            if (torrent.State == TorrentState.Seeding)
+            {
+                if (SettingsManager.HoursToSeed != 0 &&
+                    (DateTime.Now - torrent.CompletionTime).TotalHours > SettingsManager.HoursToSeed)
+                {
+                    torrent.Pause();
+                    return;
+                }
+                if (SettingsManager.TargetSeedRatio != 0 &&
+                    torrent.Ratio >= SettingsManager.TargetSeedRatio)
+                {
+                    torrent.Pause();
+                    return;
+                }
+            }
         }
 
         public static bool IsIdle { get; set; }

@@ -78,7 +78,7 @@ namespace Patchy
             if (Torrent.State == TorrentState.Seeding && (State == TorrentState.Stopped || State == TorrentState.Hashing))
                 CompletedOnAdd = true;
             State = Torrent.State;
-            if (Torrent.Progress == 100 && Progress != 100)
+            if (Torrent.Progress == 100 && CompletionTime == DateTime.MinValue)
                 CompletionTime = DateTime.Now;
             Progress = Torrent.Progress;
             Complete = Torrent.Complete;
