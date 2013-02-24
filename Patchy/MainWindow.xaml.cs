@@ -249,6 +249,10 @@ namespace Patchy
             {
                 lowerFill.Visibility = Visibility.Collapsed;
                 lowerGrid.DataContext = torrentGrid.SelectedItem;
+                if ((torrentGrid.SelectedItem as PeriodicTorrent).Complete)
+                    estimatedCompletionTextBlock.Text = "Completed at:";
+                else
+                    estimatedCompletionTextBlock.Text = "Estimated completion:";
             }
             clearLabelGlobalMenu.Visibility = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Any(t => t.Label != null)
                 ? Visibility.Visible : Visibility.Collapsed;

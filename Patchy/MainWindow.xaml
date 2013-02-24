@@ -357,7 +357,7 @@
                                 <RowDefinition Height="Auto"></RowDefinition>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="125"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -368,7 +368,7 @@
                             <TextBlock FontWeight="Bold" FontSize="14">Transfer</TextBlock>
                             <TextBlock Grid.Row="1" Text="Elapsed time: "></TextBlock>
                             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ElapsedTime, Converter={StaticResource ResourceKey=timeSpanConverter}}"></TextBlock>
-                            <TextBlock Grid.Row="2" Text="Estimated completion: "></TextBlock>
+                            <TextBlock Grid.Row="2" Text="Estimated completion: " x:Name="estimatedCompletionTextBlock"></TextBlock>
                             <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding EstimatedTime, Converter={StaticResource ResourceKey=torrentEtaDateTimeConverter}}"></TextBlock>
                             <TextBlock Grid.Row="3" Text="Download speed: "></TextBlock>
                             <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding DownloadSpeed, Converter={StaticResource ResourceKey=torrentSpeedConverter}}"></TextBlock>
