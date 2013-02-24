@@ -21,7 +21,7 @@ namespace Patchy.Converters
             else if (Math.Abs(time.TotalSeconds) < (60 * 5))
                 result = string.Format("{0}:{1:00}", Math.Abs(time.Minutes), Math.Abs(time.Seconds));
             else if (Math.Abs(time.TotalMinutes) < 60)
-                result = time.Minutes + " mins";
+                result = Math.Abs(time.Minutes) + " mins";
             else if (Math.Abs(time.TotalHours) < 24)
                 result = string.Format("{0}:{1:00}", Math.Abs(time.Hours), Math.Abs(time.Minutes));
             else
