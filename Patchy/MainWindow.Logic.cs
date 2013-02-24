@@ -120,6 +120,11 @@ namespace Patchy
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             var wrapper = new TorrentWrapper(torrent, path, new TorrentSettings());
+            if (torrent.IsPrivate)
+            {
+                wrapper.Settings.UseDht = false;
+                wrapper.Settings.EnablePeerExchange = false;
+            }
             if (Client.Torrents.Any(t => t.Torrent.InfoHash == wrapper.InfoHash))
             {
                 if (!suppressMessages)
