@@ -28,11 +28,48 @@
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
                     </Grid.RowDefinitions>
                     <TextBlock>This installer will walk you through the process of installing Patchy.</TextBlock>
                     <TextBlock Grid.Row="1" HorizontalAlignment="Stretch" TextWrapping="Wrap">Patchy is free and open source, distributed under the terms of
                         the MIT license, shown below. If you agree to these terms (they're not so bad), click "Next" to begin the install.</TextBlock>
                     <TextBox Height="150" Grid.Row="2" x:Name="licenseText" TextWrapping="Wrap"></TextBox>
+                    <Button Content="Browse source code" Cursor="Hand" Grid.Row="3" Click="browseSourceClick">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <TextBlock TextDecorations="Underline">
+                                    <ContentPresenter />
+                                </TextBlock>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Foreground" Value="Blue" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter Property="Foreground" Value="Red" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </TabItem>
+            <TabItem Visibility="Collapsed"> <!--Step two, install location-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock TextWrapping="Wrap" Grid.ColumnSpan="2">Please select a location to install Patchy to:</TextBlock>
+                    <TextBox Grid.Row="1" x:Name="installPathTextBox"></TextBox>
+                    <Button Grid.Column="1" Grid.Row="1" Width="20" Click="browseInstallLocationClick">...</Button>
+                    <TextBlock Grid.Row="2" Grid.ColumnSpan="2" TextWrapping="Wrap">If you're installing an update, this should be set to the current install location. Leave it so.</TextBlock>
                 </Grid>
             </TabItem>
         </TabControl>
@@ -42,8 +79,8 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Width="100" Margin="3" IsEnabled="False">Previous</Button>
-            <Button Grid.Column="2" Width="100" Margin="3">Next</Button>
+            <Button Grid.Column="1" Width="100" Margin="3" IsEnabled="False" x:Name="previousButton" Click="previousButtonClick">Previous</Button>
+            <Button Grid.Column="2" Width="100" Margin="3" x:Name="nextButton" Click="nextButtonClick">Next</Button>
         </Grid>
     </Grid>
 </Window>
