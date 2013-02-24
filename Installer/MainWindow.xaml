@@ -1,0 +1,41 @@
+﻿<Window x:Class="Installer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="500" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Image Source="Images/patchy.png" Grid.RowSpan="2" Width="70" Height="70"></Image>
+            <TextBlock FontSize="18" Grid.Column="1">Patchy</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="1">An open-source bittorrent client with all of the features and none of the ads</TextBlock>
+        </Grid>
+        <TabControl Grid.Row="1" x:Name="progressTabs" BorderThickness="0" Background="Transparent">
+            <TabItem Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock>This installer will walk you through the process of installing Patchy.</TextBlock>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Width="100" Margin="3" IsEnabled="False">Previous</Button>
+            <Button Grid.Column="2" Width="100" Margin="3">Next</Button>
+        </Grid>
+    </Grid>
+</Window>

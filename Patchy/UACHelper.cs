@@ -1,9 +1,9 @@
-﻿
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System;
 using System.Diagnostics;
 using System.Security.Principal;
 using Microsoft.Win32;
+
 namespace Patchy
 {
     public static class UacHelper
