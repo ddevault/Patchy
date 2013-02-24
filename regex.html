@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Patchy - A bittorrent client for Windows</title>
+        <link rel="stylesheet" type="text/css" href="css/base.css" />
+        <link rel="shortcut icon" href="images/patchy.ico" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="js/images.js"></script>
+    </head>
+    <body>
+        <div id="content">
+            <h1>Patchy for Windows</h1>
+            <h2>An open-source bittorrent client with all of the features and none of the ads</h2>
+            <div class="content-body">
+                <h3>Regular Expressions</h3>
+                <p>Patchy supports adding torrents based on <a href="http://en.wikipedia.org/wiki/Regular_expression">regular
+                expressions</a> in RSS feeds. These are powerful expressions that allow you to be quite specific with which
+                torrents are added and which are discarded. It is suggested that you spend some time reading about them on
+                <a href="http://en.wikipedia.org/wiki/Regular_expression">Wikipedia</a>, or through other sources, but here's
+                a really simple crash course:</p>
+                <p>Say you want to add new episodes of the TV show "foo bar" as they're released. You know the torrent name
+                will be something like "Foo Bar S01E<strong>#</strong>". The following regex would match it:</p>
+                <pre>Foo Bar S01E[0-9]+</pre>
+                <p>This looks for "Foo Bar SE01E", and then at least one character between 0 and 9 (<code>[0-9]+</code>).</p>
+                <p>Another example: you want the latest album by "That One Group". You know the torrent will be named something
+                like "That One Group - <strong>Album Name</strong>". You could use this regex:</p>
+                <pre>That One Group - [A-Z ]+</pre>
+                <p>This will match on "That One Group - ", and then at least one letter or space (<code>[A-Z ]+</code>).</p>
+                <p>If you're in doubt, regex will also match most regular old strings. So, "Foo Bar" would match anything with
+                "Foo Bar" in the title. There are a few special characters you cannot use - see the Wikipedia page. You can
+                still use these characters if you escape them, like this: "\."</p>
+                <p>Notes:</p>
+                <ul>
+                    <li>Patch regexes are not case-sensitive</li>
+                    <li>^ and $ are not added automatically</li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
