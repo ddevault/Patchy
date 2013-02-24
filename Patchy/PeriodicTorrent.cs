@@ -162,6 +162,12 @@ namespace Patchy
             TorrentInfo.TotalDownloaded = TotalDownloaded;
             TorrentInfo.TotalUploaded = TotalUploaded;
             TorrentInfo.CompletionTime = CompletionTime;
+            TorrentInfo.EnableDHT = Torrent.Settings.UseDht;
+            TorrentInfo.EnablePeerExchange = Torrent.Settings.EnablePeerExchange;
+            TorrentInfo.MaxConnections = Torrent.Settings.MaxConnections;
+            TorrentInfo.MaxDownloadSpeed = Torrent.Settings.MaxDownloadSpeed;
+            TorrentInfo.MaxUploadSpeed = Torrent.Settings.MaxUploadSpeed;
+            TorrentInfo.UploadSlots = Torrent.Settings.UploadSlots;
             if (Torrent.Torrent != null && Torrent.Torrent.Files != null)
             {
                 TorrentInfo.FilePriority = new Priority[Torrent.Torrent.Files.Length];
@@ -175,6 +181,12 @@ namespace Patchy
             TorrentInfo = info;
             Label = TorrentInfo.Label;
             CompletionTime = TorrentInfo.CompletionTime;
+            Torrent.Settings.MaxConnections = info.MaxConnections;
+            Torrent.Settings.MaxDownloadSpeed = info.MaxDownloadSpeed;
+            Torrent.Settings.MaxUploadSpeed = info.MaxUploadSpeed;
+            Torrent.Settings.UploadSlots = info.UploadSlots;
+            Torrent.Settings.UseDht = info.EnableDHT;
+            Torrent.Settings.EnablePeerExchange = info.EnablePeerExchange;
         }
 
         protected internal virtual void OnPropertyChanged(string name)

@@ -21,5 +21,11 @@ namespace Patchy
         public long TotalUploaded { get; set; }
         public string Path { get; set; }
         public Priority[] FilePriority { get; set; }
+        public bool EnableDHT { get; set; }
+        public bool EnablePeerExchange { get; set; }
+        public int MaxUploadSpeed { get; set; }
+        public int MaxDownloadSpeed { get; set; }
+        public int UploadSlots { get; set; }
+        public int MaxConnections { get; set; }
     }
 }
