@@ -213,6 +213,11 @@ namespace Patchy
             Settings.DoubleClickDownloading = (DoubleClickAction)downloadingTorrentDoubleClickComboBox.SelectedIndex;
         }
 
+        private void randomizeIncomingPortClicked(object sender, RoutedEventArgs e)
+        {
+            Settings.IncomingPort = new Random().Next(0, 65536);
+        }
+
         #region RSS Manager
 
         private void addNewFeedButtonClick(object sender, RoutedEventArgs e)

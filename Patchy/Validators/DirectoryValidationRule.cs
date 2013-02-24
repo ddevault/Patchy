@@ -8,9 +8,9 @@ using System.Windows.Controls;
 
 namespace Patchy.Validators
 {
-    public class ValidDirectoryValidationRule : ValidationRule
+    public class DirectoryValidationRule : ValidationRule
     {
-        public ValidDirectoryValidationRule()
+        public DirectoryValidationRule()
         {
             AllowEmpty = true;
         }

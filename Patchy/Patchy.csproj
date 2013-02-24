@@ -110,7 +110,8 @@
       <DependentUpon>TorrentLabelWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UACHelper.cs" />
-    <Compile Include="Validators\ValidDirectoryValidationRule.cs" />
+    <Compile Include="Validators\TcpPortValidationRule.cs" />
+    <Compile Include="Validators\DirectoryValidationRule.cs" />
     <Page Include="AddTorrentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
