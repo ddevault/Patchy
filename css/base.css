@@ -82,9 +82,9 @@ h2:after {
 }
 
 .outset {
-    width: 1200px;
+    width: 1172px;
     position: relative;
-    left: -200px;
+    left: -186px;
     margin-top: 20px;
     box-shadow: 0 0 5px 2px #000;
     height: 600px;
