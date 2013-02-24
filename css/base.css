@@ -29,6 +29,15 @@ h1 {
     text-align: center;
 }
 
+h1 a {
+    text-decoration: none;
+    color: #000;
+}
+
+h1 a:hover {
+    text-decoration: underline;
+}
+
 h2 {
     text-align: center;
     font-style: italic;
