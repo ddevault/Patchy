@@ -12,18 +12,23 @@ namespace Patchy.Converters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             TimeSpan time = (TimeSpan)value;
+            string result = string.Empty;
 
             if (time == TimeSpan.MaxValue || time == TimeSpan.MinValue)
-                return "n/a";
-            if (time.TotalSeconds < 60)
-                return (int)time.TotalSeconds + " secs";
-            if (time.TotalSeconds < (60 * 5))
-                return string.Format("{0}:{1:00}", time.Minutes, time.Seconds);
-            if (time.TotalMinutes < 60)
-                return time.Minutes + " mins";
-            if (time.TotalHours < 24)
-                return string.Format("{0}:{1:00}", time.Hours, time.Minutes);
-            return string.Format("{0} days", (int)time.TotalDays);
+                result = "n/a";
+            else if (Math.Abs(time.TotalSeconds) < 60)
+                result = Math.Abs((int)time.TotalSeconds) + " secs";
+            else if (Math.Abs(time.TotalSeconds) < (60 * 5))
+                result = string.Format("{0}:{1:00}", Math.Abs(time.Minutes), Math.Abs(time.Seconds));
+            else if (Math.Abs(time.TotalMinutes) < 60)
+                result = time.Minutes + " mins";
+            else if (Math.Abs(time.TotalHours) < 24)
+                result = string.Format("{0}:{1:00}", Math.Abs(time.Hours), Math.Abs(time.Minutes));
+            else
+                result = string.Format("{0} days", Math.Abs((int)time.TotalDays));
+            if (time.Ticks < 0)
+                return "-" + result;
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
