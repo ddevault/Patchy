@@ -46,6 +46,17 @@ namespace Patchy
                 encryptionSettingsComboBox.SelectedIndex = 2;
             seedingTorrentDoubleClickComboBox.SelectedIndex = (int)Settings.DoubleClickSeeding;
             downloadingTorrentDoubleClickComboBox.SelectedIndex = (int)Settings.DoubleClickDownloading;
+            foreach (var label in Settings.Labels)
+            {
+                var comboItem = new ComboBoxItem
+                {
+                    Content = label.Name,
+                    Background = label.Brush,
+                    Foreground = label.ForegroundBrush,
+                    Tag = label
+                };
+                rssLabelComboBox.Items.Add(comboItem);
+            }
         }
 
         private void InitializeRegistryBoundItems()
@@ -247,6 +258,14 @@ namespace Patchy
             var feed = (RssFeed)feedListView.SelectedItem;
             if (string.IsNullOrEmpty(ruleRegexTextBox.Text))
                 return;
+            var path = Settings.DefaultDownloadLocation;
+            if (rssOtherLocationRadioButton.IsChecked.Value)
+                path = rssSaveDirectoryTextBox.Text;
+            if (!Directory.Exists(path))
+            {
+                MessageBox.Show("The specified directory does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             Regex regex;
             try
             {
@@ -263,7 +282,10 @@ namespace Patchy
                 MessageBox.Show("This rule has already been added.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            feed.TorrentRules.Add(new RssTorrentRule(type, regex));
+            var rule = new RssTorrentRule(type, regex);
+            rule.Label = (rssLabelComboBox.SelectedItem as ComboBoxItem).Tag as TorrentLabel;
+            rule.DownloadPath = path;
+            feed.TorrentRules.Add(rule);
             ruleRegexTextBox.Text = string.Empty;
         }
 
@@ -280,6 +302,12 @@ namespace Patchy
             var feeds = new List<RssFeed>(feedListView.SelectedItems.Cast<RssFeed>());
             foreach (var feed in feeds)
                 Settings.RssFeeds = Settings.RssFeeds.Where(f => f != feed).ToArray();
+            Settings.OnPropertyChanged("RssFeeds");
+        }
+
+        private void regexHelpButtonClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://sircmpwn.github.com/Patchy/regex.html");
         }
 
         #endregion

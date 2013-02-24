@@ -5,7 +5,7 @@
         xmlns:mt="clr-namespace:MonoTorrent.Common;assembly=MonoTorrent"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:pt="clr-namespace:Patchy"
-        Title="Patchy" Height="600" Width="1200" Icon="Images/patchy.ico"
+        Title="Patchy" Height="600" Width="1122" Icon="Images/patchy.ico"
         Closing="WindowClosing" Closed="WindowClosed">
     <Window.Resources>
         <ResourceDictionary>
@@ -169,7 +169,7 @@
                     <ItemsControl x:Name="rssListView" BorderThickness="0" Grid.Row="1" Grid.ColumnSpan="2">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderBrush="LightGray" Margin="3" BorderThickness="2" CornerRadius="3">
+                                <Border BorderBrush="LightGray" Background="#eee" Margin="3" BorderThickness="2" CornerRadius="3">
                                     <Grid Margin="3">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"></RowDefinition>
