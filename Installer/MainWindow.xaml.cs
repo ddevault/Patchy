@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,9 @@ namespace Installer
         public MainWindow()
         {
             InitializeComponent();
+            var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Installer.LICENSE"));
+            licenseText.Text = reader.ReadToEnd();
+            reader.Close();
             Loaded += MainWindow_Loaded;
         }
 

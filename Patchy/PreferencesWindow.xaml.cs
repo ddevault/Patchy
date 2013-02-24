@@ -36,6 +36,7 @@ namespace Patchy
             InitializeRegistryBoundItems();
             var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Patchy.LICENSE"));
             licenseText.Text = reader.ReadToEnd();
+            reader.Close();
             Settings = manager;
             DataContext = Settings;
             if (Settings.EncryptionSettings == EncryptionTypes.PlainText)

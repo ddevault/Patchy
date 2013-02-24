@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Installer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="500" Width="500">
+        Title="Patchy Installer" Icon="Images/patchy.ico" Height="500" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -22,10 +22,18 @@
             <TextBlock Grid.Row="1" Grid.Column="1">An open-source bittorrent client with all of the features and none of the ads</TextBlock>
         </Grid>
         <TabControl Grid.Row="1" x:Name="progressTabs" BorderThickness="0" Background="Transparent">
-            <TabItem Visibility="Collapsed">
-                <StackPanel>
+            <TabItem Visibility="Collapsed"> <!--Step one, agree to terms-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
                     <TextBlock>This installer will walk you through the process of installing Patchy.</TextBlock>
-                </StackPanel>
+                    <TextBlock Grid.Row="1" HorizontalAlignment="Stretch" TextWrapping="Wrap">Patchy is free and open source, distributed under the terms of
+                        the MIT license, shown below. If you agree to these terms (they're not so bad), click "Next" to begin the install.</TextBlock>
+                    <TextBox Height="150" Grid.Row="2" x:Name="licenseText" TextWrapping="Wrap"></TextBox>
+                </Grid>
             </TabItem>
         </TabControl>
         <Grid Grid.Row="2">
