@@ -19,9 +19,10 @@
                 <a href="http://en.wikipedia.org/wiki/Regular_expression">Wikipedia</a>, or other sources, but here's a really
                 simple crash course:</p>
                 <p>Say you want to add new episodes of the TV show "foo bar" as they're released. You know the torrent name
-                will be something like "Foo Bar S01E<strong>#</strong>". The following regex would match it:</p>
-                <pre>Foo Bar S01E[0-9]+</pre>
-                <p>This looks for "Foo Bar SE01E", and then at least one character between 0 and 9 (<code>[0-9]+</code>).</p>
+                will be something like "Foo Bar S<strong>#</strong>E<strong>#</strong>". The following regex would match it:</p>
+                <pre>Foo Bar S[0-9]+E[0-9]+</pre>
+                <p>This looks for "Foo Bar S", and then at least one character between 0 and 9 (<code>[0-9]+</code>), one for
+                season, one for episode.</p>
                 <p>Another example: you want the latest album by "That One Group". You know the torrent will be named something
                 like "That One Group - <strong>Album Name</strong>". You could use this regex:</p>
                 <pre>That One Group - [A-Z ]+</pre>
@@ -32,7 +33,7 @@
                 still use these characters if you escape them, like this: "\."</p>
                 <p>Notes:</p>
                 <ul>
-                    <li>Patch regexes are not case-sensitive</li>
+                    <li>Patchy regexes are not case-sensitive</li>
                     <li>^ and $ are not added automatically</li>
                 </ul>
             </div>
