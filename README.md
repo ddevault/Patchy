@@ -4,17 +4,17 @@ Patchy is an open source bittorrent client for Windows.
 
 Patchy is powered by [MonoTorrent](https://github.com/mono/monotorrent).
 
-**Current Status**: Alpha [(Download)](http://bit.ly/patchy-alpha)
+**Current Status**: Beta [(Download)](http://bit.ly/patchy-beta)
 
-Beta begins on Friday, February 22nd.
-
-[![Screenshot](http://i.imgur.com/PCMRBZn.png)](http://i.imgur.com/PCMRBZn.png "Click to enlarge")
+[![Screenshot](http://sircmpwn.github.com/Patchy/images/screenshots/1.png)](http://sircmpwn.github.com/Patchy/images/screenshots/1.png "Click to enlarge")
 
 ## Features
 
 * Downloads torrents (from torrent files and magnet links)
 * Inline file priority adjustment
-* Configurable speed settings (global and per-torrent)
+* Configurable speed and connection settings (global and per-torrent)
+* Seeding goals (hours seeding, target ratio)
+* Torrent labels for organization
 * Encrypted torrenting
 * Prioritize torrents for streaming
 * Seeding goals
@@ -30,10 +30,9 @@ installer, and it comes with all the features, completely free.
 
 ## Download
 
-Make sure you come back to get updates until auto-updating is added.
+These links will become active once the final release goes live.
 
-* [Download .torrent](#)
-* [Magnet link](#)
+* [.torrent](#)
 * [HTTP](#)
 
 ## Help and Feedback
