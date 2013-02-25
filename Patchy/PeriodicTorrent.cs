@@ -29,6 +29,7 @@ namespace Patchy
         public DateTime CompletionTime { get; set; }
         public TorrentInfo TorrentInfo { get; set; }
         public bool PausedFromSeeding { get; set; }
+        public bool OpenWhenComplete { get; set; }
 
         public PeriodicTorrent(TorrentWrapper wrapper)
         {

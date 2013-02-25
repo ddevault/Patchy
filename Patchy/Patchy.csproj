@@ -76,6 +76,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AutomaticUpdate.cs" />
     <Compile Include="Converters\NetworkSpeedConverter.cs" />
     <Compile Include="Converters\NullToBooleanConverter.cs" />
     <Compile Include="Converters\PeerClientConverter.cs" />
@@ -110,6 +111,9 @@
       <DependentUpon>TorrentLabelWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UACHelper.cs" />
+    <Compile Include="UpdateSummaryWindow.xaml.cs">
+      <DependentUpon>UpdateSummaryWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Validators\TcpPortValidationRule.cs" />
     <Compile Include="Validators\DirectoryValidationRule.cs" />
     <Page Include="AddTorrentWindow.xaml">
@@ -149,6 +153,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TorrentLabelWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UpdateSummaryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

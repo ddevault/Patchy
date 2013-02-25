@@ -22,11 +22,14 @@ using Clipboard = System.Windows.Clipboard;
 using MessageBox = System.Windows.MessageBox;
 using Timer = System.Threading.Timer;
 using System.Threading;
+using System.Net;
 
 namespace Patchy
 {
     public partial class MainWindow
     {
+        private const int CurrentVersion = 1;
+
         private ClientManager Client { get; set; }
         private Timer Timer { get; set; }
         private SettingsManager SettingsManager { get; set; }
@@ -86,6 +89,39 @@ namespace Patchy
             Timer = new Timer(o => Dispatcher.Invoke(new Action(PeriodicUpdate)),
                 null, 1000, 1000);
             IsIdle = false;
+            if (SettingsManager.AutoUpdate)
+                CheckForUpdates();
+        }
+
+        private void CheckForUpdates()
+        {
+            Task.Factory.StartNew(() =>
+                {
+                    try
+                    {
+                        var client = new WebClient();
+                        var stream = client.OpenRead("http://sircmpwn.github.com/Patchy/update.json");
+                        var serializer = new JsonSerializer();
+                        var update = serializer.Deserialize<AutomaticUpdate>(new JsonTextReader(new StreamReader(stream)));
+                        stream.Close();
+                        if (update.Version > CurrentVersion)
+                        {
+                            Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    var window = new UpdateSummaryWindow(update);
+                                    if (window.ShowDialog().Value)
+                                    {
+                                        if (Directory.Exists(Path.Combine(SettingsManager.SettingsPath, "update")))
+                                            Directory.Delete(Path.Combine(SettingsManager.SettingsPath, "update"), true);
+                                        var torrent = AddTorrent(new MagnetLink(update.MagnetLink), Path.Combine(SettingsManager.SettingsPath, "update"));
+                                        if (torrent != null)
+                                            torrent.OpenWhenComplete = true;
+                                    }
+                                }));
+                        }
+                    }
+                    catch { }
+                });
         }
 
         public PeriodicTorrent AddTorrent(MagnetLink link, string path, bool suppressMessages = false)
@@ -163,6 +199,8 @@ namespace Patchy
                             torrent.Name, System.Windows.Forms.ToolTipIcon.Info);
                         BalloonTorrent = torrent;
                         FlashWindow(new WindowInteropHelper(this).Handle, true);
+                        if (torrent.OpenWhenComplete)
+                            Process.Start("explorer", "\"" + torrent.Torrent.SavePath + "\"");
                     }
                     torrent.NotifiedComplete = true;
                     if (!string.IsNullOrEmpty(SettingsManager.PostCompletionDestination))
