@@ -106,6 +106,8 @@ namespace Patchy
             RecentDownloadLocations = new string[0];
             Labels = new TorrentLabel[0];
             TotalBytesDownloaded = TotalBytesUploaded = 0;
+            WindowWidth = WindowHeight = -1;
+            Maximized = false;
         }
 
         public void ForcePropertyUpdate()
@@ -513,6 +515,9 @@ namespace Patchy
 
         public long TotalBytesUploaded { get; set; }
         public long TotalBytesDownloaded { get; set; }
+        public int WindowWidth { get; set; }
+        public int WindowHeight { get; set; }
+        public bool Maximized { get; set; }
 
         #endregion
 

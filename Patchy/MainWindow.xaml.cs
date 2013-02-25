@@ -61,6 +61,14 @@ namespace Patchy
 
             Initialize();
 
+            if (SettingsManager.WindowWidth != -1)
+            {
+                Width = SettingsManager.WindowWidth;
+                Height = SettingsManager.WindowHeight;
+                if (SettingsManager.Maximized)
+                    WindowState = WindowState.Minimized;
+            }
+
             torrentGrid.ItemsSource = Client.Torrents;
 
             Loaded += MainWindow_Loaded;
@@ -81,6 +89,10 @@ namespace Patchy
                     WindowState = WindowState.Normal;
                 }
             }
+            if (WindowState == WindowState.Maximized)
+                SettingsManager.Maximized = true;
+            else if (WindowState == WindowState.Normal)
+                SettingsManager.Maximized = false;
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -238,6 +250,9 @@ namespace Patchy
                 }
                 File.WriteAllBytes(SettingsManager.FastResumePath, resume.Encode());
             }
+            SettingsManager.WindowWidth = (int)Width;
+            SettingsManager.WindowHeight = (int)Height;
+            SaveSettings();
             Client.Shutdown();
         }
 
