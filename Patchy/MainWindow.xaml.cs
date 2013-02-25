@@ -31,6 +31,7 @@ namespace Patchy
         private PeriodicTorrent BalloonTorrent { get; set; }
         private string IgnoredClipboardValue { get; set; }
         internal bool AllowClose { get; set; }
+        internal bool ForceClose { get; set; }
 
         public MainWindow()
         {
@@ -196,7 +197,9 @@ namespace Patchy
         {
             if (AllowClose || (!SettingsManager.CloseToSystemTray && SettingsManager.ShowTrayIcon))
             {
-                if (SettingsManager.ConfirmExitWhenActive && Client.Torrents.Any(t => t.State == TorrentState.Downloading || t.State == TorrentState.Seeding))
+                if (SettingsManager.ConfirmExitWhenActive
+                    && Client.Torrents.Any(t => t.State == TorrentState.Downloading || t.State == TorrentState.Seeding)
+                    && !ForceClose)
                 {
                     e.Cancel = MessageBox.Show("You still have active torrents! Are you sure you want to exit?",
                         "Confirm Exit", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No;

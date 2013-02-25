@@ -29,6 +29,7 @@ namespace Patchy.IPC
         public void Shutdown()
         {
             Window.AllowClose = true;
+            Window.ForceClose = true;
             Window.Close();
             Application.Current.Shutdown();
         }
