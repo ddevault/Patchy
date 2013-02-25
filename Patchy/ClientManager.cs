@@ -136,7 +136,7 @@ namespace Patchy
         {
             torrent.Torrent.TorrentStateChanged += (s, e) =>
                 {
-                    if (e.NewState == TorrentState.Stopped)
+                    if (e.NewState == TorrentState.Stopped || e.NewState == TorrentState.Error)
                     {
                         torrent.Torrent.Stop();
                         try
@@ -165,7 +165,7 @@ namespace Patchy
         {
             torrent.Torrent.TorrentStateChanged += (s, e) =>
             {
-                if (e.NewState == TorrentState.Stopped)
+                if (e.NewState == TorrentState.Stopped || e.NewState == TorrentState.Error)
                 {
                     Client.Unregister(torrent.Torrent);
                     // Delete cache
@@ -178,7 +178,11 @@ namespace Patchy
                             Path.GetFileNameWithoutExtension(torrent.CacheFilePath) + ".info"));
                     }
                     // Delete files
-                    Directory.Delete(torrent.Torrent.Path, true);
+                    try
+                    {
+                        Directory.Delete(torrent.Torrent.Path, true);
+                    }
+                    catch { }
 
                     torrent.Torrent.Dispose();
                     Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Remove(torrent)));
@@ -254,6 +258,7 @@ namespace Patchy
             Name = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(Name));
             Size = -1;
             IsMagnet = true;
+            Path = savePath;
         }
     }
 }
