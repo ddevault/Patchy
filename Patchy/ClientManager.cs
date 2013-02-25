@@ -107,25 +107,30 @@ namespace Patchy
 
         public PeriodicTorrent AddTorrent(TorrentWrapper torrent)
         {
+            return AddTorrent(torrent, SettingsManager.StartTorrentsImmediately);
+        }
+
+        public PeriodicTorrent AddTorrent(TorrentWrapper torrent, bool startImmediately)
+        {
             var periodicTorrent = new PeriodicTorrent(torrent);
             Task.Factory.StartNew(() =>
                 {
                     Client.Register(torrent);
-                    if (SettingsManager.StartTorrentsImmediately)
+                    if (startImmediately)
                         torrent.Start();
                 });
             Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Add(periodicTorrent)));
             return periodicTorrent;
         }
 
-        public PeriodicTorrent LoadFastResume(FastResume resume, TorrentWrapper torrent)
+        public PeriodicTorrent LoadFastResume(FastResume resume, TorrentWrapper torrent, bool startImmediately)
         {
             var periodicTorrent = new PeriodicTorrent(torrent);
             Task.Factory.StartNew(() =>
                 {
                     torrent.LoadFastResume(resume);
                     Client.Register(torrent);
-                    if (SettingsManager.StartTorrentsImmediately)
+                    if (startImmediately)
                         torrent.Start();
                 });
             Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Add(periodicTorrent)));

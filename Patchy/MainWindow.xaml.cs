@@ -235,12 +235,12 @@ namespace Patchy
                 var serializer = new JsonSerializer();
                 foreach (var torrent in Client.Torrents)
                 {
+                    torrent.UpdateInfo();
                     torrent.Torrent.Stop();
                     var start = DateTime.Now;
                     while (torrent.Torrent.State != TorrentState.Stopped && torrent.Torrent.State != TorrentState.Error &&
                         (DateTime.Now - start).TotalSeconds < 2) // Time limit for trying to let it stop on its own
                         Thread.Sleep(100);
-                    torrent.UpdateInfo();
                     using (var writer = new StreamWriter(Path.Combine(SettingsManager.TorrentCachePath,
                         Path.GetFileNameWithoutExtension(torrent.CacheFilePath) + ".info")))
                         serializer.Serialize(new JsonTextWriter(writer), torrent.TorrentInfo);
@@ -459,9 +459,9 @@ namespace Patchy
             e.Handled = torrentGrid.SelectedItems.Count == 0;
             // Get paused/running info
             int paused = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Paused);
-            int running = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State != TorrentState.Paused);
+            int running = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Downloading || t.State == TorrentState.Seeding);
             int stopped = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Stopped || t.State == TorrentState.Stopping);
-            torrentGridContextMenuPause.Visibility = torrentGridContextMenuResume.Visibility = torrentGridContextMenuResume.Visibility = Visibility.Collapsed;
+            torrentGridContextMenuPause.Visibility = torrentGridContextMenuResume.Visibility = torrentGridContextMenuStop.Visibility = Visibility.Collapsed;
             if (running != 0)
             {
                 torrentGridContextMenuPause.Visibility = Visibility.Visible;

@@ -72,11 +72,11 @@ namespace Patchy
                             PeriodicTorrent periodicTorrent;
                             if (resume != null && resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
                             {
-                                periodicTorrent = Client.LoadFastResume(
-                                    new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]), wrapper);
+                                periodicTorrent = Client.LoadFastResume(new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]),
+                                    wrapper, info.IsRunning);
                             }
                             else
-                                periodicTorrent = Client.AddTorrent(wrapper);
+                                periodicTorrent = Client.AddTorrent(wrapper, info.IsRunning);
                             periodicTorrent.LoadInfo(info);
                             periodicTorrent.CacheFilePath = torrent;
                         }

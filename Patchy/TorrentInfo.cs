@@ -27,5 +27,6 @@ namespace Patchy
         public int MaxDownloadSpeed { get; set; }
         public int UploadSlots { get; set; }
         public int MaxConnections { get; set; }
+        public bool IsRunning { get; set; }
     }
 }

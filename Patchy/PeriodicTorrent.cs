@@ -169,6 +169,7 @@ namespace Patchy
             TorrentInfo.MaxDownloadSpeed = Torrent.Settings.MaxDownloadSpeed;
             TorrentInfo.MaxUploadSpeed = Torrent.Settings.MaxUploadSpeed;
             TorrentInfo.UploadSlots = Torrent.Settings.UploadSlots;
+            TorrentInfo.IsRunning = Torrent.State != TorrentState.Stopped;
             if (Torrent.Torrent != null && Torrent.Torrent.Files != null)
             {
                 TorrentInfo.FilePriority = new Priority[Torrent.Torrent.Files.Length];
