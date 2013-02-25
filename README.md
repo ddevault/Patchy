@@ -40,9 +40,10 @@ These links will become active once the final release goes live.
 Feel free to file bug reports as [GitHub Issues](https://github.com/SirCmpwn/Patchy/issues/new). Please be
 as descriptive as possible. You may also submit feature requests and ask questions through the same mechanism.
 
-You can also join
-[#patchy](http://webchat.freenode.net/?channels=patchy) ([irc://](irc://irc.freenode.net/#patchy))
-on irc.freenode.net for assistance and Patchy-related discussion.
+Additional resources:
+
+* [#patchy on Freenode](http://webchat.freenode.net/?channels=patchy) - Chat room
+* [/r/patchy](http://reddit.com/r/patchy) - Subreddit
 
 ## Compiling
 
