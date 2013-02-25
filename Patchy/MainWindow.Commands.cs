@@ -148,7 +148,7 @@ namespace Patchy
         {
             foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
             {
-                if (t.Torrent.State == TorrentState.Paused)
+                if (t.Torrent.State == TorrentState.Paused || t.Torrent.State == TorrentState.Stopped)
                     t.Torrent.Start();
             }
         }
