@@ -36,8 +36,9 @@
         <CommandBinding Command="pt:Commands.DeleteTorrent" Executed="ExecuteDeleteTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.RemoveTorrent" Executed="ExecuteRemoveTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.RemoveTorrentWithFiles" Executed="ExecuteRemoveTorrentWithFiles" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
-        <CommandBinding Command="pt:Commands.PauseOrResumeTorrent" Executed="ExecutePauseOrResumeTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
+        <CommandBinding Command="pt:Commands.PauseTorrent" Executed="ExecutePauseTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.ResumeTorrent" Executed="ExecuteResumeTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
+        <CommandBinding Command="pt:Commands.StopTorrent" Executed="ExecuteStopTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.MoveTorrent" Executed="ExecuteMoveTorrent" CanExecute="CanExecuteSingleTorrentCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.CreateLabel" Executed="ExecuteCreateLabel"></CommandBinding>
         <CommandBinding Command="pt:Commands.ClearLabel" Executed="ExecuteClearLabel"></CommandBinding>
@@ -75,10 +76,9 @@
                 <MenuItem x:Name="viewRssFeedsMenuItem" IsChecked="False" IsCheckable="True" Header="RSS Feeds"></MenuItem>
             </MenuItem>
             <MenuItem Header="Torrent" SubmenuOpened="torrentMenuItemSubmenuOpened">
-                <MenuItem Header="Pause" x:Name="pauseOrResumeTorrentMenuItem" 
-                          Command="pt:Commands.PauseOrResumeTorrent"></MenuItem>
-                <MenuItem Header="Resume" x:Name="hiddenResumeTorrentMenuItem" Visibility="Collapsed"
-                          Command="pt:Commands.ResumeTorrent"></MenuItem>
+                <MenuItem Header="Stop" x:Name="stopTorrentMenuItem" Command="pt:Commands.StopTorrent"></MenuItem>
+                <MenuItem Header="Pause" x:Name="pauseTorrentMenuItem" Command="pt:Commands.PauseTorrent"></MenuItem>
+                <MenuItem Header="Resume" x:Name="resumeTorrentMenuItem" Command="pt:Commands.ResumeTorrent"></MenuItem>
                 <MenuItem Header="Remove...">
                     <MenuItem Header="Torrent" Command="pt:Commands.RemoveTorrent"></MenuItem>
                     <MenuItem Header="Torrent+files" Command="pt:Commands.RemoveTorrentWithFiles"></MenuItem>
@@ -228,11 +228,9 @@
                         <Separator></Separator>
                         <MenuItem Header="Download for streaming" IsCheckable="True" Checked="torrentGridToggleStreaming"
                                   x:Name="torrentGridToggleStreamingMenuItem"></MenuItem>
-                        <MenuItem x:Name="torrentGridContextMenuPauseResume" Header="Pause" 
-                                  Command="pt:Commands.PauseOrResumeTorrent"></MenuItem>
-                        <!--Shown when there are several torrents selected and they are not all in the same state-->
-                        <MenuItem x:Name="torrentGridContextMenuResumeHidden" Header="Resume" Visibility="Collapsed"
-                                  Command="pt:Commands.ResumeTorrent"></MenuItem>
+                        <MenuItem x:Name="torrentGridContextMenuStop" Header="Stop" Command="pt:Commands.StopTorrent"></MenuItem>
+                        <MenuItem x:Name="torrentGridContextMenuPause" Header="Pause" Command="pt:Commands.PauseTorrent"></MenuItem>
+                        <MenuItem x:Name="torrentGridContextMenuResume" Header="Resume" Command="pt:Commands.ResumeTorrent"></MenuItem>
                         <MenuItem Header="Remove">
                             <MenuItem Command="pt:Commands.RemoveTorrent" Header="Torrent only"></MenuItem>
                             <MenuItem Command="pt:Commands.RemoveTorrentWithFiles" Header="Torrent and data" ></MenuItem>

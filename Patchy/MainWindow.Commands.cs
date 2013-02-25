@@ -126,28 +126,20 @@ namespace Patchy
             }
         }
 
-        private void ExecutePauseOrResumeTorrent(object sender, ExecutedRoutedEventArgs e)
+        private void ExecuteStopTorrent(object sender, ExecutedRoutedEventArgs e)
         {
-            // Get paused/running info
-            int paused = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Paused);
-            int running = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State != TorrentState.Paused);
-            if (paused != 0 && running != 0)
+            foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
             {
-                // Pause all
-                foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
-                {
-                    if (t.Torrent.State != TorrentState.Paused)
-                        t.Torrent.Pause();
-                }
+                if (t.Torrent.State != TorrentState.Stopped && t.Torrent.State != TorrentState.Stopped)
+                    t.Torrent.Stop();
             }
-            else if (paused != 0)
+        }
+
+        private void ExecutePauseTorrent(object sender, ExecutedRoutedEventArgs e)
+        {
+            foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
             {
-                foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
-                    t.Torrent.Start();
-            }
-            else
-            {
-                foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
+                if (t.Torrent.State == TorrentState.Seeding || t.Torrent.State == TorrentState.Downloading)
                     t.Torrent.Pause();
             }
         }
@@ -233,7 +225,8 @@ namespace Patchy
         public static readonly RoutedCommand DeleteTorrent = new RoutedUICommand("Delete Torrent", "DeleteTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand RemoveTorrent = new RoutedUICommand("Remove Torrent", "RemoveTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand RemoveTorrentWithFiles = new RoutedUICommand("Remove Torrent and Files", "RemoveTorrentWithFiles", typeof(MainWindow));
-        public static readonly RoutedUICommand PauseOrResumeTorrent = new RoutedUICommand("Pause or resume torrent", "PauseOrResumeTorrent", typeof(MainWindow));
+        public static readonly RoutedUICommand PauseTorrent = new RoutedUICommand("Pause Torrent", "PauseTorrent", typeof(MainWindow));
+        public static readonly RoutedUICommand StopTorrent = new RoutedUICommand("Stop Torrent", "StopTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand ResumeTorrent = new RoutedUICommand("Resume Torrent", "ResumeTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand MoveTorrent = new RoutedUICommand("Move Torrent", "MoveTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand CreateLabel = new RoutedUICommand("Create Label", "CreateLabel", typeof(MainWindow));

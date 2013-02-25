@@ -484,21 +484,15 @@ namespace Patchy
             // Get paused/running info
             int paused = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Paused);
             int running = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State != TorrentState.Paused);
-            if (paused != 0 && running != 0)
+            int stopped = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Stopped || t.State == TorrentState.Stopping);
+            torrentGridContextMenuPause.Visibility = torrentGridContextMenuResume.Visibility = torrentGridContextMenuResume.Visibility = Visibility.Collapsed;
+            if (running != 0)
             {
-                torrentGridContextMenuPauseResume.Header = "Pause";
-                torrentGridContextMenuResumeHidden.Visibility = Visibility.Visible;
+                torrentGridContextMenuPause.Visibility = Visibility.Visible;
+                torrentGridContextMenuStop.Visibility = Visibility.Visible;
             }
-            else if (paused != 0)
-            {
-                torrentGridContextMenuPauseResume.Header = "Resume";
-                torrentGridContextMenuResumeHidden.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                torrentGridContextMenuPauseResume.Header = "Pause";
-                torrentGridContextMenuResumeHidden.Visibility = Visibility.Collapsed;
-            }
+            if (paused != 0 || stopped != 0)
+                torrentGridContextMenuResume.Visibility = Visibility.Visible;
         }
 
         private void torrentGrid_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -510,22 +504,16 @@ namespace Patchy
         private void torrentMenuItemSubmenuOpened(object sender, RoutedEventArgs e)
         {
             int paused = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Paused);
-            int running = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State != TorrentState.Paused);
-            if (paused != 0 && running != 0)
+            int running = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Downloading || t.State == TorrentState.Seeding);
+            int stopped = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Stopped || t.State == TorrentState.Stopping);
+            pauseTorrentMenuItem.Visibility = resumeTorrentMenuItem.Visibility = stopTorrentMenuItem.Visibility = Visibility.Collapsed;
+            if (running != 0)
             {
-                pauseOrResumeTorrentMenuItem.Header = "Pause";
-                hiddenResumeTorrentMenuItem.Visibility = Visibility.Visible;
+                pauseTorrentMenuItem.Visibility = Visibility.Visible;
+                stopTorrentMenuItem.Visibility = Visibility.Visible;
             }
-            else if (paused != 0)
-            {
-                pauseOrResumeTorrentMenuItem.Header = "Resume";
-                hiddenResumeTorrentMenuItem.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                pauseOrResumeTorrentMenuItem.Header = "Pause";
-                hiddenResumeTorrentMenuItem.Visibility = Visibility.Collapsed;
-            }
+            if (paused != 0 || stopped != 0)
+                resumeTorrentMenuItem.Visibility = Visibility.Visible;
         }
 
         private void labelListSelectionChanged(object sender, SelectionChangedEventArgs e)
