@@ -79,11 +79,12 @@
                 <MenuItem Header="Stop" x:Name="stopTorrentMenuItem" Command="pt:Commands.StopTorrent"></MenuItem>
                 <MenuItem Header="Pause" x:Name="pauseTorrentMenuItem" Command="pt:Commands.PauseTorrent"></MenuItem>
                 <MenuItem Header="Resume" x:Name="resumeTorrentMenuItem" Command="pt:Commands.ResumeTorrent"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="Move" Command="pt:Commands.MoveTorrent"></MenuItem>
                 <MenuItem Header="Remove...">
                     <MenuItem Header="Torrent" Command="pt:Commands.RemoveTorrent"></MenuItem>
                     <MenuItem Header="Torrent+files" Command="pt:Commands.RemoveTorrentWithFiles"></MenuItem>
                 </MenuItem>
-                <MenuItem Header="Move" Command="pt:Commands.MoveTorrent"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="Set label" x:Name="menuSetLabelMenu">
                     <Separator></Separator>
@@ -226,16 +227,15 @@
                         <MenuItem Header="Open Folder" Click="torrentGridOpenFolder"></MenuItem>
                         <MenuItem Header="Copy Magnet Link" Click="torrentGridCopyMagnentLink"></MenuItem>
                         <Separator></Separator>
-                        <MenuItem Header="Download for streaming" IsCheckable="True" Checked="torrentGridToggleStreaming"
-                                  x:Name="torrentGridToggleStreamingMenuItem"></MenuItem>
                         <MenuItem x:Name="torrentGridContextMenuStop" Header="Stop" Command="pt:Commands.StopTorrent"></MenuItem>
                         <MenuItem x:Name="torrentGridContextMenuPause" Header="Pause" Command="pt:Commands.PauseTorrent"></MenuItem>
                         <MenuItem x:Name="torrentGridContextMenuResume" Header="Resume" Command="pt:Commands.ResumeTorrent"></MenuItem>
+                        <Separator></Separator>
+                        <MenuItem Header="Move" Command="pt:Commands.MoveTorrent"></MenuItem>
                         <MenuItem Header="Remove">
                             <MenuItem Command="pt:Commands.RemoveTorrent" Header="Torrent only"></MenuItem>
                             <MenuItem Command="pt:Commands.RemoveTorrentWithFiles" Header="Torrent and data" ></MenuItem>
                         </MenuItem>
-                        <MenuItem Header="Move" Command="pt:Commands.MoveTorrent"></MenuItem>
                         <Separator></Separator>
                         <MenuItem Header="Set label" x:Name="torrentGridContextMenuSetLabelMenu">
                             <Separator></Separator>

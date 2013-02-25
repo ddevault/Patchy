@@ -403,21 +403,6 @@ namespace Patchy
                 file.Priority = newPriority;
         }
 
-        private void torrentGridToggleStreaming(object sender, RoutedEventArgs e)
-        {
-            var torrent = torrentGrid.SelectedItem as PeriodicTorrent;
-            if (torrent.PiecePicker is SlidingWindowPicker)
-                torrent.ChangePicker(new RandomisedPicker(new StandardPicker()));
-            else
-            {
-                var sliding = new SlidingWindowPicker(torrent.PiecePicker);
-                // TODO: Perhaps integrate streaming properly into the client
-                sliding.HighPrioritySetStart = 0;
-                sliding.HighPrioritySetSize = 1;
-                torrent.ChangePicker(sliding);
-            }
-        }
-
         private void fileListGridOpenFile(object sender, RoutedEventArgs e)
         {
             var item = fileListGrid.SelectedItem as PeriodicFile;
@@ -472,15 +457,6 @@ namespace Patchy
         private void torrentGridContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             e.Handled = torrentGrid.SelectedItems.Count == 0;
-            torrentGridToggleStreamingMenuItem.IsEnabled = torrentGrid.SelectedItems.Count == 1;
-            torrentGridToggleStreamingMenuItem.IsChecked = false;
-            if (torrentGrid.SelectedItems.Count == 1)
-            {
-                var torrent = torrentGrid.SelectedItem as PeriodicTorrent;
-                torrentGridToggleStreamingMenuItem.Checked -= torrentGridToggleStreaming;
-                torrentGridToggleStreamingMenuItem.IsChecked = torrent.PiecePicker is SlidingWindowPicker;
-                torrentGridToggleStreamingMenuItem.Checked += torrentGridToggleStreaming;
-            }
             // Get paused/running info
             int paused = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State == TorrentState.Paused);
             int running = torrentGrid.SelectedItems.Cast<PeriodicTorrent>().Count(t => t.State != TorrentState.Paused);
