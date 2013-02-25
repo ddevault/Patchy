@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace Patchy.IPC
 {
@@ -11,6 +13,8 @@ namespace Patchy.IPC
     {
         [OperationContract]
         void HandleArguments(string[] args);
+        [OperationContract]
+        void Shutdown();
     }
 
     public class SingletonService : ISingletonService
@@ -20,6 +24,13 @@ namespace Patchy.IPC
         public void HandleArguments(string[] args)
         {
             Window.HandleArguments(args);
+        }
+
+        public void Shutdown()
+        {
+            Window.AllowClose = true;
+            Window.Close();
+            Application.Current.Shutdown();
         }
     }
 }

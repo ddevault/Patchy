@@ -112,7 +112,7 @@ namespace Patchy
                 if (!program.Exists)
                 {
                     program.Create("Patchy Torrent File", new ProgramVerb("Open", string.Format(
-                        "\"{0}\" \"%1\"", Path.Combine(Directory.GetCurrentDirectory(), "Patchy.exe"))));
+                        "\"{0}\" \"%1\"", Path.Combine(Assembly.GetEntryAssembly().Location))));
                     program.DefaultIcon = new ProgramIcon(Assembly.GetEntryAssembly().Location);
                 }
             }
@@ -147,7 +147,7 @@ namespace Patchy
 
         private void startOnWindowsStartupChecked(object sender, RoutedEventArgs e)
         {
-            var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
             if (startOnWindowsStartupCheckBox.IsChecked.Value)
             {
                 if (startMinimizedCheckBox.IsChecked.Value)

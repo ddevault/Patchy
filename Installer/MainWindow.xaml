@@ -72,6 +72,27 @@
                     <TextBlock Grid.Row="2" Grid.ColumnSpan="2" TextWrapping="Wrap">If you're installing an update, this should be set to the current install location. Leave it so.</TextBlock>
                 </Grid>
             </TabItem>
+            <TabItem Visibility="Collapsed"><!--Step three, additional options-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock FontSize="16">Additional Options</TextBlock>
+                    <CheckBox x:Name="startWithWindowsCheckBox" Grid.Row="1" IsChecked="True">Start Patchy when Windows starts</CheckBox>
+                    <CheckBox x:Name="startMinimizedCheckBox" Grid.Row="1" IsChecked="True" 
+                              IsEnabled="{Binding ElementName=startWithWindowsCheckBox, Path=IsChecked}">Start Patchy when Windows starts</CheckBox>
+                    <CheckBox x:Name="addToStartMenuCheckBox" Grid.Row="2" IsChecked="True">Add Patchy to the Start Menu</CheckBox>
+                    <CheckBox x:Name="torretnAssociationCheckBox" Grid.Row="3" IsChecked="True">Use Patchy for .torrent files</CheckBox>
+                    <CheckBox x:Name="magnetAssociationCheckBox" Grid.Row="4" IsChecked="True">Use Patchy for magnet links</CheckBox>
+                    <TextBlock Grid.Row="5">Click "Finish" to begin installation.</TextBlock>
+                </Grid>
+            </TabItem>
         </TabControl>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>

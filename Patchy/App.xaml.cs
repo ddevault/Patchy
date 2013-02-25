@@ -20,7 +20,7 @@ namespace Patchy
         public static bool ClearCacheOnExit { get; set; }
 
         private Mutex Singleton { get; set; }
-        private readonly Guid SingletonGuid = Guid.Parse("B11931EB-32BC-441F-BF57-859FE282236A");
+        private readonly string SingletonGuid = "B11931EB-32BC-441F-BF57-859FE282236A";
         private ServiceHost SingletonServcieHost { get; set; }
 
         internal void ShutdownSingleton()
@@ -32,7 +32,7 @@ namespace Patchy
         protected override void OnStartup(StartupEventArgs e)
         {
             bool isInitialInstance;
-            Singleton = new Mutex(true, "Patchy:" + SingletonGuid.ToString(), out isInitialInstance);
+            Singleton = new Mutex(true, "Patchy:" + SingletonGuid, out isInitialInstance);
             if (!isInitialInstance)
             {
                 PassArgumentsToInstance(e.Args);
