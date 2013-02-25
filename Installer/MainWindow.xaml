@@ -101,7 +101,7 @@
                     </Grid.RowDefinitions>
                     <TextBlock>Automatically import torrents from:</TextBlock>
                     <CheckBox Grid.Row="1" x:Name="uTorrentImportCheckBox" IsChecked="True">µTorrent</CheckBox>
-                    <CheckBox Grid.Row="2" x:Name="transmissionImportCheckBox" IsChecked="True">Transmission-qt</CheckBox>
+                    <CheckBox Grid.Row="2" x:Name="transmissionImportCheckBox" IsChecked="True">Transmission</CheckBox>
                 </Grid>
             </TabItem>
         </TabControl>

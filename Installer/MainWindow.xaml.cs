@@ -42,8 +42,10 @@ namespace Installer
             if (!string.IsNullOrEmpty(priorInstall))
                 installPathTextBox.Text = priorInstall;
             var uTorrent = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "uTorrent");
+            var transmission = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "transmission");
 
             uTorrentImportCheckBox.IsChecked = Directory.Exists(uTorrent);
+            transmissionImportCheckBox.IsChecked = Directory.Exists(transmission);
         }
 
         private void previousButtonClick(object sender, RoutedEventArgs e)
@@ -119,8 +121,10 @@ namespace Installer
         {
             var patchy = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".patchy");
             var torrentcache = Path.Combine(patchy, "torrentcache");
+
             var uTorrent = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "uTorrent");
             var transmission = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "transmission");
+
             var serializer = new JsonSerializer();
 
             Directory.CreateDirectory(patchy);
@@ -158,6 +162,39 @@ namespace Installer
                     }
                 }
                 catch { MessageBox.Show("Failed to import from uTorrent.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+            }
+            if (transmissionImportCheckBox.IsChecked.Value)
+            {
+                try
+                {
+                    if (Directory.Exists(transmission))
+                    {
+                        var torrents = Directory.GetFiles(Path.Combine(transmission, "Torrents"), "*.torrent");
+                        var dictionaries = Path.Combine(transmission, "Resume");
+                        foreach (var torrent in torrents)
+                        {
+                            if (File.Exists(Path.Combine(dictionaries,
+                                Path.GetFileNameWithoutExtension(torrent) + ".resume")))
+                            {
+                                BEncodedDictionary dictionary;
+                                using (var stream = File.OpenRead(Path.Combine(dictionaries,
+                                    Path.GetFileNameWithoutExtension(torrent) + ".resume")))
+                                    dictionary = (BEncodedDictionary)BEncodedDictionary.Decode(stream);
+                                // Add torrent
+                                var name = dictionary["name"].ToString();
+                                var info = new TorrentInfo
+                                {
+                                    Label = new TorrentLabel("Transmission", "#DA0000") { Foreground = "#FFFFFF" },
+                                    Path = dictionary["destination"].ToString()
+                                };
+                                using (var json = new StreamWriter(Path.Combine(torrentcache, name + ".info")))
+                                    serializer.Serialize(new JsonTextWriter(json), info);
+                                File.Copy(torrent, Path.Combine(torrentcache, name + ".torrent"));
+                            }
+                        }
+                    }
+                }
+                catch { MessageBox.Show("Failed to import from Transmission.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
             }
         }
 
