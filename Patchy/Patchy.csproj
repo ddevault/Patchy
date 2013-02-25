@@ -40,12 +40,6 @@
     <Reference Include="FileAssociation">
       <HintPath>..\lib\FileAssociation.dll</HintPath>
     </Reference>
-    <Reference Include="MonoTorrent">
-      <HintPath>..\lib\MonoTorrent.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoTorrent.Dht">
-      <HintPath>..\lib\MonoTorrent.Dht.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
@@ -220,6 +214,16 @@
     <Resource Include="..\images\add.png">
       <Link>Images\add.png</Link>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\externals\monotorrent\src\MonoTorrent.Dht\MonoTorrent.Dht.csproj">
+      <Project>{7A2A7E73-FD43-4171-AA34-DA413D35459E}</Project>
+      <Name>MonoTorrent.Dht</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\externals\monotorrent\src\MonoTorrent\MonoTorrent.csproj">
+      <Project>{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}</Project>
+      <Name>MonoTorrent</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
