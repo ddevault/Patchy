@@ -28,7 +28,12 @@ namespace Patchy
         [JsonIgnore]
         public Brush ForegroundBrush
         {
-            get { return new SolidColorBrush(GetContrastingColor((Color)ColorConverter.ConvertFromString(Color))); }
+            get 
+            {
+                if (Foreground == null)
+                    Foreground = GetContrastingColor((Color)ColorConverter.ConvertFromString(Color)).ToString();
+                return new SolidColorBrush((Color)ColorConverter.ConvertFromString(Foreground));
+            }
         }
 
         public static Color GetContrastingColor(Color color)
@@ -76,6 +81,7 @@ namespace Patchy
         }
 
         public string Color { get; set; }
+        public string Foreground { get; set; }
         public string Name { get; set; }
 
         public int CompareTo(object obj)

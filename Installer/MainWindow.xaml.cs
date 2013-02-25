@@ -19,6 +19,9 @@ using IWshFile = IWshRuntimeLibrary.File;
 using File = System.IO.File;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using MonoTorrent.BEncoding;
+using Patchy;
+using Newtonsoft.Json;
 
 namespace Installer
 {
@@ -38,6 +41,9 @@ namespace Installer
             var priorInstall = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Patchy", "Path", null) as string;
             if (!string.IsNullOrEmpty(priorInstall))
                 installPathTextBox.Text = priorInstall;
+            var uTorrent = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "uTorrent");
+
+            uTorrentImportCheckBox.IsChecked = Directory.Exists(uTorrent);
         }
 
         private void previousButtonClick(object sender, RoutedEventArgs e)
@@ -101,9 +107,58 @@ namespace Installer
                 SetToStartup(path);
             if (addToStartMenuCheckBox.IsChecked.Value)
                 CreateStartMenuIcon(path);
+            // Import torrents
+            ImportTorrents();
+
             Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Patchy", "Path", path);
             Process.Start(Path.Combine(path, "Patchy.exe"));
             Close();
+        }
+
+        private void ImportTorrents()
+        {
+            var patchy = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".patchy");
+            var torrentcache = Path.Combine(patchy, "torrentcache");
+            var uTorrent = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "uTorrent");
+            var transmission = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "transmission");
+            var serializer = new JsonSerializer();
+
+            Directory.CreateDirectory(patchy);
+            Directory.CreateDirectory(Path.Combine(patchy, torrentcache));
+
+            if (uTorrentImportCheckBox.IsChecked.Value)
+            {
+                try
+                {
+                    if (Directory.Exists(uTorrent))
+                    {
+                        var torrents = Directory.GetFiles(uTorrent, "*.torrent");
+                        BEncodedDictionary dictionary;
+                        if (File.Exists(Path.Combine(uTorrent, "resume.dat")))
+                        {
+                            using (var stream = File.OpenRead(Path.Combine(uTorrent, "resume.dat")))
+                                dictionary = (BEncodedDictionary)BEncodedDictionary.Decode(stream);
+                            foreach (var torrent in torrents)
+                            {
+                                if (dictionary.ContainsKey(Path.GetFileName(torrent)))
+                                {
+                                    // Add torrent
+                                    var info = new TorrentInfo
+                                    {
+                                        Label = new TorrentLabel("µTorrent", "#00853F") { Foreground = "#FFFFFF" },
+                                        Path = ((BEncodedDictionary)dictionary[Path.GetFileName(torrent)])["path"].ToString()
+                                    };
+                                    using (var json = new StreamWriter(Path.Combine(torrentcache,
+                                        Path.GetFileNameWithoutExtension(torrent) + ".info")))
+                                        serializer.Serialize(new JsonTextWriter(json), info);
+                                    File.Copy(torrent, Path.Combine(torrentcache, Path.GetFileName(torrent)));
+                                }
+                            }
+                        }
+                    }
+                }
+                catch { MessageBox.Show("Failed to import from uTorrent.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+            }
         }
 
         private void SetToStartup(string path)
