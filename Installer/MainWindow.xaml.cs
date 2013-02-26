@@ -13,15 +13,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using BrendanGrant.Helpers.FileAssociation;
-using IWshRuntimeLibrary;
 using Microsoft.Win32;
-using IWshFile = IWshRuntimeLibrary.File;
-using File = System.IO.File;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using MonoTorrent.BEncoding;
 using Patchy;
 using Newtonsoft.Json;
+using vbAccelerator.Components.Shell;
 
 namespace Installer
 {
@@ -211,14 +209,15 @@ namespace Installer
 
         private void CreateStartMenuIcon(string path)
         {
-            WshShell shell = new WshShell();
-            IWshShortcut shortcut;
             var startPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), "Programs");
-            shortcut = (IWshShortcut)shell.CreateShortcut(Path.Combine(startPath, "Patchy.lnk"));
-            shortcut.TargetPath = Path.Combine(path, "Patchy.exe");
-            shortcut.Description = "Launch the App!";
-            shortcut.IconLocation = Path.Combine(path, "Patchy.exe");
-            shortcut.Save(); 
+            using (ShellLink shortcut = new ShellLink())
+            {
+                shortcut.Target = Path.Combine(path, "Patchy.Exe");
+                shortcut.Description = "Patchy BitTorrent Client";
+                shortcut.WorkingDirectory = path;
+                shortcut.DisplayMode = ShellLink.LinkDisplayMode.edmNormal;
+                shortcut.Save(Path.Combine(startPath, "Patchy.lnk"));
+            }
         }
 
         private void AssociateMagnetLinks(string path)
