@@ -12,7 +12,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using BrendanGrant.Helpers.FileAssociation;
 using Microsoft.Win32;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
@@ -99,6 +98,7 @@ namespace Installer
             CopyFileFromAssembly("Patchy.exe", path);
             CopyFileFromAssembly("Xceed.Wpf.Toolkit.dll", path);
             // Associations
+            RegisterApplication(path);
             if (torretnAssociationCheckBox.IsChecked.Value)
                 AssociateTorrents(path);
             if (magnetAssociationCheckBox.IsChecked.Value)
@@ -224,34 +224,68 @@ namespace Installer
         {
             path = Path.Combine(path, "Patchy.exe");
             var registryPath = string.Format("\"{0}\" \"%1\"", path);
-            var key = Registry.ClassesRoot.CreateSubKey("Magnet");
-            key.SetValue(null, "Magnet URI");
-            key.SetValue("Content Type", "application/x-magnet");
-            key.SetValue("URL Protocol", string.Empty);
-            var defaultIcon = key.CreateSubKey("DefaultIcon");
-            defaultIcon.SetValue(null, path);
-            var shell = key.CreateSubKey("shell");
-            shell.SetValue(null, "open");
-            var open = shell.CreateSubKey("open");
-            var command = open.CreateSubKey("command");
-            command.SetValue(null, registryPath);
-            command.Close(); open.Close(); shell.Close(); defaultIcon.Close(); key.Close();
+
+            using (var key = Registry.ClassesRoot.CreateSubKey("Magnet"))
+            {
+                key.SetValue(null, "Magnet URI");
+                key.SetValue("Content Type", "application/x-magnet");
+                key.SetValue("URL Protocol", string.Empty);
+                using (var defaultIcon = key.CreateSubKey("DefaultIcon"))
+                    defaultIcon.SetValue(null, path);
+                using (var shell = key.CreateSubKey("shell"))
+                {
+                    shell.SetValue(null, "open");
+                    using (var open = shell.CreateSubKey("open"))
+                        using (var command = open.CreateSubKey("command"))
+                            command.SetValue(null, registryPath);
+                }
+            }
+        }
+
+        private static void RegisterApplication(string installationPath)
+        {
+            var path = Path.Combine(installationPath, "Patchy.exe");
+            var startup = string.Format("\"{0}\" \"%1\"", path);
+
+            // Register app path
+            Registry.SetValue(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\App Paths\Patchy.exe", null, path);
+            // Register application
+            using (var applications = Registry.ClassesRoot.CreateSubKey("Applications"))
+                using (var patchy = applications.CreateSubKey("Patchy.exe"))
+                {
+                    patchy.SetValue("FriendlyAppName", "Patchy BitTorrent Client");
+                    using (var types = patchy.CreateSubKey("SupportedTypes"))
+                        types.SetValue(".torrent", string.Empty);
+                    using (var shell = patchy.CreateSubKey("shell"))
+                        using (var open = shell.CreateSubKey("Open"))
+                        {
+                            open.SetValue(null, "Download with Patchy");
+                            using (var command = open.CreateSubKey("command"))
+                                command.SetValue(null, startup);
+                        }
+                }
         }
 
         private static void AssociateTorrents(string installationPath)
         {
             var path = Path.Combine(installationPath, "Patchy.exe");
-            var torrent = new FileAssociationInfo(".torrent");
-            torrent.Create("Patchy");
-            torrent.ContentType = "application/x-bittorrent";
-            torrent.OpenWithList = new[] { "patchy.exe" };
-            var program = new ProgramAssociationInfo(torrent.ProgID);
-            if (!program.Exists)
+            var startup = string.Format("\"{0}\" \"%1\"", path);
+
+            using (var torrent = Registry.ClassesRoot.CreateSubKey(".torrent"))
             {
-                program.Create("Patchy Torrent File", new ProgramVerb("Open", string.Format(
-                    "\"{0}\" \"%1\"", path)));
-                program.DefaultIcon = new ProgramIcon(path);
+                torrent.SetValue(null, "Patchy.exe");
+                torrent.SetValue("Content Type", "application/x-bittorrent");
             }
+            using (var patchy = Registry.ClassesRoot.CreateSubKey("Patchy.exe"))
+            {
+                patchy.SetValue(null, "BitTorrent File");
+                patchy.SetValue("DefaultIcon", path + ",0");
+                using (var shell = patchy.CreateSubKey("shell"))
+                    using (var open = shell.CreateSubKey("open"))
+                        using (var command = open.CreateSubKey("command"))
+                            command.SetValue(null, startup);
+            }
+            ShellNotification.NotifyOfChange();
         }
 
         private void CopyFileFromAssembly(string file, string path)

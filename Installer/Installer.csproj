@@ -38,9 +38,6 @@
     <ApplicationIcon>..\images\patchy.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FileAssociation">
-      <HintPath>..\lib\FileAssociation.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\lib\installer\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -119,9 +116,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Patchy\bin\Debug\FileAssociation.dll">
-      <Link>Binaries\FileAssociation.dll</Link>
-    </EmbeddedResource>
     <EmbeddedResource Include="..\Patchy\bin\Debug\MonoTorrent.Dht.dll">
       <Link>Binaries\MonoTorrent.Dht.dll</Link>
     </EmbeddedResource>

@@ -12,7 +12,6 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using Microsoft.Win32;
 using System.Diagnostics;
-using BrendanGrant.Helpers.FileAssociation;
 using System.Reflection;
 using System.Collections.ObjectModel;
 using System.Net;
@@ -77,11 +76,13 @@ namespace Patchy
             }
             try // We know we don't have write access, but we might have read access
             {
-                var torrent = new FileAssociationInfo(".torrent");
-                if (torrent.Exists)
-                    torrentAssociationCheckBox.IsChecked = torrent.ProgID == "Patchy";
-                else
+                if (!Registry.ClassesRoot.GetSubKeyNames().Contains(".torrent"))
                     torrentAssociationCheckBox.IsChecked = false;
+                else
+                {
+                    using (var torrent = Registry.ClassesRoot.OpenSubKey(".torrent"))
+                        torrentAssociationCheckBox.IsChecked = torrent.GetValue(null).ToString() == "Patchy";
+                }
                 // Check magnet link association
                 var value = Registry.GetValue(@"HKEY_CLASSES_ROOT\\Magnet", null, null);
                 if (value == null)
@@ -110,22 +111,62 @@ namespace Patchy
 
         private void torrentAssociationCheckBoxChecked(object sender, RoutedEventArgs e)
         {
-            var torrent = new FileAssociationInfo(".torrent");
             if (torrentAssociationCheckBox.IsChecked.Value)
             {
-                torrent.Create("Patchy");
-                torrent.ContentType = "application/x-bittorrent";
-                torrent.OpenWithList = new[] { "patchy.exe" };
-                var program = new ProgramAssociationInfo(torrent.ProgID);
-                if (!program.Exists)
-                {
-                    program.Create("Patchy Torrent File", new ProgramVerb("Open", string.Format(
-                        "\"{0}\" \"%1\"", Path.Combine(Assembly.GetEntryAssembly().Location))));
-                    program.DefaultIcon = new ProgramIcon(Assembly.GetEntryAssembly().Location);
-                }
+                RegisterApplication(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+                AssociateTorrents(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
             }
             else
-                torrent.Delete();
+            {
+                if (Registry.ClassesRoot.GetSubKeyNames().Contains(".torrent"))
+                    Registry.ClassesRoot.DeleteSubKey(".torrent");
+            }
+        }
+
+        private static void RegisterApplication(string installationPath)
+        {
+            var path = Path.Combine(installationPath, "Patchy.exe");
+            var startup = string.Format("\"{0}\" \"%1\"", path);
+
+            // Register app path
+            Registry.SetValue(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\App Paths\Patchy.exe", null, path);
+            // Register application
+            using (var applications = Registry.ClassesRoot.CreateSubKey("Applications"))
+            using (var patchy = applications.CreateSubKey("Patchy.exe"))
+            {
+                patchy.SetValue("FriendlyAppName", "Patchy BitTorrent Client");
+                using (var types = patchy.CreateSubKey("SupportedTypes"))
+                    types.SetValue(".torrent", string.Empty);
+                using (var shell = patchy.CreateSubKey("shell"))
+                using (var open = shell.CreateSubKey("Open"))
+                {
+                    open.SetValue(null, "Download with Patchy");
+                    using (var command = open.CreateSubKey("command"))
+                        command.SetValue(null, startup);
+                }
+            }
+        }
+
+        private static void AssociateTorrents(string installationPath)
+        {
+            var path = Path.Combine(installationPath, "Patchy.exe");
+            var startup = string.Format("\"{0}\" \"%1\"", path);
+
+            using (var torrent = Registry.ClassesRoot.CreateSubKey(".torrent"))
+            {
+                torrent.SetValue(null, "Patchy.exe");
+                torrent.SetValue("Content Type", "application/x-bittorrent");
+            }
+            using (var patchy = Registry.ClassesRoot.CreateSubKey("Patchy.exe"))
+            {
+                patchy.SetValue(null, "BitTorrent File");
+                patchy.SetValue("DefaultIcon", path + ",0");
+                using (var shell = patchy.CreateSubKey("shell"))
+                using (var open = shell.CreateSubKey("open"))
+                using (var command = open.CreateSubKey("command"))
+                    command.SetValue(null, startup);
+            }
+            ShellNotification.NotifyOfChange();
         }
 
         private void magnetAssociationCheckBoxChecked(object sender, RoutedEventArgs e)
