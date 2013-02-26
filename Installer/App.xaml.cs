@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.ServiceModel;
 using System.Threading;
@@ -17,6 +19,36 @@ namespace Installer
     /// </summary>
     public partial class App : Application
     {
+        // Crazy hacky stuff to make it so we can bundle the installer up in a single file
+        [STAThread]
+        public static void Main(string args)
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            App.Main(args);
+        }
+        // Crazy hacky stuff to make it so we can bundle the installer up in a single file
+        static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            AssemblyName assemblyName = new AssemblyName(args.Name);
+
+            string path = assemblyName.Name + ".dll";
+            if (assemblyName.CultureInfo.Equals(CultureInfo.InvariantCulture) == false)
+            {
+                path = String.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
+            }
+
+            using (Stream stream = executingAssembly.GetManifestResourceStream(path))
+            {
+                if (stream == null)
+                    return null;
+
+                byte[] assemblyRawBytes = new byte[stream.Length];
+                stream.Read(assemblyRawBytes, 0, assemblyRawBytes.Length);
+                return Assembly.Load(assemblyRawBytes);
+            }
+        }
+
         private readonly string SingletonGuid = "B11931EB-32BC-441F-BF57-859FE282236A";
         private Mutex Singleton { get; set; }
 
