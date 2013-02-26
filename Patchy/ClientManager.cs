@@ -113,6 +113,12 @@ namespace Patchy
 
         public PeriodicTorrent AddTorrent(TorrentWrapper torrent, bool startImmediately)
         {
+            // Apply settings
+            torrent.Settings.UseDht = SettingsManager.EnableDHT;
+            torrent.Settings.MaxConnections = SettingsManager.MaxConnectionsPerTorrent;
+            torrent.Settings.MaxDownloadSpeed = SettingsManager.MaxDownloadSpeed;
+            torrent.Settings.MaxUploadSpeed = SettingsManager.MaxUploadSpeed;
+            torrent.Settings.UploadSlots = SettingsManager.UploadSlotsPerTorrent;
             var periodicTorrent = new PeriodicTorrent(torrent);
             Task.Factory.StartNew(() =>
                 {
@@ -126,6 +132,12 @@ namespace Patchy
 
         public PeriodicTorrent LoadFastResume(FastResume resume, TorrentWrapper torrent, bool startImmediately)
         {
+            // Apply settings
+            torrent.Settings.UseDht = SettingsManager.EnableDHT;
+            torrent.Settings.MaxConnections = SettingsManager.MaxConnectionsPerTorrent;
+            torrent.Settings.MaxDownloadSpeed = SettingsManager.MaxDownloadSpeed;
+            torrent.Settings.MaxUploadSpeed = SettingsManager.MaxUploadSpeed;
+            torrent.Settings.UploadSlots = SettingsManager.UploadSlotsPerTorrent;
             var periodicTorrent = new PeriodicTorrent(torrent);
             Task.Factory.StartNew(() =>
                 {

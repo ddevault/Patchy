@@ -72,8 +72,8 @@ namespace Patchy
             MapWithUPnP = false;
             MaxUploadSpeed = 0;
             MaxDownloadSpeed = 0;
-            MaxConnections = 250;
-            MaxConnectionsPerTorrent = 50;
+            MaxConnections = 500;
+            MaxConnectionsPerTorrent = 100;
             UploadSlotsPerTorrent = 4;
 
             // BitTorrent
