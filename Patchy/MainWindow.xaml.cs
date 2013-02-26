@@ -434,7 +434,6 @@ namespace Patchy
 
         private void menuSourceCodeClicked(object sender, RoutedEventArgs e)
         {
-            throw new InvalidOperationException("test");
             Process.Start("https://github.com/SirCmpwn/Patchy");
         }
 
