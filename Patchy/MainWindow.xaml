@@ -40,6 +40,7 @@
         <CommandBinding Command="pt:Commands.ResumeTorrent" Executed="ExecuteResumeTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.StopTorrent" Executed="ExecuteStopTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.MoveTorrent" Executed="ExecuteMoveTorrent" CanExecute="CanExecuteSingleTorrentCommand"></CommandBinding>
+        <CommandBinding Command="pt:Commands.RehashTorrent" Executed="ExecuteRehashTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.CreateLabel" Executed="ExecuteCreateLabel"></CommandBinding>
         <CommandBinding Command="pt:Commands.ClearLabel" Executed="ExecuteClearLabel"></CommandBinding>
     </Window.CommandBindings>
@@ -81,6 +82,7 @@
                 <MenuItem Header="Resume" x:Name="resumeTorrentMenuItem" Command="pt:Commands.ResumeTorrent"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="Move" Command="pt:Commands.MoveTorrent"></MenuItem>
+                <MenuItem Header="Rehash" Command="pt:Commands.RehashTorrent"></MenuItem>
                 <MenuItem Header="Remove...">
                     <MenuItem Header="Torrent" Command="pt:Commands.RemoveTorrent"></MenuItem>
                     <MenuItem Header="Torrent+files" Command="pt:Commands.RemoveTorrentWithFiles"></MenuItem>
@@ -232,6 +234,7 @@
                         <MenuItem x:Name="torrentGridContextMenuResume" Header="Resume" Command="pt:Commands.ResumeTorrent"></MenuItem>
                         <Separator></Separator>
                         <MenuItem Header="Move" Command="pt:Commands.MoveTorrent"></MenuItem>
+                        <MenuItem Header="Rehash" Command="pt:Commands.RehashTorrent"></MenuItem>
                         <MenuItem Header="Remove">
                             <MenuItem Command="pt:Commands.RemoveTorrent" Header="Torrent only"></MenuItem>
                             <MenuItem Command="pt:Commands.RemoveTorrentWithFiles" Header="Torrent and data" ></MenuItem>

@@ -163,6 +163,22 @@ namespace Patchy
                 Client.MoveTorrent(torrent, dialog.SelectedPath);
         }
 
+        private void ExecuteRehashTorrent(object sender, ExecutedRoutedEventArgs e)
+        {
+            var torrents = torrentGrid.SelectedItems.Cast<PeriodicTorrent>();
+            if (!torrents.Any())
+                return;
+            Task.Factory.StartNew(() =>
+                {
+                    foreach (var torrent in torrents)
+                    {
+                        torrent.Torrent.Stop();
+                        while (torrent.Torrent.State != TorrentState.Stopped && torrent.Torrent.State != TorrentState.Error) ;
+                        torrent.Torrent.HashCheck(true);
+                    }
+                });
+        }
+
         private void ExecuteCreateLabel(object sender, ExecutedRoutedEventArgs e)
         {
             var window = new TorrentLabelWindow();
@@ -222,13 +238,17 @@ namespace Patchy
     public static class Commands
     {
         public static readonly RoutedCommand EditPreferences = new RoutedUICommand("Edit Preferences", "EditPreferences", typeof(MainWindow));
+
         public static readonly RoutedCommand DeleteTorrent = new RoutedUICommand("Delete Torrent", "DeleteTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand RemoveTorrent = new RoutedUICommand("Remove Torrent", "RemoveTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand RemoveTorrentWithFiles = new RoutedUICommand("Remove Torrent and Files", "RemoveTorrentWithFiles", typeof(MainWindow));
+
         public static readonly RoutedUICommand PauseTorrent = new RoutedUICommand("Pause Torrent", "PauseTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand StopTorrent = new RoutedUICommand("Stop Torrent", "StopTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand ResumeTorrent = new RoutedUICommand("Resume Torrent", "ResumeTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand MoveTorrent = new RoutedUICommand("Move Torrent", "MoveTorrent", typeof(MainWindow));
+        public static readonly RoutedUICommand RehashTorrent = new RoutedUICommand("Rehash Torrent", "RehashTorrent", typeof(MainWindow));
+
         public static readonly RoutedUICommand CreateLabel = new RoutedUICommand("Create Label", "CreateLabel", typeof(MainWindow));
         public static readonly RoutedUICommand ClearLabel = new RoutedUICommand("Clear Label", "ClearLabel", typeof(MainWindow));
     }
