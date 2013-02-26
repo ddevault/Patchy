@@ -20,13 +20,6 @@ namespace Installer
     public partial class App : Application
     {
         // Crazy hacky stuff to make it so we can bundle the installer up in a single file
-        [STAThread]
-        public static void Main(string args)
-        {
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            App.Main(args);
-        }
-        // Crazy hacky stuff to make it so we can bundle the installer up in a single file
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
@@ -38,7 +31,7 @@ namespace Installer
                 path = String.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
             }
 
-            using (Stream stream = executingAssembly.GetManifestResourceStream(path))
+            using (Stream stream = executingAssembly.GetManifestResourceStream("Installer.Dependencies." + path))
             {
                 if (stream == null)
                     return null;
@@ -54,6 +47,7 @@ namespace Installer
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             // Check for running instances of Patchy and kill them
             bool isInitialInstance;
             Singleton = new Mutex(true, "Patchy:" + SingletonGuid, out isInitialInstance);

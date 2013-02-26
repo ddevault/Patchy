@@ -37,6 +37,9 @@
   <PropertyGroup>
     <ApplicationIcon>..\images\patchy.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Installer.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\lib\installer\Newtonsoft.Json.dll</HintPath>
@@ -138,14 +141,15 @@
       <Name>MonoTorrent</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\externals\monotorrent\build\MonoTorrent\Debug\MonoTorrent.dll">
+      <Link>Dependencies\MonoTorrent.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\lib\installer\Newtonsoft.Json.dll">
+      <Link>Dependencies\Newtonsoft.Json.dll</Link>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterResolveReferences">
-    <ItemGroup>
-      <EmbeddedResource Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.Extension)' == '.dll'">
-        <LogicalName>%(ReferenceCopyLocalPaths.DestinationSubDirectory)%(ReferenceCopyLocalPaths.Filename)%(ReferenceCopyLocalPaths.Extension)</LogicalName>
-      </EmbeddedResource>
-    </ItemGroup>
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

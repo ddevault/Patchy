@@ -91,7 +91,6 @@ namespace Installer
         {
             // Copy files
             var path = installPathTextBox.Text;
-            CopyFileFromAssembly("FileAssociation.dll", path);
             CopyFileFromAssembly("MonoTorrent.Dht.dll", path);
             CopyFileFromAssembly("MonoTorrent.dll", path);
             CopyFileFromAssembly("Newtonsoft.Json.dll", path);
