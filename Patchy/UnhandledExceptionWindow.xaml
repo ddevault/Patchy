@@ -1,0 +1,46 @@
+﻿<Window x:Class="Patchy.UnhandledExceptionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Unhandled Exception" Icon="Images/patchy.ico" Height="300" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid MaxHeight="70">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Image Width="70" Height="70" Source="Images/patchy.png" Grid.RowSpan="2"></Image>
+            <TextBlock Grid.Column="1" x:Name="headerTextBlock" FontSize="16">Unhandled Exception has occured!</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="1" Margin="3" TextWrapping="Wrap">An unhandled exception (an error) has occured! We'd appriciate it if you told us about it. Here's the technobabble:</TextBlock>
+        </Grid>
+        <TextBox Grid.Row="1" Margin="3" x:Name="technobabbleTextBox" GotFocus="technobabbleTextBox_GotFocus"></TextBox>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Margin="3" Grid.Row="0" Grid.Column="0" Click="copyDetailsClicked">Copy Details</Button>
+            <Button Margin="3" Grid.Row="0" Grid.Column="1" Click="createGithubIssueClicked">Create GitHub issue</Button>
+            <Button Margin="3" Grid.Row="0" Grid.Column="2" Click="emailDevelopersClicked">Email Developers</Button>
+            <Button Margin="3" Grid.Row="0" Grid.Column="3" FontWeight="Bold" Click="closePatchyClicked">Close Patchy</Button>
+            <Button Margin="3" Grid.Row="1" Grid.Column="0" Click="reportToRedditClicked">Report to /r/patchy</Button>
+            <Button Margin="3" Grid.Row="1" Grid.Column="1" Click="chatOnIrcClicked">Chat about on IRC</Button>
+            <Button Margin="3" Grid.Row="1" Grid.Column="2" Click="consolatoryHugClicked">Consolatory hug</Button>
+            <Button Margin="3" Grid.Row="1" Grid.Column="3" FontWeight="Bold" Click="carryOnClicked">Attempt to carry on</Button>
+        </Grid>
+    </Grid>
+</Window>

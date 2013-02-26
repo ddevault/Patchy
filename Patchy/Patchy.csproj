@@ -105,6 +105,9 @@
       <DependentUpon>TorrentLabelWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UACHelper.cs" />
+    <Compile Include="UnhandledExceptionWindow.xaml.cs">
+      <DependentUpon>UnhandledExceptionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UpdateSummaryWindow.xaml.cs">
       <DependentUpon>UpdateSummaryWindow.xaml</DependentUpon>
     </Compile>
@@ -148,6 +151,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TorrentLabelWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UnhandledExceptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

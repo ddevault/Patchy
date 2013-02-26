@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using Patchy.IPC;
 using System.IO;
+using System.Diagnostics;
+using System.Windows.Threading;
 
 namespace Patchy
 {
@@ -43,6 +45,21 @@ namespace Patchy
             CreateServiceHost();
             (MainWindow as MainWindow).HandleArguments(e.Args);
             MainWindow.Show();
+            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        }
+
+        void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+            var window = new UnhandledExceptionWindow(e.Exception);
+            window.ShowDialog();
+        }
+
+        void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var window = new UnhandledExceptionWindow(e.ExceptionObject as Exception);
+            window.ShowDialog();
         }
 
         private void CreateServiceHost()
