@@ -110,6 +110,7 @@
     </Compile>
     <Compile Include="Validators\TcpPortValidationRule.cs" />
     <Compile Include="Validators\DirectoryValidationRule.cs" />
+    <Compile Include="WatchedDirectory.cs" />
     <Page Include="AddTorrentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

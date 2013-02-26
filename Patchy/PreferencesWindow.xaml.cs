@@ -57,6 +57,14 @@ namespace Patchy
                     Tag = label
                 };
                 rssLabelComboBox.Items.Add(comboItem);
+                comboItem = new ComboBoxItem
+                {
+                    Content = label.Name,
+                    Background = label.Brush,
+                    Foreground = label.ForegroundBrush,
+                    Tag = label
+                };
+                automaticLabelComboBox.Items.Add(comboItem);
             }
         }
 
@@ -322,8 +330,8 @@ namespace Patchy
 
         private void removeSelectedAutomaticDirectoriesClicked(object sender, RoutedEventArgs e)
         {
-            var items = automaticAddDirectoryListBox.SelectedItems.Cast<string>();
-            Settings.AutomaticAddDirectories = Settings.AutomaticAddDirectories.Where(d => !items.Contains(d)).ToArray();
+            var items = automaticAddDirectoryListBox.SelectedItems.Cast<WatchedDirectory>();
+            Settings.WatchedDirectories = Settings.WatchedDirectories.Where(d => !items.Contains(d)).ToArray();
         }
 
         private void automaticAddButtonClicked(object sender, RoutedEventArgs e)
@@ -333,12 +341,15 @@ namespace Patchy
                 MessageBox.Show("Please enter a directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            if (Settings.AutomaticAddDirectories.Contains(automaticAddTextBox.Text))
+            if (Settings.WatchedDirectories.Any(w => w.Path == automaticAddTextBox.Text))
             {
                 MessageBox.Show("This directory has already been added.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            Settings.AutomaticAddDirectories = Settings.AutomaticAddDirectories.Concat(new[] { automaticAddTextBox.Text }).ToArray();
+            var watch = new WatchedDirectory();
+            watch.Path = automaticAddTextBox.Text;
+            watch.Label = (automaticLabelComboBox.SelectedItem as ComboBoxItem).Tag as TorrentLabel;
+            Settings.WatchedDirectories = Settings.WatchedDirectories.Concat(new[] { watch }).ToArray();
             automaticAddTextBox.Text = string.Empty;
         }
 

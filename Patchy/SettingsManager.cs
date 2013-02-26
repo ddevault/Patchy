@@ -64,7 +64,7 @@ namespace Patchy
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 "Downloads");
             PostCompletionDestination = string.Empty;
-            AutomaticAddDirectories = new string[0];
+            WatchedDirectories = new WatchedDirectory[0];
 
             // Connection
             IncomingPort = 22239;
@@ -201,14 +201,14 @@ namespace Patchy
             }
         }
 
-        private string[] _AutomaticAddDirectories;
-        public string[] AutomaticAddDirectories
+        private WatchedDirectory[] _WatchedDirectories;
+        public WatchedDirectory[] WatchedDirectories
         {
-            get { return _AutomaticAddDirectories; }
+            get { return _WatchedDirectories; }
             set
             {
-                _AutomaticAddDirectories = value;
-                OnPropertyChanged("AutomaticAddDirectories");
+                _WatchedDirectories = value;
+                OnPropertyChanged("WatchedDirectories");
             }
         }
 

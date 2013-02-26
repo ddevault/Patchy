@@ -87,6 +87,7 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                         </Grid.RowDefinitions>
@@ -95,12 +96,21 @@
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <TextBlock FontWeight="Bold" Grid.ColumnSpan="2" Margin="3">Automatically add torrents from:</TextBlock>
-                        <ListBox Grid.Row="1" Grid.RowSpan="4" Margin="3" ItemsSource="{Binding AutomaticAddDirectories}" 
-                                 x:Name="automaticAddDirectoryListBox"></ListBox>
+                        <ListBox Grid.Row="1" Grid.RowSpan="5" Margin="3" ItemsSource="{Binding WatchedDirectories}" 
+                                 x:Name="automaticAddDirectoryListBox">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path}"></TextBlock>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                         <TextBox Grid.Row="1" Grid.Column="1" Width="200" x:Name="automaticAddTextBox"></TextBox>
-                        <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Width="50" Margin="3"
+                        <ComboBox x:Name="automaticLabelComboBox" Grid.Row="2" Grid.Column="1" Margin="3" SelectedIndex="0">
+                            <ComboBoxItem>No label</ComboBoxItem>
+                        </ComboBox>
+                        <Button Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Width="50" Margin="3"
                                 Click="automaticAddButtonClicked">Add</Button>
-                        <Button Grid.Row="4" Grid.Column="1" Click="removeSelectedAutomaticDirectoriesClicked">Remove Selected</Button>
+                        <Button Grid.Row="5" Grid.Column="1" Click="removeSelectedAutomaticDirectoriesClicked">Remove Selected</Button>
                     </Grid>
                 </Grid>
             </TabItem>

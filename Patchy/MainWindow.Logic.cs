@@ -497,13 +497,13 @@ namespace Patchy
                 case "MinutesBetweenRssUpdates":
                     ReloadRssTimer();
                     break;
-                case "AutomaticAddDirectories":
+                case "WatchedDirectories":
                     foreach (var watcher in AutoWatchers)
                         watcher.Dispose();
                     AutoWatchers.Clear();
-                    foreach (var item in SettingsManager.AutomaticAddDirectories)
+                    foreach (var item in SettingsManager.WatchedDirectories)
                     {
-                        var watcher = new FileSystemWatcher(item, "*.torrent");
+                        var watcher = new FileSystemWatcher(item.Path, "*.torrent");
                         watcher.EnableRaisingEvents = true;
                         watcher.Created += WatcherOnCreated;
                         AutoWatchers.Add(watcher);
@@ -528,8 +528,11 @@ namespace Patchy
                 {
                     try
                     {
+                        var watch = SettingsManager.WatchedDirectories.FirstOrDefault(w => w.Path == (sender as FileSystemWatcher).Path);
                         var torrent = Torrent.Load(fileSystemEventArgs.FullPath);
-                        AddTorrent(torrent, SettingsManager.DefaultDownloadLocation, true);
+                        var periodic = AddTorrent(torrent, SettingsManager.DefaultDownloadLocation, true);
+                        if (watch != null)
+                            periodic.Label = watch.Label;
                         BalloonTorrent = null;
                         NotifyIcon.ShowBalloonTip(5000, "Automatically added torrent",
                             "Automatically added " + torrent.Name, ToolTipIcon.Info);
