@@ -33,9 +33,9 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Margin="3" Grid.Row="0" Grid.Column="0" Click="copyDetailsClicked">Copy Details</Button>
+            <Button Margin="3" Grid.Row="0" Grid.Column="0" Click="copyDetailsClicked">Copy details</Button>
             <Button Margin="3" Grid.Row="0" Grid.Column="1" Click="createGithubIssueClicked">Create GitHub issue</Button>
-            <Button Margin="3" Grid.Row="0" Grid.Column="2" Click="emailDevelopersClicked">Email Developers</Button>
+            <Button Margin="3" Grid.Row="0" Grid.Column="2" Click="emailDevelopersClicked">Email developers</Button>
             <Button Margin="3" Grid.Row="0" Grid.Column="3" FontWeight="Bold" Click="closePatchyClicked">Close Patchy</Button>
             <Button Margin="3" Grid.Row="1" Grid.Column="0" Click="reportToRedditClicked">Report to /r/patchy</Button>
             <Button Margin="3" Grid.Row="1" Grid.Column="1" Click="chatOnIrcClicked">Chat about on IRC</Button>
