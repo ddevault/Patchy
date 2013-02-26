@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Mono.Cecil;
 using System.IO;
+using System.IO.Compression;
 
 namespace Patchy.PostBuild.EmbedAssembly
 {
@@ -22,7 +23,10 @@ namespace Patchy.PostBuild.EmbedAssembly
                 target.MainModule.Resources.Add(new EmbeddedResource(Path.GetFileName(args[i]), ManifestResourceAttributes.Public, data));
             }
             using (var stream = File.Create(args[0]))
-                target.Write(stream);
+            {
+                var gStream = new GZipStream(stream, CompressionMode.Compress);
+                target.Write(gStream);
+            }
         }
     }
 }
