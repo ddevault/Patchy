@@ -207,7 +207,7 @@ namespace Patchy
                     {
                         Task.Factory.StartNew(() =>
                             {
-                                Client.MoveTorrent(torrent.Torrent, SettingsManager.PostCompletionDestination);
+                                Client.MoveTorrent(torrent, SettingsManager.PostCompletionDestination);
                                 if (!string.IsNullOrEmpty(SettingsManager.TorrentCompletionCommand))
                                 {
                                     var command = SettingsManager.TorrentCompletionCommand;

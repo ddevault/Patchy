@@ -17,6 +17,7 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace Patchy
 {
@@ -211,22 +212,27 @@ namespace Patchy
             return Torrents.FirstOrDefault(t => t.Torrent.Torrent == torrent);
         }
 
-        public void MoveTorrent(TorrentWrapper torrent, string path)
+        public void MoveTorrent(PeriodicTorrent torrent, string path)
         {
             Task.Factory.StartNew(() =>
                 {
-                    path = Path.Combine(path, Path.GetFileName(torrent.Path));
+                    path = Path.Combine(path, Path.GetFileName(torrent.Torrent.Path));
                     if (!Directory.Exists(path))
                         Directory.CreateDirectory(path);
-                    var oldPath = torrent.Path;
-                    torrent.Stop();
+                    var oldPath = torrent.Torrent.Path;
+                    torrent.Torrent.Stop();
                     while (torrent.State != TorrentState.Stopped) ;
-                    torrent.MoveFiles(path, true);
-                    torrent.Start();
+                    torrent.Torrent.MoveFiles(path, true);
+                    torrent.Torrent.Start();
                     Directory.Delete(oldPath, true);
+                    torrent.Torrent.Path = torrent.Torrent.SavePath;
+
                     var cache = Path.Combine(SettingsManager.TorrentCachePath, Path.GetFileName(oldPath));
-                    File.WriteAllText(Path.Combine(Path.GetDirectoryName(cache),
-                        Path.GetFileName(cache)) + ".info", path);
+                    cache = Path.Combine(Path.GetDirectoryName(cache), Path.GetFileName(cache)) + ".info";
+                    torrent.TorrentInfo.Path = torrent.Torrent.Path;
+                    var serializer = new JsonSerializer();
+                    using (var writer = new StreamWriter(cache))
+                        serializer.Serialize(new JsonTextWriter(writer), torrent.TorrentInfo);
                 });
         }
 

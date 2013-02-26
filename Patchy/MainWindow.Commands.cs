@@ -160,7 +160,7 @@ namespace Patchy
                 return;
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                Client.MoveTorrent(torrent.Torrent, dialog.SelectedPath);
+                Client.MoveTorrent(torrent, dialog.SelectedPath);
         }
 
         private void ExecuteCreateLabel(object sender, ExecutedRoutedEventArgs e)
