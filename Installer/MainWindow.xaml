@@ -88,7 +88,7 @@
                     <CheckBox x:Name="startMinimizedCheckBox" Grid.Row="1" IsChecked="True" 
                               IsEnabled="{Binding ElementName=startWithWindowsCheckBox, Path=IsChecked}">Start Patchy when Windows starts</CheckBox>
                     <CheckBox x:Name="addToStartMenuCheckBox" Grid.Row="2" IsChecked="True">Add Patchy to the Start Menu</CheckBox>
-                    <CheckBox x:Name="torretnAssociationCheckBox" Grid.Row="3" IsChecked="True">Use Patchy for .torrent files</CheckBox>
+                    <CheckBox x:Name="torrentAssociationCheckBox" Grid.Row="3" IsChecked="True">Use Patchy for .torrent files</CheckBox>
                     <CheckBox x:Name="magnetAssociationCheckBox" Grid.Row="4" IsChecked="True">Use Patchy for magnet links</CheckBox>
                 </Grid>
             </TabItem>

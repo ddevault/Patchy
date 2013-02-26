@@ -164,6 +164,9 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>$(TargetDir)ToCopy\Patchy.PostBuild.EmbedAssembly.exe Installer.exe ToCopy\MonoTorrent.dll ToCopy\MonoTorrent.Dht.dll ToCopy\Newtonsoft.Json.dll ToCopy\Patchy.exe ToCopy\Xceed.Wpf.Toolkit.dll</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

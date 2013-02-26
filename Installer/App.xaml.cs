@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Reflection;
 using System.ServiceModel;
 using System.Threading;
@@ -19,25 +20,34 @@ namespace Installer
     /// </summary>
     public partial class App : Application
     {
+        public static Stream GetEmbeddedResource(string name)
+        {
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
+            if (stream == null)
+                return null;
+            var memStream = new MemoryStream();
+            using (var gStream = new GZipStream(stream, CompressionMode.Decompress))
+                Extensions.CopyTo(gStream, memStream);
+            memStream.Seek(0, SeekOrigin.Begin);
+            return memStream;
+        }
+
         // Crazy hacky stuff to make it so we can bundle the installer up in a single file
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            var executingAssembly = Assembly.GetExecutingAssembly();
             var assemblyName = new AssemblyName(args.Name);
 
             string path = assemblyName.Name + ".dll";
             if (assemblyName.CultureInfo.Equals(CultureInfo.InvariantCulture) == false)
                 path = String.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
 
-            using (var stream = executingAssembly.GetManifestResourceStream(path))
-            {
-                if (stream == null)
-                    return null;
+            var stream = GetEmbeddedResource(path);
+            if (stream == null)
+                return null;
 
-                var assemblyRawBytes = new byte[stream.Length];
-                stream.Read(assemblyRawBytes, 0, assemblyRawBytes.Length);
-                return Assembly.Load(assemblyRawBytes);
-            }
+            var assemblyRawBytes = new byte[stream.Length];
+            stream.Read(assemblyRawBytes, 0, assemblyRawBytes.Length);
+            return Assembly.Load(assemblyRawBytes);
         }
 
         private readonly string SingletonGuid = "B11931EB-32BC-441F-BF57-859FE282236A";
@@ -46,6 +56,7 @@ namespace Installer
         protected override void OnStartup(StartupEventArgs e)
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            App.Current.DispatcherUnhandledException += (s, ex) => MessageBox.Show(ex.Exception.ToString());
             // Check for running instances of Patchy and kill them
             bool isInitialInstance;
             Singleton = new Mutex(true, "Patchy:" + SingletonGuid, out isInitialInstance);

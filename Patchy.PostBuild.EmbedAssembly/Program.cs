@@ -5,6 +5,7 @@ using System.Text;
 using Mono.Cecil;
 using System.IO;
 using System.IO.Compression;
+using System.Threading;
 
 namespace Patchy.PostBuild.EmbedAssembly
 {
@@ -19,14 +20,17 @@ namespace Patchy.PostBuild.EmbedAssembly
                 target = AssemblyDefinition.ReadAssembly(stream);
             for (int i = 1; i < args.Length; i++)
             {
-                var data = File.ReadAllBytes(args[i]);
+                var memStream = new MemoryStream();
+                using (var stream = File.OpenRead(args[i]))
+                {
+                    using (var gStream = new GZipStream(memStream, CompressionMode.Compress))
+                        stream.CopyTo(gStream);
+                }
+                var data = memStream.ToArray();
                 target.MainModule.Resources.Add(new EmbeddedResource(Path.GetFileName(args[i]), ManifestResourceAttributes.Public, data));
             }
             using (var stream = File.Create(args[0]))
-            {
-                var gStream = new GZipStream(stream, CompressionMode.Compress);
-                target.Write(gStream);
-            }
+                target.Write(stream);
         }
     }
 }

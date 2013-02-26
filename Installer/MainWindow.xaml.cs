@@ -98,7 +98,7 @@ namespace Installer
             CopyFileFromAssembly("Xceed.Wpf.Toolkit.dll", path);
             // Associations
             RegisterApplication(path);
-            if (torretnAssociationCheckBox.IsChecked.Value)
+            if (torrentAssociationCheckBox.IsChecked.Value)
                 AssociateTorrents(path);
             if (magnetAssociationCheckBox.IsChecked.Value)
                 AssociateMagnetLinks(path);
@@ -289,9 +289,10 @@ namespace Installer
 
         private void CopyFileFromAssembly(string file, string path)
         {
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Installer.Binaries." + file);
+            var stream = App.GetEmbeddedResource(file);
             using (var destination = File.Create(Path.Combine(path, file)))
                 Extensions.CopyTo(stream, destination);
+            stream.Close();
         }
 
         private void browseSourceClick(object sender, RoutedEventArgs e)
