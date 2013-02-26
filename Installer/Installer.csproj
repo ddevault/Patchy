@@ -120,37 +120,48 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Patchy\bin\Debug\MonoTorrent.Dht.dll">
-      <Link>Binaries\MonoTorrent.Dht.dll</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Patchy\bin\Debug\MonoTorrent.dll">
-      <Link>Binaries\MonoTorrent.dll</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Patchy\bin\Debug\Newtonsoft.Json.dll">
-      <Link>Binaries\Newtonsoft.Json.dll</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Patchy\bin\Debug\Patchy.exe">
-      <Link>Binaries\Patchy.exe</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Patchy\bin\Debug\Xceed.Wpf.Toolkit.dll">
-      <Link>Binaries\Xceed.Wpf.Toolkit.dll</Link>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\externals\monotorrent\src\MonoTorrent\MonoTorrent.csproj">
       <Project>{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}</Project>
       <Name>MonoTorrent</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="..\externals\monotorrent\build\MonoTorrent\Debug\MonoTorrent.dll">
-      <Link>Dependencies\MonoTorrent.dll</Link>
-    </EmbeddedResource>
+    <Resource Include="ToCopy\readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\lib\Newtonsoft.Json.dll">
-      <Link>Dependencies\Newtonsoft.Json.dll</Link>
-    </EmbeddedResource>
+    <Content Include="..\externals\cecil\bin\winphone_Debug\Mono.Cecil.dll">
+      <Link>ToCopy\Mono.Cecil.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\externals\cecil\bin\winphone_Debug\mscorlib.dll">
+      <Link>ToCopy\mscorlib.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\externals\monotorrent\build\MonoTorrent\Debug\MonoTorrent.Dht.dll">
+      <Link>ToCopy\MonoTorrent.Dht.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\externals\monotorrent\build\MonoTorrent\Debug\MonoTorrent.dll">
+      <Link>ToCopy\MonoTorrent.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\lib\Newtonsoft.Json.dll">
+      <Link>ToCopy\Newtonsoft.Json.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\lib\Xceed.Wpf.Toolkit.dll">
+      <Link>ToCopy\Xceed.Wpf.Toolkit.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Patchy.PostBuild.EmbedAssembly\bin\Debug\Patchy.PostBuild.EmbedAssembly.exe">
+      <Link>ToCopy\Patchy.PostBuild.EmbedAssembly.exe</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Patchy\bin\Debug\Patchy.exe">
+      <Link>ToCopy\Patchy.exe</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
