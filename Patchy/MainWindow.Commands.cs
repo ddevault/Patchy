@@ -53,10 +53,14 @@ namespace Patchy
             var window = new AddTorrentWindow(SettingsManager);
             if (window.ShowDialog().Value)
             {
+                PeriodicTorrent torrent;
                 if (window.IsMagnet)
-                    AddTorrent(window.MagnetLink, window.DestinationPath);
+                    torrent = AddTorrent(window.MagnetLink, window.DestinationPath);
                 else
-                    AddTorrent(window.Torrent, window.DestinationPath);
+                    torrent = AddTorrent(window.Torrent, window.DestinationPath);
+                torrentGrid.SelectedItem = torrent;
+                if (window.EditAdditionalSettings)
+                    detailTabs.SelectedItem = torrentOptionsTab;
 
                 if (Visibility == Visibility.Hidden)
                 {

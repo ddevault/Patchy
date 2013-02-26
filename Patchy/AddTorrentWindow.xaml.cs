@@ -40,6 +40,8 @@ namespace Patchy
                 magnetLinkTextBox.Text = ConvertMagnetToString(value);
             }
         }
+        public string DestinationPath { get; set; }
+        public bool EditAdditionalSettings { get { return editSettingsCheckBox.IsChecked.Value; } }
 
         private string ConvertMagnetToString(MagnetLink value)
         {
@@ -50,9 +52,6 @@ namespace Patchy
                 result += "&tr=" + Uri.EscapeUriString(url);
             return result;
         }
-
-        public string DestinationPath { get; set; }
-        public bool EditAdditionalSettings { get { return editSettingsCheckBox.IsChecked.Value; } }
 
         private class FolderBrowserItem
         {
