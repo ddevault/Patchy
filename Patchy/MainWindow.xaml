@@ -99,7 +99,7 @@
                 <MenuItem Header="Preferences" Command="pt:Commands.EditPreferences"></MenuItem>
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Header="Documentation"></MenuItem>
+                <MenuItem Header="Documentation" Click="documentationClicked"></MenuItem>
                 <MenuItem Header="Report Bug" Click="menuReportBugClicked"></MenuItem>
                 <MenuItem Header="Source Code" Click="menuSourceCodeClicked"></MenuItem>
             </MenuItem>

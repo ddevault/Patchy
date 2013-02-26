@@ -437,6 +437,11 @@ namespace Patchy
             Process.Start("https://github.com/SirCmpwn/Patchy");
         }
 
+        private void documentationClicked(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/SirCmpwn/Patchy/wiki");
+        }
+
         private void menuReportBugClicked(object sender, RoutedEventArgs e)
         {
             var systemInfo = string.Format("OS Name: {0}" + Environment.NewLine +
