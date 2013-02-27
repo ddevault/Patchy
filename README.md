@@ -53,7 +53,8 @@ root of the repository to build.
 ## Contributing
 
 Pull requests are welcome. Adhere to code standards already in use. Smaller, focused pull requests are more
-likely to be accepted than broad, sweeping ones.
+likely to be accepted than broad, sweeping ones. Please make your pull requests in feature branches - that is
+to say, create a branch for each new change you make, and it will be merged into master once deemed stable.
 
 ## License
 
