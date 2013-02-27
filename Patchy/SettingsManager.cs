@@ -19,7 +19,11 @@ namespace Patchy
 
         public static string SettingsPath
         {
+#if !PORTABLE
             get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".patchy"); }
+#else
+            get { return "data"; }
+#endif
         }
 
         public static string SettingsFile
