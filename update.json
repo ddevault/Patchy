@@ -3,5 +3,6 @@
     "Version":1,
     "Description":"The initial release of Patchy.",
     "MagnetLink":"magnet:?xt=urn:btih:c8cde7428b44142b04d88b91785ecf0f20d16903&dn=archlinux-2013.02.01-dual.iso&tr=udp://tracker.archlinux.org:6969&tr=http://tracker.archlinux.org:6969/announce",
+    "HttpLink":"http://example.com",
     "DiffUrl":"http://example.com"
 }
