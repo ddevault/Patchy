@@ -20,6 +20,9 @@ namespace Patchy
     public partial class UpdateSummaryWindow : Window
     {
         public AutomaticUpdate Update { get; set; }
+        public bool DownloadOverHttp {
+            get { return httpDownload.IsChecked.Value; }
+        }
 
         public UpdateSummaryWindow(AutomaticUpdate update)
         {

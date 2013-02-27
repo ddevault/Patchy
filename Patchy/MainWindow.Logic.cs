@@ -28,7 +28,7 @@ namespace Patchy
 {
     public partial class MainWindow
     {
-        private const int CurrentVersion = 1;
+        private const int CurrentVersion = 0;
 
         private ClientManager Client { get; set; }
         private Timer Timer { get; set; }
@@ -113,15 +113,44 @@ namespace Patchy
                                     {
                                         if (Directory.Exists(Path.Combine(SettingsManager.SettingsPath, "update")))
                                             Directory.Delete(Path.Combine(SettingsManager.SettingsPath, "update"), true);
-                                        var torrent = AddTorrent(new MagnetLink(update.MagnetLink), Path.Combine(SettingsManager.SettingsPath, "update"));
-                                        if (torrent != null)
-                                            torrent.IsAutomaticUpdate = true;
+                                        if (window.DownloadOverHttp)
+                                        {
+                                            Task.Factory.StartNew(() => UpdateOverHttp(update));
+                                        }
+                                        else
+                                        {
+                                            var torrent = AddTorrent(new MagnetLink(update.MagnetLink), Path.Combine(SettingsManager.SettingsPath, "update"));
+                                            if (torrent != null)
+                                                torrent.IsAutomaticUpdate = true;
+                                        }
                                     }
                                 }));
                         }
                     }
                     catch { }
                 });
+        }
+
+        private void UpdateOverHttp(AutomaticUpdate update)
+        {
+            try
+            {
+                Directory.CreateDirectory(Path.Combine(SettingsManager.SettingsPath, "update"));
+                var path = Path.Combine(SettingsManager.SettingsPath, "update", "update.exe");
+                var client = new WebClient();
+                client.DownloadFile(update.HttpLink, path);
+
+                var result = MessageBox.Show("The latest Patchy update is ready to be applied. Would you like to install it now?",
+                    "Update Ready", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (result == MessageBoxResult.Yes)
+                    Process.Start(path);
+                else
+                    Process.Start("explorer", "\"" + Path.Combine(SettingsManager.SettingsPath, "update") + "\"");
+            }
+            catch
+            {
+                MessageBox.Show("Unable to download update. Try again later.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public PeriodicTorrent AddTorrent(MagnetLink link, string path, bool suppressMessages = false)

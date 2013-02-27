@@ -8,6 +8,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock>An update is available:</TextBlock>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
@@ -43,5 +44,6 @@
             <Button Width="50" Grid.Column="1" Margin="3" IsCancel="True" Click="cancelClicked">Cancel</Button>
             <Button Width="50" Grid.Column="2" Margin="3" IsDefault="True" Click="applyClicked">Apply</Button>
         </Grid>
+        <CheckBox Grid.Row="4" HorizontalAlignment="Right" x:Name="httpDownload" IsChecked="False">Download over HTTP</CheckBox>
     </Grid>
 </Window>

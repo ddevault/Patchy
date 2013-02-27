@@ -11,6 +11,7 @@ namespace Patchy
         public int Version { get; set; }
         public string Description { get; set; }
         public string MagnetLink { get; set; }
+        public string HttpLink { get; set; }
         public string DiffUrl { get; set; }
     }
 }
