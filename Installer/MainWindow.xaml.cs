@@ -58,23 +58,7 @@ namespace Installer
             if (progressTabs.SelectedIndex == 1) // Install path
             {
                 if (!Directory.Exists(installPathTextBox.Text))
-                {
-                    var result = MessageBox.Show("The specified directory does not exist. Create it?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error);
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        try
-                        {
-                            Directory.CreateDirectory(installPathTextBox.Text);
-                        }
-                        catch
-                        {
-                            MessageBox.Show("Unable to create directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-                    }
-                    else
-                        return;
-                }
+                    Directory.CreateDirectory(installPathTextBox.Text);
             }
             if (progressTabs.SelectedIndex == progressTabs.Items.Count - 1)
             {
