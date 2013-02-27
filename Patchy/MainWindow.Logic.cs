@@ -28,7 +28,7 @@ namespace Patchy
 {
     public partial class MainWindow
     {
-        private const int CurrentVersion = 0;
+        private const int CurrentVersion = 1;
 
         private ClientManager Client { get; set; }
         private Timer Timer { get; set; }
