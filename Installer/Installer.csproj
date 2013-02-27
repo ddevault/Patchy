@@ -134,10 +134,6 @@
       <Link>ToCopy\Mono.Cecil.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\externals\cecil\bin\winphone_Debug\mscorlib.dll">
-      <Link>ToCopy\mscorlib.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\externals\monotorrent\build\MonoTorrent\Debug\MonoTorrent.Dht.dll">
       <Link>ToCopy\MonoTorrent.Dht.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
