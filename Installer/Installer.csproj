@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Portable|AnyCPU'">
+    <OutputPath>bin\Portable\</OutputPath>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -26,7 +29,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -134,11 +137,11 @@
       <Link>ToCopy\Mono.Cecil.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\externals\monotorrent\build\MonoTorrent\Debug\MonoTorrent.Dht.dll">
+    <Content Include="..\externals\monotorrent\build\MonoTorrent\$(Configuration)\MonoTorrent.Dht.dll">
       <Link>ToCopy\MonoTorrent.Dht.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\externals\monotorrent\build\MonoTorrent\Debug\MonoTorrent.dll">
+    <Content Include="..\externals\monotorrent\build\MonoTorrent\$(Configuration)\MonoTorrent.dll">
       <Link>ToCopy\MonoTorrent.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -154,14 +157,18 @@
       <Link>ToCopy\Patchy.PostBuild.EmbedAssembly.exe</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Patchy\bin\Debug\Patchy.exe">
+    <Content Include="..\Patchy\bin\$(Configuration)\Patchy.exe">
       <Link>ToCopy\Patchy.exe</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Uninstaller\bin\$(Configuration)\Uninstaller.exe">
+      <Link>ToCopy\Uninstaller.exe</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>$(TargetDir)ToCopy\Patchy.PostBuild.EmbedAssembly.exe Installer.exe ToCopy\MonoTorrent.dll ToCopy\MonoTorrent.Dht.dll ToCopy\Newtonsoft.Json.dll ToCopy\Patchy.exe ToCopy\Xceed.Wpf.Toolkit.dll</PostBuildEvent>
+    <PostBuildEvent>$(TargetDir)ToCopy\Patchy.PostBuild.EmbedAssembly.exe Installer.exe ToCopy\MonoTorrent.dll ToCopy\MonoTorrent.Dht.dll ToCopy\Newtonsoft.Json.dll ToCopy\Patchy.exe ToCopy\Uninstaller.exe ToCopy\Xceed.Wpf.Toolkit.dll</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

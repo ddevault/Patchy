@@ -95,9 +95,11 @@ namespace Installer
             CopyFileFromAssembly("MonoTorrent.dll", path);
             CopyFileFromAssembly("Newtonsoft.Json.dll", path);
             CopyFileFromAssembly("Patchy.exe", path);
+            CopyFileFromAssembly("Uninstaller.exe", path);
             CopyFileFromAssembly("Xceed.Wpf.Toolkit.dll", path);
             // Associations
             RegisterApplication(path);
+            RegisterUninstaller(path);
             if (torrentAssociationCheckBox.IsChecked.Value)
                 AssociateTorrents(path);
             if (magnetAssociationCheckBox.IsChecked.Value)
@@ -263,6 +265,37 @@ namespace Installer
                                 command.SetValue(null, startup);
                         }
                 }
+        }
+
+        public void RegisterUninstaller(string installPath)
+        {
+            using (RegistryKey parent = Registry.LocalMachine.CreateSubKey(
+                 @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"))
+            {
+                RegistryKey key = null;
+
+                try
+                {
+                    key = parent.CreateSubKey("Patchy");
+
+                    key.SetValue("DisplayName", "Patchy BitTorrent Client");
+                    key.SetValue("ApplicationVersion", "1.0");
+                    key.SetValue("Publisher", "Drew DeVault");
+                    key.SetValue("DisplayIcon", Path.Combine(installPath, "Patchy.exe"));
+                    key.SetValue("DisplayVersion", "1.0");
+                    key.SetValue("URLInfoAbout", "http://sircmpwn.github.com/Patchy");
+                    key.SetValue("Contact", "sir@cmpwn.com");
+                    key.SetValue("InstallDate", DateTime.Now.ToString("yyyyMMdd"));
+                    key.SetValue("UninstallString", Path.Combine(installPath, "Uninstaller.exe"));
+                }
+                finally
+                {
+                    if (key != null)
+                    {
+                        key.Close();
+                    }
+                }
+            }
         }
 
         private static void AssociateTorrents(string installationPath)
