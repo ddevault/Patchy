@@ -125,20 +125,29 @@ namespace Installer
                         {
                             using (var stream = File.OpenRead(Path.Combine(uTorrent, "resume.dat")))
                                 dictionary = (BEncodedDictionary)BEncodedDictionary.Decode(stream);
-                            foreach (var torrent in torrents)
+                            foreach (var key in dictionary.Keys)
                             {
-                                if (dictionary.ContainsKey(Path.GetFileName(torrent)))
+                                if (key.Text.EndsWith(".torrent"))
                                 {
-                                    // Add torrent
-                                    var info = new TorrentInfo
+                                    if (File.Exists(Path.Combine(uTorrent, key.Text)))
                                     {
-                                        Label = new TorrentLabel("µTorrent", "#00853F") { Foreground = "#FFFFFF" },
-                                        Path = ((BEncodedDictionary)dictionary[Path.GetFileName(torrent)])["path"].ToString()
-                                    };
-                                    using (var json = new StreamWriter(Path.Combine(torrentcache,
-                                        Path.GetFileNameWithoutExtension(torrent) + ".info")))
-                                        serializer.Serialize(new JsonTextWriter(json), info);
-                                    File.Copy(torrent, Path.Combine(torrentcache, Path.GetFileName(torrent)));
+                                        // Add torrent
+                                        var torrent = Path.Combine(uTorrent, key.Text);
+                                        var info = new TorrentInfo
+                                        {
+                                            Label = new TorrentLabel("µTorrent", "#00853F") { Foreground = "#FFFFFF" },
+                                            Path = ((BEncodedDictionary)dictionary[key.Text])["path"].ToString(),
+                                            UploadSlots = 4,
+                                            IsRunning = true
+                                        };
+                                        if (!File.Exists(Path.Combine(torrentcache, Path.GetFileName(torrent))))
+                                        {
+                                            using (var json = new StreamWriter(Path.Combine(torrentcache,
+                                                Path.GetFileNameWithoutExtension(torrent) + ".info")))
+                                                serializer.Serialize(new JsonTextWriter(json), info);
+                                            File.Copy(torrent, Path.Combine(torrentcache, Path.GetFileName(torrent)));
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -168,7 +177,9 @@ namespace Installer
                                 var info = new TorrentInfo
                                 {
                                     Label = new TorrentLabel("Transmission", "#DA0000") { Foreground = "#FFFFFF" },
-                                    Path = dictionary["destination"].ToString()
+                                    Path = dictionary["destination"].ToString(),
+                                    UploadSlots = 4,
+                                    IsRunning = true
                                 };
                                 using (var json = new StreamWriter(Path.Combine(torrentcache, name + ".info")))
                                     serializer.Serialize(new JsonTextWriter(json), info);

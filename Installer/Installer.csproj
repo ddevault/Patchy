@@ -63,8 +63,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\Patchy\TorrentInfo.cs">
+      <Link>TorrentInfo.cs</Link>
+    </Compile>
     <Compile Include="ShellLink.cs" />
-    <Compile Include="TorrentInfo.cs" />
     <Compile Include="TorrentLabel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
