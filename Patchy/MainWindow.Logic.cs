@@ -115,7 +115,7 @@ namespace Patchy
                                             Directory.Delete(Path.Combine(SettingsManager.SettingsPath, "update"), true);
                                         var torrent = AddTorrent(new MagnetLink(update.MagnetLink), Path.Combine(SettingsManager.SettingsPath, "update"));
                                         if (torrent != null)
-                                            torrent.OpenWhenComplete = true;
+                                            torrent.IsAutomaticUpdate = true;
                                     }
                                 }));
                         }
@@ -199,8 +199,20 @@ namespace Patchy
                             torrent.Name, System.Windows.Forms.ToolTipIcon.Info);
                         BalloonTorrent = torrent;
                         FlashWindow(new WindowInteropHelper(this).Handle, true);
-                        if (torrent.OpenWhenComplete)
-                            Process.Start("explorer", "\"" + torrent.Torrent.SavePath + "\"");
+                        if (torrent.IsAutomaticUpdate)
+                        {
+                            if (File.Exists(Path.Combine(torrent.Torrent.SavePath, "update.exe")))
+                            {
+                                var result = MessageBox.Show("The latest Patchy update is ready to be applied. Would you like to install it now?",
+                                    "Update Ready", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                                if (result == MessageBoxResult.Yes)
+                                    Process.Start(Path.Combine(torrent.Torrent.SavePath, "update.exe"));
+                                else
+                                    Process.Start("explorer", "\"" + torrent.Torrent.SavePath + "\"");
+                            }
+                            else
+                                Process.Start("explorer", "\"" + torrent.Torrent.SavePath + "\"");
+                        }
                     }
                     torrent.NotifiedComplete = true;
                     if (!string.IsNullOrEmpty(SettingsManager.PostCompletionDestination))
