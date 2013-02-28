@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2010
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patchy", "Patchy\Patchy.csproj", "{43E0AA6B-8DF3-429C-BD51-20314E47F61A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Installer", "Installer\Installer.csproj", "{1108AAC3-B62F-4298-8399-A6209A2A92CD}"
@@ -242,11 +242,11 @@ Global
 		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.net_4_0_Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.net_4_0_Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.net_4_0_Release|x86.ActiveCfg = Release|Any CPU
-		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Portable|Any CPU.ActiveCfg = Portable|Any CPU
-		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Portable|Any CPU.Build.0 = Portable|Any CPU
-		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Portable|Mixed Platforms.ActiveCfg = Portable|Any CPU
-		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Portable|Mixed Platforms.Build.0 = Portable|Any CPU
-		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Portable|x86.ActiveCfg = Portable|Any CPU
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Portable|Any CPU.ActiveCfg = Stats|Any CPU
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Portable|Any CPU.Build.0 = Stats|Any CPU
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Portable|Mixed Platforms.ActiveCfg = Stats|Any CPU
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Portable|Mixed Platforms.Build.0 = Stats|Any CPU
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Portable|x86.ActiveCfg = Stats|Any CPU
 		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
@@ -312,11 +312,11 @@ Global
 		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.net_4_0_Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.net_4_0_Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.net_4_0_Release|x86.ActiveCfg = Release|Any CPU
-		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Portable|Any CPU.ActiveCfg = Portable|Any CPU
-		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Portable|Any CPU.Build.0 = Portable|Any CPU
-		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Portable|Mixed Platforms.ActiveCfg = Portable|Any CPU
-		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Portable|Mixed Platforms.Build.0 = Portable|Any CPU
-		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Portable|x86.ActiveCfg = Portable|Any CPU
+		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Portable|Any CPU.ActiveCfg = Release|Any CPU
+		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Portable|Any CPU.Build.0 = Release|Any CPU
+		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Portable|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Portable|Mixed Platforms.Build.0 = Release|Any CPU
+		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Portable|x86.ActiveCfg = Release|Any CPU
 		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
@@ -382,10 +382,11 @@ Global
 		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.net_4_0_Release|Mixed Platforms.ActiveCfg = net_4_0_Release|Any CPU
 		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.net_4_0_Release|Mixed Platforms.Build.0 = net_4_0_Release|Any CPU
 		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.net_4_0_Release|x86.ActiveCfg = net_4_0_Release|Any CPU
-		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.Portable|Any CPU.ActiveCfg = Portable|Any CPU
-		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.Portable|Any CPU.Build.0 = Portable|Any CPU
-		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.Portable|Mixed Platforms.ActiveCfg = Portable|Any CPU
-		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.Portable|x86.ActiveCfg = Portable|Any CPU
+		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.Portable|Any CPU.ActiveCfg = silverlight_Release|Any CPU
+		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.Portable|Any CPU.Build.0 = silverlight_Release|Any CPU
+		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.Portable|Mixed Platforms.ActiveCfg = silverlight_Release|Any CPU
+		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.Portable|Mixed Platforms.Build.0 = silverlight_Release|Any CPU
+		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.Portable|x86.ActiveCfg = silverlight_Release|Any CPU
 		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.Release|Any CPU.ActiveCfg = winphone_Release|Any CPU
 		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.Release|Any CPU.Build.0 = winphone_Release|Any CPU
 		{D68133BD-1E63-496E-9EDE-4FBDBF77B486}.Release|Mixed Platforms.ActiveCfg = winphone_Release|Any CPU
