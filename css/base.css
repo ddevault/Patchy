@@ -186,6 +186,7 @@ p.download-link a {
     padding: 5px 0;
     text-decoration: none;
     transition: box-shadow 0.5s;
+    -webkit-transition: box-shadow 0.5s;
     background: #267f00; /* Old browsers */
     background: -moz-linear-gradient(top, #267f00 0%, #1d6000 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#267f00), color-stop(100%,#1d6000)); /* Chrome,Safari4+ */
@@ -198,6 +199,7 @@ p.download-link a {
 
 p.download-link a:hover {
     transition: box-shadow 0.5s;
+    -webkit-transition: box-shadow 0.5s;
     box-shadow: 0 0 10px 1px #444;
 }
 
