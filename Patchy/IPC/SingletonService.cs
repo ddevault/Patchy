@@ -5,6 +5,8 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using MonoTorrent;
+using MonoTorrent.Common;
 
 namespace Patchy.IPC
 {
@@ -15,6 +17,10 @@ namespace Patchy.IPC
         void HandleArguments(string[] args);
         [OperationContract]
         void Shutdown();
+        [OperationContract]
+        bool AddTorrent(byte[] file, string destination);
+        [OperationContract]
+        bool AddMagnetLink(string link, string destination);
     }
 
     public class SingletonService : ISingletonService
@@ -32,6 +38,34 @@ namespace Patchy.IPC
             Window.ForceClose = true;
             Window.Close();
             Application.Current.Shutdown();
+        }
+
+        public bool AddTorrent(byte[] file, string destination)
+        {
+            try
+            {
+                var torrent = Torrent.Load(file);
+                Window.AddTorrent(torrent, destination, true);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool AddMagnetLink(string link, string destination)
+        {
+            try
+            {
+                var torrent = new MagnetLink(link);
+                Window.AddTorrent(torrent, destination, true);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
