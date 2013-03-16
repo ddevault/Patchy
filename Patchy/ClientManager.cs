@@ -18,6 +18,7 @@ using System.Threading;
 using System.Windows;
 using System.ComponentModel;
 using Newtonsoft.Json;
+using Mono.Nat;
 
 namespace Patchy
 {
@@ -34,6 +35,8 @@ namespace Patchy
             var port = SettingsManager.IncomingPort;
             if (SettingsManager.UseRandomPort)
                 port = new Random().Next(1, 65536);
+            if (SettingsManager.MapWithUPnP)
+                MapPort();
             var settings = new EngineSettings(SettingsManager.DefaultDownloadLocation, port);
 
             settings.PreferEncryption = SettingsManager.EncryptionSettings != EncryptionTypes.PlainText; // Always prefer encryption unless it's disabled
@@ -60,6 +63,8 @@ namespace Patchy
             {
                 case "IncomingPort":
                     Client.Listener.ChangeEndpoint(new IPEndPoint(IPAddress.Any, SettingsManager.IncomingPort));
+                    if (SettingsManager.MapWithUPnP)
+                        MapPort();
                     break;
                 case "MapWithUPnP":
                     // TODO: UPnP
@@ -95,6 +100,22 @@ namespace Patchy
                     Client.Settings.AllowedEncryption = SettingsManager.EncryptionSettings;
                     break;
             }
+        }
+
+        private void MapPort()
+        {
+            NatUtility.DeviceFound += NatUtility_DeviceFound;
+            NatUtility.StartDiscovery();
+        }
+
+        void NatUtility_DeviceFound(object sender, DeviceEventArgs e)
+        {
+            try
+            {
+                e.Device.CreatePortMap(new Mapping(Protocol.Tcp, SettingsManager.IncomingPort, SettingsManager.IncomingPort));
+                NatUtility.StopDiscovery();
+            }
+            catch { }
         }
 
         void Torrents_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
