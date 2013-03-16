@@ -511,6 +511,8 @@ namespace Patchy
                     // 0: All torrents
                     // 1: Downloading
                     // 2: Seeding
+                    if (Client == null)
+                        return;
                     if (labelList.SelectedIndex == 0)
                         torrentGrid.ItemsSource = Client.Torrents;
                     else if (labelList.SelectedIndex == 1)

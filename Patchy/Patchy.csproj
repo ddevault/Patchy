@@ -46,6 +46,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -73,6 +74,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AutomaticUpdate.cs" />
+    <Compile Include="Converters\HeaderFilterConverter.cs" />
     <Compile Include="Converters\NetworkSpeedConverter.cs" />
     <Compile Include="Converters\NullToBooleanConverter.cs" />
     <Compile Include="Converters\PeerClientConverter.cs" />
@@ -85,6 +87,7 @@
       <DependentUpon>CreateTorrentWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="DoubleClickAction.cs" />
+    <Compile Include="FilterDataGrid.cs" />
     <Compile Include="IPC\SingletonService.cs" />
     <Compile Include="MainWindow.Commands.cs" />
     <Compile Include="MainWindow.Logic.cs" />
@@ -152,6 +155,10 @@
     <Page Include="PreferencesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Default.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="TorrentLabelWindow.xaml">
       <SubType>Designer</SubType>
@@ -236,6 +243,7 @@
       <Name>MonoTorrent</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -211,7 +211,7 @@
                       Visibility="{Binding ElementName=viewRssFeedsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}"></GridSplitter>
         <!--Main torrent grid-->
         <Grid Grid.Row="2" Grid.Column="2" x:Name="upperGrid">
-            <DataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
+            <pt:FilteringDataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
                       GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="TorrentGridSelectionChanged"
                       IsReadOnly="True" ContextMenuOpening="torrentGridContextMenuOpening" CanUserResizeRows="False"
                       BorderThickness="0" PreviewKeyDown="torrentGrid_PreviewKeyDown">
@@ -326,7 +326,7 @@
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
-            </DataGrid>
+            </pt:FilteringDataGrid>
         </Grid>
         <GridSplitter Grid.Row="3" Grid.Column="2" ResizeDirection="Rows" Width="Auto"
                       Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray"
