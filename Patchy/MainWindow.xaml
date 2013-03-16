@@ -214,7 +214,7 @@
             <pt:FilteringDataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
                       GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="TorrentGridSelectionChanged"
                       IsReadOnly="True" ContextMenuOpening="torrentGridContextMenuOpening" CanUserResizeRows="False"
-                      BorderThickness="0" PreviewKeyDown="torrentGrid_PreviewKeyDown">
+                      BorderThickness="0" PreviewKeyDown="torrentGrid_PreviewKeyDown" IsFilteringCaseSensitive="False">
                 <DataGrid.Background>
                     <ImageBrush ImageSource="Images/patchy.png" AlignmentX="Right" AlignmentY="Bottom"
                                 Viewport="0,20,70,70" ViewportUnits="Absolute" Opacity="0.5"></ImageBrush>
