@@ -13,9 +13,5 @@ namespace Patchy.IPC
         void HandleArguments(string[] args);
         [OperationContract]
         void Shutdown();
-        [OperationContract]
-        bool AddTorrent(byte[] file, string destination);
-        [OperationContract]
-        bool AddMagnetLink(string link, string destination);
     }
 }
