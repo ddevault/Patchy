@@ -71,16 +71,20 @@
                         <Thumb x:Name="PART_RightHeaderGripper" Grid.Column="1" Width="1" BorderThickness="1" BorderBrush="Gray" Opacity="0.5" Cursor="SizeWE" Margin="0"/>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Trigger.EnterActions>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="False"/>
+                                <Condition Property="IsFocused" SourceName="filterTextBox" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.ExitActions>
                                 <BeginStoryboard x:Name="ShowFilterControl_BeginStoryboard" Storyboard="{StaticResource ShowFilterControl}"/>
                                 <StopStoryboard BeginStoryboardName="HideFilterControl_BeginShowFilterControl"/>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
+                            </MultiTrigger.ExitActions>
+                            <MultiTrigger.EnterActions>
                                 <BeginStoryboard x:Name="HideFilterControl_BeginShowFilterControl" Storyboard="{StaticResource HideFilterControl}"/>
                                 <StopStoryboard BeginStoryboardName="ShowFilterControl_BeginStoryboard"/>
-                            </Trigger.ExitActions>
-                        </Trigger>
+                            </MultiTrigger.EnterActions>
+                        </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
