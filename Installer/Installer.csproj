@@ -147,6 +147,10 @@
       <Link>ToCopy\MonoTorrent.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\lib\Mono.Nat.dll">
+      <Link>ToCopy\Mono.Nat.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\lib\Newtonsoft.Json.dll">
       <Link>ToCopy\Newtonsoft.Json.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
