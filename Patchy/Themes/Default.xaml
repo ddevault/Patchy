@@ -32,6 +32,11 @@
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </ControlTemplate.Resources>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
                         <dg:DataGridHeaderBorder x:Name="dataGridHeaderBorder" Margin="0" VerticalAlignment="Top" Height="25" IsClickable="{TemplateBinding CanUserSort}" IsHovered="{TemplateBinding IsMouseOver}" IsPressed="{TemplateBinding IsPressed}" SeparatorBrush="{TemplateBinding SeparatorBrush}" SeparatorVisibility="{TemplateBinding SeparatorVisibility}" SortDirection="{TemplateBinding SortDirection}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" Grid.ColumnSpan="1">
                             <Grid x:Name="grid" Width="Auto" Height="Auto" RenderTransformOrigin="0.5,0.5">
                                 <Grid.RenderTransform>
@@ -45,24 +50,26 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                            <ContentPresenter x:Name="contentPresenter"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
-                                    ContentStringFormat="{TemplateBinding ContentStringFormat}" 
-                                    ContentTemplate="{TemplateBinding ContentTemplate}">
-                                <ContentPresenter.Content>
+                                <ContentPresenter x:Name="contentPresenter"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                        ContentStringFormat="{TemplateBinding ContentStringFormat}" 
+                                        ContentTemplate="{TemplateBinding ContentTemplate}">
+                                    <ContentPresenter.Content>
                                         <MultiBinding Converter="{StaticResource headerConverter}">
                                             <MultiBinding.Bindings>
                                                 <Binding ElementName="filterTextBox" Path="Text" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Content" />
                                             </MultiBinding.Bindings>
                                         </MultiBinding>
-                                </ContentPresenter.Content>
-                            </ContentPresenter>
-                            <TextBox x:Name="filterTextBox" HorizontalAlignment="Right" MinWidth="50" Height="Auto" OpacityMask="Black" Visibility="Collapsed" Text="" TextWrapping="Wrap" Grid.Column="0" Grid.ColumnSpan="1" FontSize="10"/>
+                                    </ContentPresenter.Content>
+                                </ContentPresenter>
+                                <TextBox x:Name="filterTextBox" HorizontalAlignment="Right" MinWidth="50" Height="Auto" OpacityMask="Black" Visibility="Collapsed" Text="" TextWrapping="Wrap" Grid.Column="0" Grid.ColumnSpan="1" FontSize="10"/>
                             </Grid>
-                    </dg:DataGridHeaderBorder>                      
+                        </dg:DataGridHeaderBorder>
+                        <Thumb x:Name="PART_RightHeaderGripper" Grid.Column="1" Width="1" BorderThickness="1" BorderBrush="Gray" Opacity="0.5" Cursor="SizeWE" Margin="0"/>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Trigger.EnterActions>
