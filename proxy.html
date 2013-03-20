@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Patchy - A bittorrent client for Windows</title>
+        <link rel="stylesheet" type="text/css" href="css/base.css" />
+        <link rel="shortcut icon" href="images/patchy.ico" />
+    </head>
+    <body>
+        <div id="content">
+            <h1><a href="/Patchy">Patchy for Windows</a></h1>
+            <h2>An open-source bittorrent client with all of the features and none of the ads</h2>
+            <div class="content-body">
+                <h3>Proxying Torrent Traffic</h3>
+                <p>Patchy supports torrenting over a SOCKSv5 proxy. The only traffic that will actually be proxied is peer-to-peer traffic.
+                There are a few things to take note of here:</p>
+                <ul>
+                    <li>Tracker traffic is not proxied, and still uses HTTP or UDP directly.</li>
+                    <li>The proxy does not add additional encryption - make sure you set your encryption preferences in the
+                    bittorrent tab if you'd like your peer-to-peer traffic to be encrypted.</li>
+                    <li><a href="https://blog.torproject.org/blog/bittorrent-over-tor-isnt-good-idea">Torrenting over TOR is a bad idea</a>.</li>
+                </ul>
+                <p>It's important to note that using a proxy does not increase your privacy. Patchy (and most other bittorrent clients) will send
+                your IP address to peers, thus comprimising your privacy. You should consider using a more sophisticated solution if you wish
+                to obsfucate your IP address. Using a proxy will also likely slow down your downloads, and you might not be given credit where
+                it's due if your tracker requires a high seeding ratio.</p>
+            </div>
+        </div>
+        <script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-38670250-1']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+        </script>
+    </body>
+</html>
