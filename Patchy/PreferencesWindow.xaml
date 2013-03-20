@@ -165,6 +165,64 @@
                     </Grid>
                 </Grid>
             </TabItem>
+            <TabItem Header="Proxy">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock TextWrapping="Wrap">Patchy supports torrenting over a SOCKSv5 proxy. Tracker connections will still be performed
+                    over HTTP or UDP, without a proxy. Using a proxy for bittorrent does not increase your privacy - bittorrent clients send your
+                    IP address to connected peers, and using a proxy won't stop that. Also worth noting - using bittorrent over TOR is a bad idea.
+                    It hurts the TOR network and, for the reasons stated before, does not increase your privacy. Got all of that? Great, enter
+                    your proxy details here:</TextBlock>
+                    <TextBlock Grid.Row="1">Proxy Address:</TextBlock>
+                    <TextBox Grid.Row="2" Text="{Binding ProxyAddress}"></TextBox>
+                    <GroupBox Header="Authentication" Grid.Row="3">
+                        <Grid Margin="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <CheckBox x:Name="authenticatedProxyCheckBox" IsChecked="{Binding EnableProxyAuthentication}">Requires authentication</CheckBox>
+                            <TextBlock Grid.Row="1">Username:</TextBlock>
+                            <TextBox Grid.Row="2" IsEnabled="{Binding ElementName=authenticatedProxyCheckBox, Path=IsChecked}"
+                                     Text="{Binding ProxyUsername}"></TextBox>
+                            <TextBlock Grid.Row="3">Password:</TextBlock>
+                            <TextBox Grid.Row="4" IsEnabled="{Binding ElementName=authenticatedProxyCheckBox, Path=IsChecked}"
+                                     Text="{Binding ProxyPassword}"></TextBox>
+                        </Grid>
+                    </GroupBox>
+                    <TextBlock Grid.Row="4" TextWrapping="Wrap">When you change these settings, only new connections will use the proxy. If you
+                    want the current connections to use the proxy, restart Patchy, or stop, then resume all active torrents.</TextBlock>
+                    <Button Content="More information on proxying with Patchy" Cursor="Hand" Grid.Row="5" Click="proxyInfoClick">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <TextBlock TextDecorations="Underline">
+                                    <ContentPresenter />
+                                </TextBlock>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Foreground" Value="Blue" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter Property="Foreground" Value="Red" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </TabItem>
             <TabItem Header="BitTorrent">
                 <StackPanel>
                     <TextBlock FontWeight="Bold">General BitTorrent Settings</TextBlock>

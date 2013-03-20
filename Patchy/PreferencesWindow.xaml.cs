@@ -229,6 +229,11 @@ namespace Patchy
             Process.Start("https://github.com/SirCmpwn/Patchy");
         }
 
+        private void proxyInfoClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://sircmpwn.github.com/Patchy/proxy.html");
+        }
+
         private void elevatePermissionsButtonClicked(object sender, RoutedEventArgs e)
         {
             var info = new ProcessStartInfo(Assembly.GetEntryAssembly().Location);

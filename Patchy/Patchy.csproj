@@ -50,6 +50,9 @@
       <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Starksoft.Net.Proxy">
+      <HintPath>..\lib\Starksoft.Net.Proxy.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -103,6 +106,7 @@
     <Compile Include="PreferencesWindow.xaml.cs">
       <DependentUpon>PreferencesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProxiedConnection.cs" />
     <Compile Include="RssFeed.cs" />
     <Compile Include="RssFeedEntry.cs" />
     <Compile Include="RssTorrentRule.cs" />

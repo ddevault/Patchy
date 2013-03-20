@@ -80,6 +80,12 @@ namespace Patchy
             MaxConnectionsPerTorrent = 100;
             UploadSlotsPerTorrent = 4;
 
+            // Proxy
+            ProxyAddress = null;
+            EnableProxyAuthentication = false;
+            ProxyUsername = null;
+            ProxyPassword = null;
+
             // BitTorrent
             EnableDHT = true;
             EncryptionSettings = EncryptionTypes.RC4Header | EncryptionTypes.RC4Full;
@@ -305,6 +311,54 @@ namespace Patchy
             {
                 _UploadSlotsPerTorrent = value;
                 OnPropertyChanged("UploadSlotsPerTorrent");
+            }
+        }
+
+        #endregion
+
+        #region Proxy
+
+        private string _ProxyAddress;
+        public string ProxyAddress
+        {
+            get { return _ProxyAddress; }
+            set
+            {
+                _ProxyAddress = value;
+                OnPropertyChanged("ProxyAddress");
+            }
+        }
+
+        private string _ProxyUsername;
+        public string ProxyUsername
+        {
+            get { return _ProxyUsername; }
+            set
+            {
+                _ProxyUsername = value;
+                OnPropertyChanged("ProxyUsername");
+            }
+        }
+
+        private string _ProxyPassword;
+        public string ProxyPassword
+        {
+            get { return _ProxyPassword; }
+            set
+            {
+                _ProxyPassword = value;
+                OnPropertyChanged("ProxyPassword");
+            }
+        }
+
+        private bool _EnableProxyAuthentication;
+        public bool EnableProxyAuthentication
+        {
+            get { return _EnableProxyAuthentication; }
+            set
+            {
+                _EnableProxyAuthentication = value;
+                OnPropertyChanged("EnableProxyAuthentication");
             }
         }
 
