@@ -48,7 +48,12 @@ Additional resources:
 ## Compiling
 
 To compile Patchy, add `C:\Windows\Microsoft.NET\Framework\v4.0.30319` to your PATH. Run `msbuild` from the
-root of the repository to build.
+root of the repository to build. There are three different configurations. You can target a specific
+configuration with `msbuild /p:Configuration=<value>`. The three configurations are:
+
+* DEBUG: Default configuration. Builds everything with debugging symbols.
+* RELEASE: Optimizes code, removes debugging symbols.
+* PORTABLE: Does not build installer and related projects. Tweaks things slightly to work in a portable fasion.
 
 ## Contributing
 

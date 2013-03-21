@@ -135,10 +135,10 @@
     <Resource Include="ToCopy\readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\externals\cecil\bin\winphone_Debug\Mono.Cecil.dll">
+    <None Include="..\externals\cecil\bin\net_4_0_$(Configuration)\Mono.Cecil.dll">
       <Link>ToCopy\Mono.Cecil.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="..\externals\monotorrent\build\MonoTorrent\$(Configuration)\MonoTorrent.Dht.dll">
       <Link>ToCopy\MonoTorrent.Dht.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -155,6 +155,10 @@
       <Link>ToCopy\Newtonsoft.Json.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="..\lib\Starksoft.Net.Proxy.dll">
+      <Link>ToCopy\Starksoft.Net.Proxy.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="..\lib\Xceed.Wpf.Toolkit.dll">
       <Link>ToCopy\Xceed.Wpf.Toolkit.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -174,7 +178,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>$(TargetDir)ToCopy\Patchy.PostBuild.EmbedAssembly.exe Installer.exe ToCopy\MonoTorrent.dll ToCopy\Mono.Nat.dll ToCopy\MonoTorrent.Dht.dll ToCopy\Newtonsoft.Json.dll ToCopy\Patchy.exe ToCopy\Uninstaller.exe ToCopy\Xceed.Wpf.Toolkit.dll</PostBuildEvent>
+    <PostBuildEvent>$(TargetDir)ToCopy\Patchy.PostBuild.EmbedAssembly.exe Installer.exe ToCopy\MonoTorrent.dll ToCopy\Mono.Nat.dll ToCopy\MonoTorrent.Dht.dll ToCopy\Starksoft.Net.Proxy.dll ToCopy\Newtonsoft.Json.dll ToCopy\Patchy.exe ToCopy\Uninstaller.exe ToCopy\Xceed.Wpf.Toolkit.dll</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
