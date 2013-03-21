@@ -68,7 +68,8 @@ namespace Patchy
                         MapPort();
                     break;
                 case "MapWithUPnP":
-                    // TODO: UPnP
+                    if (SettingsManager.MapWithUPnP)
+                        MapPort();
                     break;
                 case "MaxUploadSpeed":
                     Client.Settings.GlobalMaxUploadSpeed = SettingsManager.MaxUploadSpeed * 1024;
