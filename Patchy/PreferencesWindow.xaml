@@ -181,7 +181,15 @@
                     It hurts the TOR network and, for the reasons stated before, does not increase your privacy. Got all of that? Great, enter
                     your proxy details here:</TextBlock>
                     <TextBlock Grid.Row="1">Proxy Address:</TextBlock>
-                    <TextBox Grid.Row="2" Text="{Binding ProxyAddress}"></TextBox>
+                    <TextBox Grid.Row="2">
+                        <TextBox.Text>
+                            <Binding Path="ProxyAddress">
+                                <Binding.ValidationRules>
+                                    <v:ProxyAddressValidationRule></v:ProxyAddressValidationRule>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                     <GroupBox Header="Authentication" Grid.Row="3">
                         <Grid Margin="3">
                             <Grid.RowDefinitions>
@@ -196,8 +204,8 @@
                             <TextBox Grid.Row="2" IsEnabled="{Binding ElementName=authenticatedProxyCheckBox, Path=IsChecked}"
                                      Text="{Binding ProxyUsername}"></TextBox>
                             <TextBlock Grid.Row="3">Password:</TextBlock>
-                            <TextBox Grid.Row="4" IsEnabled="{Binding ElementName=authenticatedProxyCheckBox, Path=IsChecked}"
-                                     Text="{Binding ProxyPassword}"></TextBox>
+                            <PasswordBox Grid.Row="4" IsEnabled="{Binding ElementName=authenticatedProxyCheckBox, Path=IsChecked}"
+                                         PasswordChanged="proxyPasswordBox_PasswordChanged" x:Name="proxyPasswordBox"></PasswordBox>
                         </Grid>
                     </GroupBox>
                     <TextBlock Grid.Row="4" TextWrapping="Wrap">When you change these settings, only new connections will use the proxy. If you

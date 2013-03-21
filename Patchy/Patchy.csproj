@@ -124,6 +124,7 @@
     <Compile Include="UpdateSummaryWindow.xaml.cs">
       <DependentUpon>UpdateSummaryWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Validators\ProxyAddressValidationRule.cs" />
     <Compile Include="Validators\TcpPortValidationRule.cs" />
     <Compile Include="Validators\DirectoryValidationRule.cs" />
     <Compile Include="WatchedDirectory.cs" />

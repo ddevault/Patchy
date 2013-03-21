@@ -118,7 +118,7 @@ namespace Patchy
                             address = parts[0];
                             port = ushort.Parse(parts[1]);
                         }
-                        if (SettingsManager.EnableProxyAuthentication)
+                        if (!SettingsManager.EnableProxyAuthentication)
                             ProxiedConnection.SetProxyDetails(address, port);
                         else
                             ProxiedConnection.SetProxyDetails(address, port, SettingsManager.ProxyUsername, SettingsManager.ProxyPassword);

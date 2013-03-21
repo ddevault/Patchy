@@ -32,6 +32,7 @@ namespace Patchy
         public PreferencesWindow(SettingsManager manager)
         {
             InitializeComponent();
+            proxyPasswordBox.Password = manager.ProxyPassword;
             InitializeRegistryBoundItems();
             var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Patchy.LICENSE"));
             licenseText.Text = reader.ReadToEnd();
@@ -271,6 +272,11 @@ namespace Patchy
         private void randomizeIncomingPortClicked(object sender, RoutedEventArgs e)
         {
             Settings.IncomingPort = new Random().Next(0, 65536);
+        }
+
+        private void proxyPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            Settings.ProxyPassword = proxyPasswordBox.Password;
         }
 
         #region RSS Manager
