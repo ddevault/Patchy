@@ -19,6 +19,7 @@ using System.Windows;
 using System.ComponentModel;
 using Newtonsoft.Json;
 using Mono.Nat;
+using MonoTorrent.Client.Connections;
 
 namespace Patchy
 {
@@ -98,6 +99,21 @@ namespace Patchy
                     break;
                 case "EncryptionSettings":
                     Client.Settings.AllowedEncryption = SettingsManager.EncryptionSettings;
+                    break;
+                case "ProxyAddress":
+                case "EnableProxyAuthentication":
+                case "ProxyUsername":
+                case "ProxyPassword":
+                    if (string.IsNullOrEmpty(SettingsManager.ProxyAddress))
+                        ConnectionFactory.RegisterTypeForProtocol("tcp", typeof(IPV4Connection));
+                    else
+                    {
+                        ConnectionFactory.RegisterTypeForProtocol("tcp", typeof (ProxiedConnection));
+                        if (SettingsManager.EnableProxyAuthentication)
+                            ProxiedConnection.SetProxyDetails(SettingsManager.ProxyAddress, 21981); // TODO: Allow users to customize the port
+                        else
+                            ProxiedConnection.SetProxyDetails(SettingsManager.ProxyAddress, 21981, SettingsManager.ProxyUsername, SettingsManager.ProxyPassword);
+                    }
                     break;
             }
         }

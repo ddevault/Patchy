@@ -8,6 +8,8 @@ using MonoTorrent.Client.Connections;
 using Starksoft.Net.Proxy;
 using System.Threading;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace Patchy
 {
@@ -17,12 +19,16 @@ namespace Patchy
         private static ushort ProxyPort { get; set; }
         private static string Username { get; set; }
         private static string Password { get; set; }
+        private static bool InformedUserOfFailure { get; set; }
+        private static bool ConnectAnyway { get; set; }
+        private static bool WaitingForUserInput { get; set; }
 
         public static void SetProxyDetails(string proxyHostname, ushort proxyPort)
         {
             ProxyHostname = proxyHostname;
             ProxyPort = proxyPort;
             Username = Password = null;
+            WaitingForUserInput = ConnectAnyway = InformedUserOfFailure = false;
         }
 
         public static void SetProxyDetails(string proxyHostname, ushort proxyPort, string username, string password)
@@ -31,6 +37,7 @@ namespace Patchy
             ProxyPort = proxyPort;
             Username = username;
             Password = password;
+            WaitingForUserInput = ConnectAnyway = InformedUserOfFailure = false;
         }
 
         private bool isIncoming;
@@ -63,7 +70,10 @@ namespace Patchy
             this.socket = socket;
             this.endPoint = endPoint;
             this.isIncoming = isIncoming;
-            this.proxyClient = new Socks5ProxyClient();
+            if (Username == null)
+                this.proxyClient = new Socks5ProxyClient(ProxyHostname, ProxyPort);
+            else
+                this.proxyClient = new Socks5ProxyClient(ProxyHostname, ProxyPort, Username, Password);
             proxyClient.CreateConnectionAsyncCompleted += CreateConnectionAsyncCompleted;
             pendingOperations = new ConcurrentQueue<ProxyConnectionResult>();
         }
@@ -120,8 +130,39 @@ namespace Patchy
         {
             ProxyConnectionResult result;
             while (!pendingOperations.TryDequeue(out result)) { }
-            socket = e.ProxyConnection.Client;
-            result.Callback(result);
+            if (e.Error == null)
+            {
+                socket = e.ProxyConnection.Client;
+                result.Callback(result);
+            }
+            else
+            {
+                // Inform user, ask if they want to forgo the proxy
+                while (WaitingForUserInput) { }
+                if (!InformedUserOfFailure)
+                {
+                    InformedUserOfFailure = true;
+                    WaitingForUserInput = true;
+                    ConnectAnyway = MessageBox.Show("Unable to connect to proxy. Connect without proxy?", "Error", MessageBoxButton.YesNo) ==
+                                    MessageBoxResult.Yes;
+                    WaitingForUserInput = false;
+                }
+                if (ConnectAnyway)
+                {
+                    socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    try
+                    {
+                        socket.Connect(EndPoint);
+                        result.Callback(result);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Callback(result);
+                    }
+                }
+                else
+                    result.Callback(result);
+            }
         }
 
         public IAsyncResult BeginReceive(byte[] buffer, int offset, int count, AsyncCallback asyncCallback, object state)

@@ -43,6 +43,7 @@ namespace Patchy
             SettingsManager = new SettingsManager();
             LoadSettings();
             Client.Initialize(SettingsManager);
+            SettingsManager.ForcePropertyUpdate();
             foreach (var label in SettingsManager.Labels)
                 AddLabel(label);
             // Load prior session on another thread because it takes some time
