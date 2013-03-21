@@ -110,10 +110,18 @@ namespace Patchy
                     else
                     {
                         ConnectionFactory.RegisterTypeForProtocol("tcp", typeof (ProxiedConnection));
+                        ushort port = 1080;
+                        string address = SettingsManager.ProxyAddress;
+                        if (SettingsManager.ProxyAddress.Contains(':'))
+                        {
+                            var parts = SettingsManager.ProxyAddress.Split(':');
+                            address = parts[0];
+                            port = ushort.Parse(parts[1]);
+                        }
                         if (SettingsManager.EnableProxyAuthentication)
-                            ProxiedConnection.SetProxyDetails(SettingsManager.ProxyAddress, 21981); // TODO: Allow users to customize the port
+                            ProxiedConnection.SetProxyDetails(address, port);
                         else
-                            ProxiedConnection.SetProxyDetails(SettingsManager.ProxyAddress, 21981, SettingsManager.ProxyUsername, SettingsManager.ProxyPassword);
+                            ProxiedConnection.SetProxyDetails(address, port, SettingsManager.ProxyUsername, SettingsManager.ProxyPassword);
                     }
                     break;
             }
