@@ -276,7 +276,8 @@ namespace Patchy
 
         private void proxyPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ProxyPassword = proxyPasswordBox.Password;
+            if (Settings != null)
+                Settings.ProxyPassword = proxyPasswordBox.Password;
         }
 
         #region RSS Manager

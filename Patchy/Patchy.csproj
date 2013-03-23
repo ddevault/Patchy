@@ -50,8 +50,8 @@
       <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
-    <Reference Include="Starksoft.Net.Proxy">
-      <HintPath>..\lib\Starksoft.Net.Proxy.dll</HintPath>
+    <Reference Include="StarksoftBiko">
+      <HintPath>..\lib\StarksoftBiko.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

@@ -137,14 +137,16 @@ namespace Patchy
             }
             else
             {
+                if (e.Error.InnerException.Message.StartsWith("The the network was unreachable concerning destination host"))
+                    throw e.Error;
                 // Inform user, ask if they want to forgo the proxy
                 while (WaitingForUserInput) { }
                 if (!InformedUserOfFailure)
                 {
                     InformedUserOfFailure = true;
                     WaitingForUserInput = true;
-                    ConnectAnyway = MessageBox.Show("Unable to connect to proxy. Connect without proxy?", "Error", MessageBoxButton.YesNo) ==
-                                    MessageBoxResult.Yes;
+                    ConnectAnyway = MessageBox.Show(string.Format("Unable to connect to proxy ({0}). Connect without proxy?",
+                        e.Error.InnerException.Message), "Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
                     WaitingForUserInput = false;
                 }
                 if (ConnectAnyway)
@@ -187,8 +189,11 @@ namespace Patchy
 
         public int EndReceive(IAsyncResult result)
         {
-
-            return socket.EndReceive(result);
+            try
+            {
+                return socket.EndReceive(result);
+            }
+            catch { return -1; }
         }
     }
 

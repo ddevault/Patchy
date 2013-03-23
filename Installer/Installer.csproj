@@ -155,8 +155,8 @@
       <Link>ToCopy\Newtonsoft.Json.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="..\lib\Starksoft.Net.Proxy.dll">
-      <Link>ToCopy\Starksoft.Net.Proxy.dll</Link>
+    <None Include="..\lib\StarksoftBiko.dll">
+      <Link>ToCopy\StarksoftBiko.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="..\lib\Xceed.Wpf.Toolkit.dll">
@@ -178,7 +178,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>$(TargetDir)ToCopy\Patchy.PostBuild.EmbedAssembly.exe Installer.exe ToCopy\MonoTorrent.dll ToCopy\Mono.Nat.dll ToCopy\MonoTorrent.Dht.dll ToCopy\Starksoft.Net.Proxy.dll ToCopy\Newtonsoft.Json.dll ToCopy\Patchy.exe ToCopy\Uninstaller.exe ToCopy\Xceed.Wpf.Toolkit.dll</PostBuildEvent>
+    <PostBuildEvent>$(TargetDir)ToCopy\Patchy.PostBuild.EmbedAssembly.exe Installer.exe ToCopy\MonoTorrent.dll ToCopy\Mono.Nat.dll ToCopy\MonoTorrent.Dht.dll ToCopy\StarksoftBiko.dll ToCopy\Newtonsoft.Json.dll ToCopy\Patchy.exe ToCopy\Uninstaller.exe ToCopy\Xceed.Wpf.Toolkit.dll</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
