@@ -23,7 +23,7 @@ namespace Patchy.Converters
             else if (Math.Abs(time.TotalMinutes) < 60)
                 result = Math.Abs(time.Minutes) + " mins";
             else if (Math.Abs(time.TotalHours) < 24)
-                result = string.Format("{0}:{1:00}", Math.Abs(time.Hours), Math.Abs(time.Minutes));
+                result = string.Format("{0} hours", Math.Abs(time.Hours));
             else
                 result = string.Format("{0} days", Math.Abs((int)time.TotalDays));
             if (time.Ticks < 0)
