@@ -503,6 +503,7 @@ namespace Patchy
             else
             {
                 var serializer = new JsonSerializer();
+                serializer.Formatting = Formatting.Indented;
                 serializer.MissingMemberHandling = MissingMemberHandling.Ignore;
                 try
                 {
@@ -522,6 +523,7 @@ namespace Patchy
         private void SaveSettings()
         {
             var serializer = new JsonSerializer();
+            serializer.Formatting = Formatting.Indented;
             using (var writer = new StreamWriter(SettingsManager.SettingsFile))
                 serializer.Serialize(writer, SettingsManager);
         }
