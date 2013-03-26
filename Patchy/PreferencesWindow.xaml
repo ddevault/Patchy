@@ -293,7 +293,7 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
-            <!--<TabItem Header="Queueing">
+            <TabItem Header="Queueing">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -308,7 +308,7 @@
                     <TextBlock Margin="0 0 5 0" Grid.Row="1">Maximum active downloads</TextBlock>
                     <TextBox Grid.Row="1" Grid.Column="1" Width="100"></TextBox>
                 </Grid>
-            </TabItem>--><!--TODO: Consider implementing this-->
+            </TabItem>
             <TabItem Header="Completion">
                 <StackPanel>
                     <TextBlock>When torrents finish downloading, run the following command:</TextBlock>

@@ -105,6 +105,10 @@ namespace Patchy
             DoubleClickSeeding = DoubleClickAction.OpenFolder;
             DoubleClickDownloading = DoubleClickAction.OpenFolder;
 
+            // Queueing
+            MaxActiveDownloads = 5;
+            MaxActiveTorrents = 15;
+
             // Completion
             TorrentCompletionCommand = string.Empty;
 
@@ -532,6 +536,32 @@ namespace Patchy
             {
                 _DoubleClickDownloading = value;
                 OnPropertyChanged("DoubleClickDownloading");
+            }
+        }
+
+        #endregion
+
+        #region Queueing
+
+        private int _MaxActiveTorrents;
+        public int MaxActiveTorrents
+        {
+            get { return _MaxActiveTorrents; }
+            set
+            {
+                _MaxActiveTorrents = value;
+                OnPropertyChanged("MaxActiveTorrents");
+            }
+        }
+
+        private int _MaxActiveDownloads;
+        public int MaxActiveDownloads
+        {
+            get { return _MaxActiveDownloads; }
+            set
+            {
+                _MaxActiveDownloads = value;
+                OnPropertyChanged("MaxActiveDownloads");
             }
         }
 

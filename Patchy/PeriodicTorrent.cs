@@ -30,6 +30,7 @@ namespace Patchy
         public TorrentInfo TorrentInfo { get; set; }
         public bool PausedFromSeeding { get; set; }
         public bool IsAutomaticUpdate { get; set; }
+        public DateTime ScheduledStateChange { get; set; }
 
         public PeriodicTorrent(TorrentWrapper wrapper)
         {
@@ -47,6 +48,7 @@ namespace Patchy
             wrapper.PieceHashed += wrapper_PieceHashed;
             TorrentInfo.Path = Torrent.Path;
             PausedFromSeeding = false;
+            ScheduledStateChange = DateTime.MaxValue;
         }
 
         void wrapper_PieceHashed(object sender, PieceHashedEventArgs e)
