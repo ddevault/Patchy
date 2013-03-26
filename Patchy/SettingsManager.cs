@@ -106,6 +106,7 @@ namespace Patchy
             DoubleClickDownloading = DoubleClickAction.OpenFolder;
 
             // Queueing
+            EnableQueueing = true;
             MaxActiveDownloads = 5;
             MaxActiveTorrents = 15;
 
@@ -542,6 +543,17 @@ namespace Patchy
         #endregion
 
         #region Queueing
+
+        private bool _EnableQueueing;
+        public bool EnableQueueing
+        {
+            get { return _EnableQueueing; }
+            set
+            {
+                _EnableQueueing = value;
+                OnPropertyChanged("EnableQueueing");
+            }
+        }
 
         private int _MaxActiveTorrents;
         public int MaxActiveTorrents

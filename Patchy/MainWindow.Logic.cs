@@ -297,6 +297,8 @@ namespace Patchy
 
         private void UpdateQueue()
         {
+            if (!SettingsManager.EnableQueueing)
+                return;
             int downloads = Client.Torrents.Count(t => t.State == TorrentState.Downloading ||
                 (t.PriorState == TorrentState.Downloading && !t.StoppedByUser));
             if (downloads > SettingsManager.MaxActiveDownloads)

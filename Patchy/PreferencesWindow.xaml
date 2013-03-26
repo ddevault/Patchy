@@ -27,7 +27,7 @@
                         <RowDefinition Height="Auto"></RowDefinition>
                     </Grid.RowDefinitions>
                     <StackPanel x:Name="registryBoundPreferences">
-                        <TextBlock FontWeight="Bold">Use Patchy as default for:</TextBlock>
+                        <TextBlock FontWeight="Bold">Use Patchy as default program for:</TextBlock>
                         <CheckBox x:Name="torrentAssociationCheckBox" Click="torrentAssociationCheckBoxChecked">.torrent files</CheckBox>
                         <CheckBox x:Name="magnetAssociationCheckBox" Click="magnetAssociationCheckBoxChecked">Magnet links</CheckBox>
                         <TextBlock FontWeight="Bold">Start Up</TextBlock>
@@ -41,8 +41,11 @@
                     </StackPanel>
                     <StackPanel Grid.Column="1" Grid.RowSpan="2">
                         <TextBlock FontWeight="Bold">Privacy</TextBlock>
+                        <TextBlock TextWrapping="Wrap">Patchy saves your torrents on your computer in order to start them again the next time
+                        you run Patchy. These saved torrents are part of the "torrent cache". Magnet links are also converted to torrent files
+                        and saved here.</TextBlock>
                         <Button Click="clearTorrentCacheClick">Clear torrent cache</Button>
-                        <CheckBox IsChecked="{Binding SaveSession}">Save session</CheckBox>
+                        <CheckBox IsChecked="{Binding SaveSession}">Save session to torrent cache</CheckBox>
                         <CheckBox IsChecked="{Binding AutoUpdate}">Check for updates automatically</CheckBox>
                         <TextBlock FontWeight="Bold">General</TextBlock>
                         <CheckBox IsChecked="{Binding PromptForSaveOnShellLinks}">Prompt on magnet links/torrent files</CheckBox>
@@ -88,6 +91,7 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                         </Grid.RowDefinitions>
@@ -96,7 +100,10 @@
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <TextBlock FontWeight="Bold" Grid.ColumnSpan="2" Margin="3">Automatically add torrents from:</TextBlock>
-                        <ListBox Grid.Row="1" Grid.RowSpan="5" Margin="3" ItemsSource="{Binding WatchedDirectories}" 
+                        <TextBlock TextWrapping="Wrap" Grid.ColumnSpan="2" Margin="3" Grid.Row="1">Patchy lets you add any number of
+                        directories on your computer to watch for .torrent files, like your web browser's download folder. It'll
+                        automatically add and start downloading .torrent files that appear in these directories.</TextBlock>
+                        <ListBox Grid.Row="2" Grid.RowSpan="5" Margin="3" ItemsSource="{Binding WatchedDirectories}" 
                                  x:Name="automaticAddDirectoryListBox">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
@@ -104,13 +111,13 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <TextBox Grid.Row="1" Grid.Column="1" Width="200" x:Name="automaticAddTextBox"></TextBox>
+                        <TextBox Grid.Row="3" Grid.Column="1" Width="200" x:Name="automaticAddTextBox"></TextBox>
                         <ComboBox x:Name="automaticLabelComboBox" Grid.Row="2" Grid.Column="1" Margin="3" SelectedIndex="0">
                             <ComboBoxItem>No label</ComboBoxItem>
                         </ComboBox>
-                        <Button Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Width="50" Margin="3"
+                        <Button Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" Width="50" Margin="3"
                                 Click="automaticAddButtonClicked">Add</Button>
-                        <Button Grid.Row="5" Grid.Column="1" Click="removeSelectedAutomaticDirectoriesClicked">Remove Selected</Button>
+                        <Button Grid.Row="6" Grid.Column="1" Click="removeSelectedAutomaticDirectoriesClicked">Remove Selected</Button>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -209,7 +216,7 @@
                         </Grid>
                     </GroupBox>
                     <TextBlock Grid.Row="4" TextWrapping="Wrap">When you change these settings, only new connections will use the proxy. If you
-                    want the current connections to use the proxy, restart Patchy, or stop, then resume all active torrents.</TextBlock>
+                    want to immediately start using the proxy, restart Patchy.</TextBlock>
                     <Button Content="More information on proxying with Patchy" Cursor="Hand" Grid.Row="5" Click="proxyInfoClick">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
@@ -235,12 +242,17 @@
                 <StackPanel>
                     <TextBlock FontWeight="Bold">General BitTorrent Settings</TextBlock>
                     <CheckBox IsChecked="{Binding EnableDHT}">Enable DHT</CheckBox>
+                    <TextBlock TextWrapping="Wrap">DHT is required for magnet links to work. This allows us to
+                    gather torrent information from the swarm.</TextBlock>
                     <TextBlock FontWeight="Bold">Encryption</TextBlock>
                     <ComboBox x:Name="encryptionSettingsComboBox" SelectionChanged="EncryptionSettingsChanged">
                         <ComboBoxItem>Disabled</ComboBoxItem>
                         <ComboBoxItem>Enabled</ComboBoxItem>
                         <ComboBoxItem>Forced</ComboBoxItem>
                     </ComboBox>
+                    <TextBlock TextWrapping="Wrap">This setting only affects peer-to-peer traffic. This will prevent anyone who
+                    is snooping your connection from understanding the data you transmit to your peers, but will not prevent you
+                    from sending data to malicious peers (who can decrypt and understand the data).</TextBlock>
                     <TextBlock FontWeight="Bold">Seeding</TextBlock>
                     <TextBlock>Stop seeding after (hours): [0 to never stop seeding]</TextBlock>
                     <TextBox Text="{Binding HoursToSeed}"></TextBox>
@@ -272,19 +284,22 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"></RowDefinition>
                                 <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Row="0" VerticalAlignment="Center" Margin="0 0 5 0">Seeding torrents:</TextBlock>
-                            <TextBlock Grid.Row="1" VerticalAlignment="Center" Margin="0 0 5 0">Downloading torrents:</TextBlock>
-                            <ComboBox Grid.Row="0" Grid.Column="1" x:Name="seedingTorrentDoubleClickComboBox" SelectionChanged="seedingTorrentDoubleClickComboBoxSelectionChanged">
+                            <TextBlock TextWrapping="Wrap" Grid.ColumnSpan="2">These settings affect the behavior upon double clicking a torrent in the
+                            torrent list.</TextBlock>
+                            <TextBlock Grid.Row="1" VerticalAlignment="Center" Margin="0 0 5 0">Seeding torrents:</TextBlock>
+                            <TextBlock Grid.Row="2" VerticalAlignment="Center" Margin="0 0 5 0">Downloading torrents:</TextBlock>
+                            <ComboBox Grid.Row="1" Grid.Column="1" x:Name="seedingTorrentDoubleClickComboBox" SelectionChanged="seedingTorrentDoubleClickComboBoxSelectionChanged">
                                 <ComboBoxItem>Open folder</ComboBoxItem>
                                 <ComboBoxItem>Open largest file</ComboBoxItem>
                                 <ComboBoxItem>Start/stop</ComboBoxItem>
                             </ComboBox>
-                            <ComboBox Grid.Row="1" Grid.Column="1" SelectedIndex="0" x:Name="downloadingTorrentDoubleClickComboBox" SelectionChanged="downloadingTorrentDoubleClickComboBoxSelectionChanged">
+                            <ComboBox Grid.Row="2" Grid.Column="1" SelectedIndex="0" x:Name="downloadingTorrentDoubleClickComboBox" SelectionChanged="downloadingTorrentDoubleClickComboBoxSelectionChanged">
                                 <ComboBoxItem>Open folder</ComboBoxItem>
                                 <ComboBoxItem>Open largest file</ComboBoxItem>
                                 <ComboBoxItem>Start/stop</ComboBoxItem>
@@ -295,23 +310,36 @@
             </TabItem>
             <TabItem Header="Queueing">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBlock Margin="0 0 5 0">Maximum active torrents</TextBlock>
-                    <TextBox Grid.Column="1" Width="100"></TextBox>
-                    <TextBlock Margin="0 0 5 0" Grid.Row="1">Maximum active downloads</TextBlock>
-                    <TextBox Grid.Row="1" Grid.Column="1" Width="100"></TextBox>
+                    <CheckBox x:Name="enableQueueingCheckBox" IsChecked="{Binding EnableQueueing}">Enable Queueing</CheckBox>
+                    <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="3">Queueing will reduce bandwidth usage by only allowing a small
+                    number of torrents to remain active at one time. Patchy will prioritize torrents based on how long they've been running -
+                    newer torrents recieve a higher priority.</TextBlock>
+                    <GroupBox Grid.Row="2" Header="Queueing" IsEnabled="{Binding ElementName=enableQueueingCheckBox, Path=IsChecked}">
+                        <Grid Margin="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <TextBlock Margin="0 0 5 0">Maximum active torrents</TextBlock>
+                            <TextBox Grid.Column="1" Text="{Binding MaxActiveTorrents}"></TextBox>
+                            <TextBlock Margin="0 0 5 0" Grid.Row="1">Maximum active downloads</TextBlock>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MaxActiveDownloads}"></TextBox>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Completion">
                 <StackPanel>
-                    <TextBlock>When torrents finish downloading, run the following command:</TextBlock>
+                    <TextBlock>When torrents finish downloading, the following shell command will be run:</TextBlock>
                     <TextBox Text="{Binding TorrentCompletionCommand}"></TextBox>
                     <TextBlock>You may use the following variables in your command:</TextBlock>
                     <TextBlock>%F: Name of file in torrents with one file</TextBlock>
@@ -324,11 +352,14 @@
             <TabItem Header="RSS">
                 <Grid x:Name="rssManagerGrid" DataContext="{Binding RssFeeds}">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="4*"></RowDefinition>
                         <RowDefinition Height="7*"></RowDefinition>
                     </Grid.RowDefinitions>
+                    <TextBlock TextWrapping="Wrap">Patchy allows you to add RSS feeds from your favorite torrent websites. You can configure it to
+                    automatically download torrents from these feeds based on certain conditions.</TextBlock>
                     <!--Left grid-->
-                    <Grid Margin="3">
+                    <Grid Margin="3" Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*"></ColumnDefinition>
                             <ColumnDefinition Width="1*"></ColumnDefinition>
@@ -355,7 +386,7 @@
                         </Grid>
                     </Grid>
                     <!--Right grid-->
-                    <GroupBox Header="Rules" Grid.Row="1" Margin="3" DataContext="{Binding ElementName=feedListView, Path=SelectedItem}"
+                    <GroupBox Header="Rules" Grid.Row="2" Margin="3" DataContext="{Binding ElementName=feedListView, Path=SelectedItem}"
                         IsEnabled="{Binding ElementName=feedListView, Path=SelectedItem, Converter={StaticResource nullToBooleanConverter}, ConverterParameter=reverse}">
                         <Grid>
                             <Grid.ColumnDefinitions>

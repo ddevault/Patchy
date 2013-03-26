@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using MonoTorrent.Client;
@@ -86,6 +87,8 @@ namespace Patchy
 
         internal void Update(bool blockingUpdates)
         {
+            if (Thread.CurrentThread == Dispatcher.CurrentDispatcher.Thread)
+                blockingUpdates = false;
             if (Torrent.State == TorrentState.Seeding && (State == TorrentState.Stopped || State == TorrentState.Hashing))
                 CompletedOnAdd = true;
             State = Torrent.State;
@@ -166,7 +169,7 @@ namespace Patchy
         public void Resume()
         {
             StoppedByUser = false;
-            Torrent.Start();
+            Task.Factory.StartNew(() => Torrent.Start());
         }
 
         public void Stop()
