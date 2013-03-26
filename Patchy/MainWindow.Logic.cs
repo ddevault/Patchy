@@ -34,7 +34,7 @@ namespace Patchy
         private Timer Timer { get; set; }
         private SettingsManager SettingsManager { get; set; }
         private List<FileSystemWatcher> AutoWatchers { get; set; }
-        private DateTime LastIdleEvent { get; set; }
+        private DateTime NextQueueCycle { get; set; }
 
         private void Initialize()
         {
@@ -71,13 +71,16 @@ namespace Patchy
                                 info = serializer.Deserialize<TorrentInfo>(new JsonTextReader(reader));
                             var wrapper = new TorrentWrapper(Torrent.Load(torrent), info.Path, new TorrentSettings());
                             PeriodicTorrent periodicTorrent;
+                            bool start = info.IsRunning;
+                            if (Client.Torrents.Count > SettingsManager.MaxActiveTorrents)
+                                start = false;
                             if (resume != null && resume.ContainsKey(wrapper.Torrent.InfoHash.ToHex()))
                             {
                                 periodicTorrent = Client.LoadFastResume(new FastResume((BEncodedDictionary)resume[wrapper.Torrent.InfoHash.ToHex()]),
-                                    wrapper, info.IsRunning);
+                                    wrapper, start);
                             }
                             else
-                                periodicTorrent = Client.AddTorrent(wrapper, info.IsRunning);
+                                periodicTorrent = Client.AddTorrent(wrapper, start);
                             periodicTorrent.LoadInfo(info);
                             periodicTorrent.CacheFilePath = torrent;
                         }
@@ -87,6 +90,7 @@ namespace Patchy
                     foreach (var file in toRemove)
                         File.Delete(file);
                 });
+            NextQueueCycle = DateTime.Now.AddSeconds(10);
             Timer = new Timer(o => Dispatcher.Invoke(new Action(PeriodicUpdate)),
                 null, 1000, 1000);
             IsIdle = false;
@@ -287,6 +291,55 @@ namespace Patchy
             labelColumn.Visibility = Client.Torrents.Any(t => t.Label != null) ? Visibility.Visible : Visibility.Collapsed;
             UpdateNotifyIcon();
             CheckIdleTime();
+            if (NextQueueCycle < DateTime.Now)
+                UpdateQueue();
+        }
+
+        private void UpdateQueue()
+        {
+            int downloads = Client.Torrents.Count(t => t.State == TorrentState.Downloading ||
+                (t.PriorState == TorrentState.Downloading && !t.StoppedByUser));
+            if (downloads > SettingsManager.MaxActiveDownloads)
+                downloads = SettingsManager.MaxActiveDownloads;
+            int seeds = SettingsManager.MaxActiveTorrents - downloads;
+            // We determine how many downloading torrents and how many seeding torrents we will allow above
+            // Once determined, we sort the torrents so the ones that have gotten the least time to run are
+            // prioritized. Then, we update all the seeding and downloading torrents appropriately so that
+            // the ones with the highest priority are running first.
+            foreach (var torrent in Client.Torrents.Where(t => !t.ExcludeFromQueue).OrderBy(t => t.ElapsedTime))
+            {
+                if (torrent.StoppedByUser)
+                    continue;
+                if (torrent.State == TorrentState.Downloading || (torrent.PriorState == TorrentState.Downloading && torrent.State == TorrentState.Stopped))
+                {
+                    if (downloads <= 0)
+                    {
+                        if (torrent.State == TorrentState.Downloading)
+                            torrent.StopQueue();
+                    }
+                    else
+                    {
+                        downloads--;
+                        if (torrent.State == TorrentState.Stopped)
+                            torrent.Resume();
+                    }
+                }
+                else if (torrent.State == TorrentState.Seeding || (torrent.PriorState == TorrentState.Seeding && torrent.State == TorrentState.Stopped))
+                {
+                    if (seeds <= 0)
+                    {
+                        if (torrent.State == TorrentState.Seeding)
+                            torrent.StopQueue();
+                    }
+                    else
+                    {
+                        seeds--;
+                        if (torrent.State == TorrentState.Stopped)
+                            torrent.Resume();
+                    }
+                }
+            }
+            NextQueueCycle = DateTime.Now.AddMinutes(15);
         }
 
         private void CheckTorrentSeedingGuideliens(PeriodicTorrent torrent)

@@ -43,6 +43,7 @@
         <CommandBinding Command="pt:Commands.RehashTorrent" Executed="ExecuteRehashTorrent" CanExecute="CanExecuteTorrentSpecificCommand"></CommandBinding>
         <CommandBinding Command="pt:Commands.CreateLabel" Executed="ExecuteCreateLabel"></CommandBinding>
         <CommandBinding Command="pt:Commands.ClearLabel" Executed="ExecuteClearLabel"></CommandBinding>
+        <CommandBinding Command="pt:Commands.ExcludeFromQueue" CanExecute="CanExecuteTorrentSpecificCommand" Executed="ExecuteExcludeFromQueue"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="Open" Key="O" Modifiers="Control"></KeyBinding>
@@ -86,6 +87,11 @@
                 <MenuItem Header="Remove...">
                     <MenuItem Header="Torrent" Command="pt:Commands.RemoveTorrent"></MenuItem>
                     <MenuItem Header="Torrent+files" Command="pt:Commands.RemoveTorrentWithFiles"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Exclude from Queue" Command="pt:Commands.ExcludeFromQueue" x:Name="excludeFromQueueMenuItem">
+                    <MenuItem.ToolTip>
+                        <ToolTip>Excluded torrents are not queued internally, and will not be stopped or started without user input.</ToolTip>
+                    </MenuItem.ToolTip>
                 </MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="Set label" x:Name="menuSetLabelMenu">
@@ -238,6 +244,11 @@
                         <MenuItem Header="Remove">
                             <MenuItem Command="pt:Commands.RemoveTorrent" Header="Torrent only"></MenuItem>
                             <MenuItem Command="pt:Commands.RemoveTorrentWithFiles" Header="Torrent and data" ></MenuItem>
+                        </MenuItem>
+                        <MenuItem Header="Exclude from Queue" Command="pt:Commands.ExcludeFromQueue">
+                            <MenuItem.ToolTip>
+                                <ToolTip>Excluded torrents are not queued internally, and will not be stopped or started without user input.</ToolTip>
+                            </MenuItem.ToolTip>
                         </MenuItem>
                         <Separator></Separator>
                         <MenuItem Header="Set label" x:Name="torrentGridContextMenuSetLabelMenu">

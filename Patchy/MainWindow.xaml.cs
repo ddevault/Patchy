@@ -129,7 +129,7 @@ namespace Patchy
                     else
                     {
                         foreach (var torrent in Client.Torrents)
-                            torrent.Torrent.Start();
+                            torrent.Resume();
                     }
                 };
             menu.MenuItems.Add("-");
@@ -236,7 +236,7 @@ namespace Patchy
                 foreach (var torrent in Client.Torrents)
                 {
                     torrent.UpdateInfo();
-                    torrent.Torrent.Stop();
+                    torrent.Stop();
                     var start = DateTime.Now;
                     while (torrent.Torrent.State != TorrentState.Stopped && torrent.Torrent.State != TorrentState.Error &&
                         (DateTime.Now - start).TotalSeconds < 2) // Time limit for trying to let it stop on its own
@@ -357,7 +357,7 @@ namespace Patchy
                         break;
                     case DoubleClickAction.ToggleActive:
                         if (item.State == TorrentState.Paused)
-                            item.Torrent.Start();
+                            item.Resume();
                         else
                             item.Torrent.Pause();
                         break;

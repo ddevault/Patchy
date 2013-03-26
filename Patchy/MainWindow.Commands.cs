@@ -135,7 +135,7 @@ namespace Patchy
             foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
             {
                 if (t.Torrent.State != TorrentState.Stopped && t.Torrent.State != TorrentState.Stopped)
-                    t.Torrent.Stop();
+                    t.Stop();
             }
         }
 
@@ -153,7 +153,7 @@ namespace Patchy
             foreach (PeriodicTorrent t in torrentGrid.SelectedItems)
             {
                 if (t.Torrent.State == TorrentState.Paused || t.Torrent.State == TorrentState.Stopped)
-                    t.Torrent.Start();
+                    t.Resume();
             }
         }
 
@@ -176,11 +176,28 @@ namespace Patchy
                 {
                     foreach (var torrent in torrents)
                     {
-                        torrent.Torrent.Stop();
+                        torrent.Stop();
                         while (torrent.Torrent.State != TorrentState.Stopped && torrent.Torrent.State != TorrentState.Error) ;
                         torrent.Torrent.HashCheck(true);
                     }
                 });
+        }
+
+        private void ExecuteExcludeFromQueue(object sender, ExecutedRoutedEventArgs e)
+        {
+            var torrents = torrentGrid.SelectedItems.Cast<PeriodicTorrent>();
+            if (!torrents.Any())
+                return;
+            foreach (var torrent in torrents)
+            {
+                torrent.ExcludeFromQueue = true;
+                if (torrent.State == TorrentState.Stopped &&
+                   (torrent.PriorState == TorrentState.Downloading || torrent.PriorState == TorrentState.Seeding) &&
+                   !torrent.StoppedByUser)
+                {
+                    torrent.Resume();
+                }
+            }
         }
 
         private void ExecuteCreateLabel(object sender, ExecutedRoutedEventArgs e)
@@ -252,6 +269,7 @@ namespace Patchy
         public static readonly RoutedUICommand ResumeTorrent = new RoutedUICommand("Resume Torrent", "ResumeTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand MoveTorrent = new RoutedUICommand("Move Torrent", "MoveTorrent", typeof(MainWindow));
         public static readonly RoutedUICommand RehashTorrent = new RoutedUICommand("Rehash Torrent", "RehashTorrent", typeof(MainWindow));
+        public static readonly RoutedUICommand ExcludeFromQueue = new RoutedUICommand("Exclude from Queue", "ExcludeTorrentFromQueue", typeof(MainWindow));
 
         public static readonly RoutedUICommand CreateLabel = new RoutedUICommand("Create Label", "CreateLabel", typeof(MainWindow));
         public static readonly RoutedUICommand ClearLabel = new RoutedUICommand("Clear Label", "ClearLabel", typeof(MainWindow));

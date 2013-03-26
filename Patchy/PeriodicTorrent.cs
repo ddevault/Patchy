@@ -30,14 +30,15 @@ namespace Patchy
         public TorrentInfo TorrentInfo { get; set; }
         public bool PausedFromSeeding { get; set; }
         public bool IsAutomaticUpdate { get; set; }
-        public DateTime ScheduledStateChange { get; set; }
+        public TorrentState PriorState { get; set; }
+        public bool StoppedByUser { get; set; }
+        public bool ExcludeFromQueue { get; set; }
 
         public PeriodicTorrent(TorrentWrapper wrapper)
         {
             TorrentInfo = new TorrentInfo();
             Torrent = wrapper;
             PeerList = new ObservableCollection<PeerId>();
-            Update();
             Name = Torrent.Name;
             Size = Torrent.Size;
             CompletedOnAdd = Torrent.Complete;
@@ -48,7 +49,9 @@ namespace Patchy
             wrapper.PieceHashed += wrapper_PieceHashed;
             TorrentInfo.Path = Torrent.Path;
             PausedFromSeeding = false;
-            ScheduledStateChange = DateTime.MaxValue;
+            StoppedByUser = false;
+            ExcludeFromQueue = false;
+            Update(false);
         }
 
         void wrapper_PieceHashed(object sender, PieceHashedEventArgs e)
@@ -77,6 +80,11 @@ namespace Patchy
         }
 
         internal void Update()
+        {
+            Update(true);
+        }
+
+        internal void Update(bool blockingUpdates)
         {
             if (Torrent.State == TorrentState.Seeding && (State == TorrentState.Stopped || State == TorrentState.Hashing))
                 CompletedOnAdd = true;
@@ -120,19 +128,26 @@ namespace Patchy
                 foreach (var file in files)
                     file.Update();
             }
-            Peers = Torrent.Peers.Available;
-            Seeders = Torrent.Peers.Seeds;
-            Leechers = Torrent.Peers.Leechs;
-            var peerList = Torrent.GetPeers();
-            foreach (var peer in peerList)
+            if ((Torrent.State == TorrentState.Downloading || Torrent.State == TorrentState.Seeding) && blockingUpdates)
             {
-                if (!PeerList.Contains(peer))
-                    PeerList.Add(peer);
+                Peers = Torrent.Peers.Available;
+                Seeders = Torrent.Peers.Seeds;
+                Leechers = Torrent.Peers.Leechs;
+                var peerList = Torrent.GetPeers();
+                foreach (var peer in peerList)
+                {
+                    if (!PeerList.Contains(peer))
+                        PeerList.Add(peer);
+                }
+                for (int i = 0; i < PeerList.Count; i++)
+                {
+                    if (!peerList.Contains(PeerList[i]))
+                        PeerList.RemoveAt(i--);
+                }
             }
-            for (int i = 0; i < PeerList.Count; i++)
+            else
             {
-                if (!peerList.Contains(PeerList[i]))
-                    PeerList.RemoveAt(i--);
+                Peers = Seeders = Leechers = 0;
             }
         }
 
@@ -150,7 +165,22 @@ namespace Patchy
 
         public void Resume()
         {
+            StoppedByUser = false;
             Torrent.Start();
+        }
+
+        public void Stop()
+        {
+            StoppedByUser = true;
+            PriorState = State;
+            Torrent.Stop();
+        }
+
+        public void StopQueue()
+        {
+            StoppedByUser = false;
+            PriorState = State;
+            Torrent.Stop();
         }
 
         /// <summary>

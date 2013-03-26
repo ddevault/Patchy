@@ -202,7 +202,7 @@ namespace Patchy
                 {
                     if (e.NewState == TorrentState.Stopped || e.NewState == TorrentState.Error)
                     {
-                        torrent.Torrent.Stop();
+                        torrent.Stop();
                         try
                         {
                             Client.Unregister(torrent.Torrent);
@@ -222,7 +222,7 @@ namespace Patchy
                         Task.Factory.StartNew(() => Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Remove(torrent))));
                     }
                 };
-            Task.Factory.StartNew(() => torrent.Torrent.Stop());
+            Task.Factory.StartNew(() => torrent.Stop());
         }
 
         public void RemoveTorrentAndFiles(PeriodicTorrent torrent)
@@ -252,7 +252,7 @@ namespace Patchy
                     Application.Current.Dispatcher.BeginInvoke(new Action(() => Torrents.Remove(torrent)));
                 }
             };
-            Task.Factory.StartNew(() => torrent.Torrent.Stop());
+            Task.Factory.StartNew(() => torrent.Stop());
         }
 
         public void Shutdown()
@@ -278,7 +278,7 @@ namespace Patchy
                     if (!Directory.Exists(path))
                         Directory.CreateDirectory(path);
                     var oldPath = torrent.Torrent.Path;
-                    torrent.Torrent.Stop();
+                    torrent.Stop();
                     while (torrent.State != TorrentState.Stopped) ;
                     torrent.Torrent.MoveFiles(path, true);
                     torrent.Torrent.Start();
