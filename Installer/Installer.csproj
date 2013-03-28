@@ -132,49 +132,51 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Resource Include="ToCopy\readme.txt" />
+    <None Include="ToCopy\readme.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\externals\cecil\bin\net_4_0_$(Configuration)\Mono.Cecil.dll">
       <Link>ToCopy\Mono.Cecil.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="..\externals\monotorrent\build\MonoTorrent\$(Configuration)\MonoTorrent.Dht.dll">
+    <None Include="..\externals\monotorrent\build\MonoTorrent\$(Configuration)\MonoTorrent.Dht.dll">
       <Link>ToCopy\MonoTorrent.Dht.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\externals\monotorrent\build\MonoTorrent\$(Configuration)\MonoTorrent.dll">
+    </None>
+    <None Include="..\externals\monotorrent\build\MonoTorrent\$(Configuration)\MonoTorrent.dll">
       <Link>ToCopy\MonoTorrent.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\lib\Mono.Nat.dll">
+    </None>
+    <None Include="..\lib\Mono.Nat.dll">
       <Link>ToCopy\Mono.Nat.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\lib\Newtonsoft.Json.dll">
+    </None>
+    <None Include="..\lib\Newtonsoft.Json.dll">
       <Link>ToCopy\Newtonsoft.Json.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="..\lib\StarksoftBiko.dll">
       <Link>ToCopy\StarksoftBiko.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="..\lib\Xceed.Wpf.Toolkit.dll">
+    <None Include="..\lib\Xceed.Wpf.Toolkit.dll">
       <Link>ToCopy\Xceed.Wpf.Toolkit.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Patchy.PostBuild.EmbedAssembly\bin\Debug\Patchy.PostBuild.EmbedAssembly.exe">
+    </None>
+    <None Include="..\Patchy.PostBuild.EmbedAssembly\bin\Debug\Patchy.PostBuild.EmbedAssembly.exe">
       <Link>ToCopy\Patchy.PostBuild.EmbedAssembly.exe</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Patchy\bin\$(Configuration)\Patchy.exe">
+    </None>
+    <None Include="..\Patchy\bin\$(Configuration)\Patchy.exe">
       <Link>ToCopy\Patchy.exe</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Uninstaller\bin\$(Configuration)\Uninstaller.exe">
+    </None>
+    <None Include="..\Uninstaller\bin\$(Configuration)\Uninstaller.exe">
       <Link>ToCopy\Uninstaller.exe</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

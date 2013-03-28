@@ -78,7 +78,7 @@ namespace Installer
             CopyFileFromAssembly("MonoTorrent.Dht.dll", path);
             CopyFileFromAssembly("MonoTorrent.dll", path);
             CopyFileFromAssembly("Mono.Nat.dll", path);
-            CopyFileFromAssembly("Starksoft.Net.Proxy.dll", path);
+            CopyFileFromAssembly("StarksoftBiko.dll", path);
             CopyFileFromAssembly("Newtonsoft.Json.dll", path);
             CopyFileFromAssembly("Patchy.exe", path);
             CopyFileFromAssembly("Uninstaller.exe", path);
