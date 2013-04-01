@@ -111,6 +111,8 @@ namespace Patchy
             {
                 // Create the torrent
                 Path = dialog.FileName;
+                if (!Path.EndsWith(".torrent"))
+                    Path += ".torrent";
                 pathGrid.IsEnabled = trackerGrid.IsEnabled = optionsGrid.IsEnabled = createButton.IsEnabled = false;
                 Creator.Hashed += Creator_Hashed;
                 Creator.BeginCreate(source, CreationComplete, null);
@@ -125,7 +127,7 @@ namespace Patchy
         private void CreationComplete(IAsyncResult result)
         {
             Creator.EndCreate(result, Path);
-            Process.Start("explorer", "/Select \"" + Path + "\"");
+            Process.Start("explorer", "/Select, \"" + Path + "\"");
             Torrent = Torrent.Load(Path);
             Dispatcher.Invoke(new Action(() =>
                 {

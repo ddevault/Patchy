@@ -32,10 +32,14 @@ namespace Patchy
             if (window.ShowDialog().Value)
             {
                 var torrent = window.Torrent;
-                var wrapper = new TorrentWrapper(torrent, window.FilePath, new TorrentSettings());
+                TorrentWrapper wrapper;
+                if (window.singleFileRadioButton.IsChecked.Value)
+                    wrapper = new TorrentWrapper(torrent, Path.GetDirectoryName(window.FilePath), new TorrentSettings());
+                else
+                    wrapper = new TorrentWrapper(torrent, window.FilePath, new TorrentSettings());
                 var periodic = Client.AddTorrent(wrapper);
                 // Save torrent to cache
-                var cache = Path.Combine(SettingsManager.TorrentCachePath, torrent.TorrentPath);
+                var cache = Path.Combine(SettingsManager.TorrentCachePath, Path.GetFileName(torrent.TorrentPath));
                 if (File.Exists(cache))
                     File.Delete(cache);
                 File.Copy(torrent.TorrentPath, cache);
