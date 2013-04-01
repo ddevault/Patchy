@@ -1,8 +1,8 @@
 ﻿{
-    "FriendlyVersion":"1.0",
+    "FriendlyVersion":"1.1",
     "Version":1,
-    "Description":"The initial release of Patchy.",
+    "Description":"Patchy Version 1.1\n\nNew Features:\n* Torrent grid filtering\n* Queueing to save bandwidth\n* Proxy support\n* UPnP for automatic port mapping\n\nBugs Fixed:\n* Torrent creation fixed\n* Magnet links fixed for some torrents",
     "MagnetLink":"magnet:?xt=urn:btih:c8cde7428b44142b04d88b91785ecf0f20d16903&dn=archlinux-2013.02.01-dual.iso&tr=udp://tracker.archlinux.org:6969&tr=http://tracker.archlinux.org:6969/announce",
-    "HttpLink":"http://example.com",
-    "DiffUrl":"http://example.com"
+    "HttpLink":"http://ge.tt/api/1/files/2kFvolc/0/blob?download",
+    "DiffUrl":"https://github.com/SirCmpwn/Patchy/compare/9257491b760d1065a3382557132aaed694a186c6...e174326d8e122c28a03dc31e04261b35d4002ce8"
 }
