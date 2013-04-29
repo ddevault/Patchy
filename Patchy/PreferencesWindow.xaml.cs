@@ -407,5 +407,10 @@ namespace Patchy
         }
 
         #endregion
+
+        private void UseDarkThemeChecked(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("You must restart Patchy for this change to take effect.");
+        }
     }
 }

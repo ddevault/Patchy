@@ -104,6 +104,7 @@ namespace Patchy
             StartTorrentsImmediately = true;
             DoubleClickSeeding = DoubleClickAction.OpenFolder;
             DoubleClickDownloading = DoubleClickAction.OpenFolder;
+            UseDarkTheme = false;
 
             // Queueing
             EnableQueueing = true;
@@ -537,6 +538,17 @@ namespace Patchy
             {
                 _DoubleClickDownloading = value;
                 OnPropertyChanged("DoubleClickDownloading");
+            }
+        }
+
+        private bool _UseDarkTheme;
+        public bool UseDarkTheme
+        {
+            get { return _UseDarkTheme; }
+            set
+            {
+                _UseDarkTheme = value;
+                OnPropertyChanged("UseDarkTheme");
             }
         }
 

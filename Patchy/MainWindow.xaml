@@ -6,27 +6,31 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:pt="clr-namespace:Patchy"
         Title="Patchy" Height="600" Width="1122" Icon="Images/patchy.ico"
-        Closing="WindowClosing" Closed="WindowClosed"
+        Closing="WindowClosing" Closed="WindowClosed" Foreground="{DynamicResource Foreground}"
         DragEnter="Window_DragEnter" Drop="Window_Drop" DragOver="Window_DragOver" AllowDrop="True">
     <Window.Resources>
         <ResourceDictionary>
-            <c:TorrentStatusToStringConverter x:Key="torrentStatusConverter"></c:TorrentStatusToStringConverter>
-            <c:TorrentSizeConverter x:Key="torrentSizeConverter"></c:TorrentSizeConverter>
-            <c:TorrentSpeedConverter x:Key="torrentSpeedConverter"></c:TorrentSpeedConverter>
-            <c:TorrentETAConverter x:Key="torrentEtaConverter"></c:TorrentETAConverter>
-            <c:TorrentProgressConverter x:Key="torrentProgressConverter"></c:TorrentProgressConverter>
-            <c:PeerClientConverter x:Key="peerClientConverter"></c:PeerClientConverter>
-            <c:TimeSpanConverter x:Key="timeSpanConverter"></c:TimeSpanConverter>
-            <c:TorrentETADateTimeConverter x:Key="torrentEtaDateTimeConverter"></c:TorrentETADateTimeConverter>
-            <c:TorrentCreationDateConverter x:Key="torrentCreationDateConverter"></c:TorrentCreationDateConverter>
-            <c:PriorityToIndexConverter x:Key="priorityToIndexConverter"></c:PriorityToIndexConverter>
-            <c:NetworkSpeedConverter x:Key="networkSpeedConverter"></c:NetworkSpeedConverter>
-            <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"></BooleanToVisibilityConverter>
-            <ObjectDataProvider x:Key="priorityDataProvider" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="mt:Priority"></x:Type>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <c:TorrentStatusToStringConverter x:Key="torrentStatusConverter"></c:TorrentStatusToStringConverter>
+                    <c:TorrentSizeConverter x:Key="torrentSizeConverter"></c:TorrentSizeConverter>
+                    <c:TorrentSpeedConverter x:Key="torrentSpeedConverter"></c:TorrentSpeedConverter>
+                    <c:TorrentETAConverter x:Key="torrentEtaConverter"></c:TorrentETAConverter>
+                    <c:TorrentProgressConverter x:Key="torrentProgressConverter"></c:TorrentProgressConverter>
+                    <c:PeerClientConverter x:Key="peerClientConverter"></c:PeerClientConverter>
+                    <c:TimeSpanConverter x:Key="timeSpanConverter"></c:TimeSpanConverter>
+                    <c:TorrentETADateTimeConverter x:Key="torrentEtaDateTimeConverter"></c:TorrentETADateTimeConverter>
+                    <c:TorrentCreationDateConverter x:Key="torrentCreationDateConverter"></c:TorrentCreationDateConverter>
+                    <c:PriorityToIndexConverter x:Key="priorityToIndexConverter"></c:PriorityToIndexConverter>
+                    <c:NetworkSpeedConverter x:Key="networkSpeedConverter"></c:NetworkSpeedConverter>
+                    <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"></BooleanToVisibilityConverter>
+                    <ObjectDataProvider x:Key="priorityDataProvider" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+                        <ObjectDataProvider.MethodParameters>
+                            <x:Type TypeName="mt:Priority"></x:Type>
+                        </ObjectDataProvider.MethodParameters>
+                    </ObjectDataProvider>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
@@ -217,11 +221,12 @@
                       Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray"
                       Visibility="{Binding ElementName=viewRssFeedsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}"></GridSplitter>
         <!--Main torrent grid-->
-        <Grid Grid.Row="2" Grid.Column="2" x:Name="upperGrid">
-            <pt:FilteringDataGrid AlternatingRowBackground="LightGray" x:Name="torrentGrid" AutoGenerateColumns="False"
+        <Grid Grid.Row="2" Grid.Column="2" x:Name="upperGrid" Background="{DynamicResource WindowBackground}">
+            <pt:FilteringDataGrid x:Name="torrentGrid" AutoGenerateColumns="False" Foreground="{DynamicResource Foreground}"
                       GridLinesVisibility="None" SelectionUnit="FullRow" SelectionChanged="TorrentGridSelectionChanged"
                       IsReadOnly="True" ContextMenuOpening="torrentGridContextMenuOpening" CanUserResizeRows="False"
-                      BorderThickness="0" PreviewKeyDown="torrentGrid_PreviewKeyDown" IsFilteringCaseSensitive="False">
+                      BorderThickness="0" PreviewKeyDown="torrentGrid_PreviewKeyDown" IsFilteringCaseSensitive="False"
+                      RowBackground="{DynamicResource RowBackground}" AlternatingRowBackground="{DynamicResource AlteringRowBackground}">
                 <DataGrid.Background>
                     <ImageBrush ImageSource="Images/patchy.png" AlignmentX="Right" AlignmentY="Bottom"
                                 Viewport="0,20,70,70" ViewportUnits="Absolute" Opacity="0.5"></ImageBrush>
@@ -344,9 +349,9 @@
                       Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray"
                       Visibility="{Binding ElementName=viewTorrentDetailsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}"></GridSplitter>
         <!--Torrent detail grid-->
-        <Grid Grid.Row="4" Grid.Column="2" x:Name="lowerGrid"
+        <Grid Grid.Row="4" Grid.Column="2" x:Name="lowerGrid" Background="{DynamicResource WindowBackground}"
               Visibility="{Binding ElementName=viewTorrentDetailsMenuItem, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}">
-            <TabControl VerticalAlignment="Stretch" x:Name="detailTabs">
+            <TabControl VerticalAlignment="Stretch" x:Name="detailTabs" Foreground="{DynamicResource Foreground}" Background="{DynamicResource WindowBackground}">
                 <TabItem Header="Information" IsSelected="True">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -355,8 +360,8 @@
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <TextBlock Margin="5">Progress</TextBlock>
-                        <pt:PiecedProgressBar Height="25" Grid.Row="1" DataContext="{Binding}"></pt:PiecedProgressBar>
-                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"
+                        <pt:PiecedProgressBar Height="25" Grid.Row="1" DataContext="{Binding}" Background="LightGray"></pt:PiecedProgressBar>
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Foreground="Black"
                                    Text="{Binding Progress,Converter={StaticResource ResourceKey=torrentProgressConverter}}"></TextBlock>
                         <Grid Grid.Row="2">
                             <Grid.RowDefinitions>
@@ -419,10 +424,11 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Files">
-                    <DataGrid ItemsSource="{Binding Files}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False"
+                    <DataGrid ItemsSource="{Binding Files}" AutoGenerateColumns="False" 
                         GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="fileListGrid" IsReadOnly="True"
                         EnableRowVirtualization="True" VerticalScrollBarVisibility="Auto"
-                        ContextMenuOpening="fileListGridContextMenuOpening">
+                        ContextMenuOpening="fileListGridContextMenuOpening" Background="{DynamicResource WindowBackground}" Foreground="{DynamicResource Foreground}"
+                        RowBackground="{DynamicResource RowBackground}" AlternatingRowBackground="{DynamicResource AlteringRowBackground}">
                         <DataGrid.ContextMenu>
                             <ContextMenu x:Name="fileListGridContextMenu">
                                 <MenuItem Header="Open" Click="fileListGridOpenFile"></MenuItem>
@@ -486,9 +492,10 @@
                     </DataGrid>
                 </TabItem>
                 <TabItem Header="Peers">
-                    <DataGrid ItemsSource="{Binding PeerList}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False"
+                    <DataGrid ItemsSource="{Binding PeerList}" AutoGenerateColumns="False"
                         GridLinesVisibility="None" SelectionUnit="FullRow" x:Name="peerListGrid" IsReadOnly="True"
-                        MouseDoubleClick="FileListGridMouseDoubleClick">
+                        MouseDoubleClick="FileListGridMouseDoubleClick" Background="{DynamicResource WindowBackground}" Foreground="{DynamicResource Foreground}"
+                        RowBackground="{DynamicResource RowBackground}" AlternatingRowBackground="{DynamicResource AlteringRowBackground}">
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="BorderThickness" Value="0"/>
@@ -535,8 +542,8 @@
                         <StackPanel Margin="3" Grid.Column="1">
                             <TextBlock FontWeight="Bold" Text="Upload slots"></TextBlock>
                             <TextBox Text="{Binding UploadSlots}"></TextBox>
-                            <CheckBox IsChecked="{Binding UseDht}">Enable DHT</CheckBox>
-                            <CheckBox IsChecked="{Binding EnablePeerExchange}">Enable Peer Exchange</CheckBox>
+                            <CheckBox IsChecked="{Binding UseDht}" Foreground="{DynamicResource Foreground}">Enable DHT</CheckBox>
+                            <CheckBox IsChecked="{Binding EnablePeerExchange}"  Foreground="{DynamicResource Foreground}">Enable Peer Exchange</CheckBox>
                         </StackPanel>
                     </Grid>
                 </TabItem>

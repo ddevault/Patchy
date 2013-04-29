@@ -19,6 +19,7 @@ using System.Windows.Media;
 using Patchy.Converters;
 using System.Windows.Data;
 using Newtonsoft.Json;
+using System.Windows.Markup;
 
 namespace Patchy
 {
@@ -38,6 +39,7 @@ namespace Patchy
         {
             This = this;
 
+            // Load theme
             InitializeComponent();
             InitializeNotifyIcon();
             torrentGrid.ContextMenu = null;
@@ -63,6 +65,12 @@ namespace Patchy
             Client = new ClientManager();
 
             Initialize();
+            ResourceDictionary theme;
+            if (SettingsManager.UseDarkTheme)
+                theme = new ResourceDictionary() { Source = new Uri("pack://application:,,,/Patchy;component/Themes/Dark.xaml") };
+            else
+                theme = new ResourceDictionary() { Source = new Uri("pack://application:,,,/Patchy;component/Themes/Default.xaml") };
+            Resources.MergedDictionaries.Add(theme);
 
             if (SettingsManager.WindowWidth != -1)
             {
@@ -249,7 +257,8 @@ namespace Patchy
                         serializer.Serialize(new JsonTextWriter(writer), torrent.TorrentInfo);
                     // TODO: Notify users on error? The application is shutting down here, it wouldn't be particualry
                     // easy to get information to the user
-                    resume.Add(torrent.Torrent.InfoHash.ToHex(), torrent.Torrent.SaveFastResume().Encode());
+                    if (torrent.Torrent.HashChecked)
+                        resume.Add(torrent.Torrent.InfoHash.ToHex(), torrent.Torrent.SaveFastResume().Encode());
                 }
                 File.WriteAllBytes(SettingsManager.FastResumePath, resume.Encode());
             }

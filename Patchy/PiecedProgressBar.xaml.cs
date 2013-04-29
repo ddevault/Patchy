@@ -76,7 +76,7 @@ namespace Patchy
                         new Rect(Math.Ceiling(i * width), 0, Math.Ceiling(width), ActualHeight));
                 }
                 else
-                    drawingContext.DrawRectangle(Brushes.White, null,
+                    drawingContext.DrawRectangle(Background, null,
                         new Rect(Math.Ceiling(i * width), 0, Math.Ceiling(width), ActualHeight));
             }
             drawingContext.DrawRectangle(null, new Pen(Brushes.DarkGray, 1), new Rect(0, 0, this.ActualWidth, this.ActualHeight));

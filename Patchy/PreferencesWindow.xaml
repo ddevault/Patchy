@@ -262,6 +262,7 @@
             </TabItem>
             <TabItem Header="Interface">
                 <StackPanel>
+                    <CheckBox IsChecked="{Binding UseDarkTheme}" Checked="UseDarkThemeChecked">Use dark theme</CheckBox>
                     <GroupBox Header="Tray Options">
                         <StackPanel>
                             <CheckBox IsChecked="{Binding ShowTrayIcon}" x:Name="showTrayIconCheckBox">Show tray icon</CheckBox>
