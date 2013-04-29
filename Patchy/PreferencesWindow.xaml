@@ -463,7 +463,7 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <TextBlock FontWeight="Bold">Patchy Bittorrent Client</TextBlock>
-                    <TextBlock Grid.Row="1">Version: 1.1</TextBlock>
+                    <TextBlock Grid.Row="1">Version: 1.2</TextBlock>
                     <Button Content="Browse source code" Cursor="Hand" Grid.Row="2" Click="browseSourceClick">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">

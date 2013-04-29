@@ -28,7 +28,7 @@ namespace Patchy
 {
     public partial class MainWindow
     {
-        private const int CurrentVersion = 2; // Increment every time we push an update
+        private const int CurrentVersion = 3; // Increment every time we push an update
 
         private ClientManager Client { get; set; }
         private Timer Timer { get; set; }
