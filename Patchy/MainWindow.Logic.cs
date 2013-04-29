@@ -429,32 +429,36 @@ namespace Patchy
 
         private void CheckMagnetLinks()
         {
-            var visibility = Visibility.Collapsed;
-            if (Clipboard.ContainsText())
+            try
             {
-                var text = Clipboard.GetText();
-                if (IgnoredClipboardValue != text)
+                var visibility = Visibility.Collapsed;
+                if (Clipboard.ContainsText())
                 {
-                    if (Uri.IsWellFormedUriString(text, UriKind.Absolute))
+                    var text = Clipboard.GetText();
+                    if (IgnoredClipboardValue != text)
                     {
-                        var uri = new Uri(text);
-                        if (uri.Scheme == "magnet")
+                        if (Uri.IsWellFormedUriString(text, UriKind.Absolute))
                         {
-                            try
+                            var uri = new Uri(text);
+                            if (uri.Scheme == "magnet")
                             {
-                                var link = new MagnetLink(text);
-                                if (!Client.Torrents.Any(t => t.Torrent.InfoHash == link.InfoHash))
+                                try
                                 {
-                                    quickAddName.Text = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(link.Name));
-                                    visibility = Visibility.Visible;
+                                    var link = new MagnetLink(text);
+                                    if (!Client.Torrents.Any(t => t.Torrent.InfoHash == link.InfoHash))
+                                    {
+                                        quickAddName.Text = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(link.Name));
+                                        visibility = Visibility.Visible;
+                                    }
                                 }
+                                catch { }
                             }
-                            catch { }
                         }
                     }
                 }
+                quickAddGrid.Visibility = visibility;
             }
-            quickAddGrid.Visibility = visibility;
+            catch { /* This is basically the least important feature, we can afford to just ditch the exception */ }
         }
 
         public void HandleArguments(string[] args)
