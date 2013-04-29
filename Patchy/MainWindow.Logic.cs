@@ -219,8 +219,15 @@ namespace Patchy
             return periodic;
         }
 
+        int updateIterations = 0;
         private void PeriodicUpdate()
         {
+            updateIterations++;
+            if (updateIterations >= 1000)
+            {
+                CheckForUpdates();
+                updateIterations = 0;
+            }
             CheckMagnetLinks();
             foreach (var torrent in Client.Torrents)
             {
