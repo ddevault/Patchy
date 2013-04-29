@@ -6,7 +6,8 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:pt="clr-namespace:Patchy"
         Title="Patchy" Height="600" Width="1122" Icon="Images/patchy.ico"
-        Closing="WindowClosing" Closed="WindowClosed">
+        Closing="WindowClosing" Closed="WindowClosed"
+        DragEnter="Window_DragEnter" Drop="Window_Drop" DragOver="Window_DragOver" AllowDrop="True">
     <Window.Resources>
         <ResourceDictionary>
             <c:TorrentStatusToStringConverter x:Key="torrentStatusConverter"></c:TorrentStatusToStringConverter>

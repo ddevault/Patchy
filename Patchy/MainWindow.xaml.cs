@@ -529,5 +529,52 @@ namespace Patchy
                  catch { }
             }
         }
+
+        private void Window_DragEnter(object sender, DragEventArgs e)
+        {
+            bool allow = false;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (!files.Any(f => !f.EndsWith(".torrent")))
+                    allow = true;
+            }
+            e.Handled = allow;
+        }
+
+        private void Window_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files.Any(f => !f.EndsWith(".torrent")))
+                    return;
+                if (files.Length == 1)
+                {
+                    var dialog = new AddTorrentWindow(SettingsManager, files[0]);
+                    if (dialog.ShowDialog().Value)
+                        AddTorrent(dialog.Torrent, dialog.DestinationPath);
+                }
+                else
+                {
+                    foreach (var file in files)
+                        AddTorrent(Torrent.Load(file), SettingsManager.DefaultDownloadLocation);
+                }
+            }
+        }
+
+        private void Window_DragOver(object sender, DragEventArgs e)
+        {
+            bool allow = false;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (!files.Any(f => !f.EndsWith(".torrent")))
+                    allow = true;
+            }
+            e.Handled = !allow;
+            if (e.Handled)
+                e.Effects = DragDropEffects.None;
+        }
     }
 }
