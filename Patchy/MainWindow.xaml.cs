@@ -32,9 +32,12 @@ namespace Patchy
         private string IgnoredClipboardValue { get; set; }
         internal bool AllowClose { get; set; }
         internal bool ForceClose { get; set; }
+        internal static MainWindow This { get; set; }
 
         public MainWindow()
         {
+            This = this;
+
             InitializeComponent();
             InitializeNotifyIcon();
             torrentGrid.ContextMenu = null;

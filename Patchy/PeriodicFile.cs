@@ -23,7 +23,8 @@ namespace Patchy
         internal void Update()
         {
             Updating = true;
-            Name = System.IO.Path.GetFileName(File.FullPath);
+            if (Name != null)
+                Name = System.IO.Path.GetFileName(File.FullPath);
             Length = File.Length;
             Progress = ((double)File.BytesDownloaded / (double)File.Length) * 100;
             Priority = File.Priority;

@@ -40,6 +40,7 @@ namespace Patchy
             TorrentInfo = new TorrentInfo();
             Torrent = wrapper;
             PeerList = new ObservableCollection<PeerId>();
+            
             Name = Torrent.Name;
             Size = Torrent.Size;
             CompletedOnAdd = Torrent.Complete;
@@ -88,7 +89,10 @@ namespace Patchy
         internal void Update(bool blockingUpdates)
         {
             if (Thread.CurrentThread == Dispatcher.CurrentDispatcher.Thread)
+            {
                 blockingUpdates = false;
+                Task.Factory.StartNew(() => BlockingUpdate(), CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            }
             if (Torrent.State == TorrentState.Seeding && (State == TorrentState.Stopped || State == TorrentState.Hashing))
                 CompletedOnAdd = true;
             State = Torrent.State;
@@ -129,28 +133,40 @@ namespace Patchy
             if (files != null)
             {
                 foreach (var file in files)
-                    file.Update();
+                {
+                    if (file != null)
+                        file.Update();
+                }
             }
-            if ((Torrent.State == TorrentState.Downloading || Torrent.State == TorrentState.Seeding) && blockingUpdates)
+            if (blockingUpdates)
+                BlockingUpdate();
+            else
+            {
+                Peers = Seeders = Leechers = 0;
+            }
+        }
+
+        private void BlockingUpdate()
+        {
+            if (Torrent.State == TorrentState.Downloading || Torrent.State == TorrentState.Seeding)
             {
                 Peers = Torrent.Peers.Available;
                 Seeders = Torrent.Peers.Seeds;
                 Leechers = Torrent.Peers.Leechs;
                 var peerList = Torrent.GetPeers();
-                foreach (var peer in peerList)
-                {
-                    if (!PeerList.Contains(peer))
-                        PeerList.Add(peer);
-                }
-                for (int i = 0; i < PeerList.Count; i++)
-                {
-                    if (!peerList.Contains(PeerList[i]))
-                        PeerList.RemoveAt(i--);
-                }
-            }
-            else
-            {
-                Peers = Seeders = Leechers = 0;
+                MainWindow.This.Dispatcher.Invoke(new Action(() =>
+                    {
+                        foreach (var peer in peerList)
+                        {
+                            if (!PeerList.Contains(peer))
+                                PeerList.Add(peer);
+                        }
+                        for (int i = 0; i < PeerList.Count; i++)
+                        {
+                            if (!peerList.Contains(PeerList[i]))
+                                PeerList.RemoveAt(i--);
+                        }
+                    }));
             }
         }
 
