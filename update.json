@@ -1,8 +1,8 @@
 ﻿{
-    "FriendlyVersion":"1.1",
-    "Version":2,
-    "Description":"Patchy Version 1.1\n\nNew Features:\n* Torrent grid filtering\n* Queueing to save bandwidth\n* Proxy support\n* UPnP for automatic port mapping\n\nBugs Fixed:\n* Torrent creation fixed\n* Magnet links fixed for some torrents",
-    "MagnetLink":"magnet:?xl=864768&dn=update.exe&xt=urn:btih:F5CC119C33056B9C71481982ECAD47EE171097D3&tr=udp://tracker.openbittorrent.com:80/",
-    "HttpLink":"http://ge.tt/api/1/files/2kFvolc/0/blob?download",
-    "DiffUrl":"https://github.com/SirCmpwn/Patchy/compare/9257491b760d1065a3382557132aaed694a186c6...e174326d8e122c28a03dc31e04261b35d4002ce8"
+    "FriendlyVersion":"1.2",
+    "Version":3,
+    "Description":"Patchy Version 1.2\n\nNew Features:\n* Drag and drop torrents onto window\n* Dark theme\n\nBugs Fixed:\n* Peer list and seeder/leecher counts\n* Checks for updates periodically, not just on start up\n* Fix bug with random exceptions related to clipboard",
+    "MagnetLink":"magnet:?xt=urn:btih:cdbd9406453728810be7c2180c5dfcf7dc0ac0ea&dn=update.exe&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80",
+    "HttpLink":"http://ge.tt/api/1/files/8acbPZf/0/blob?download",
+    "DiffUrl":"https://github.com/SirCmpwn/Patchy/compare/f69dd1ac299bfbd519014f180f9c0e29a92d6d80...857590afc6872481bada73a9948704f11151cf5f"
 }
